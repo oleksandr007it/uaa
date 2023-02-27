@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:13" hostname="iMac-Aleksandr-2.local" time="0.105">
+  <properties/>
+  <testcase name="testUpdateStatehoodSubjectRepresent()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.013"/>
+  <testcase name="testHasAccessToSubj()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.006"/>
+  <testcase name="testChangeContextTo()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.006"/>
+  <testcase name="testFindAllRepresentersBySubjectId()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.01"/>
+  <testcase name="testDeleteStatehoodSubjectRepresent()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.007"/>
+  <testcase name="testGetCurrentSubjectWithAuthGroups()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.006"/>
+  <testcase name="testCreateStatehoodSubjectRepresent()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.019"/>
+  <testcase name="testGetCurrentContext()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.007"/>
+  <testcase name="testGetAllActiveByCurrentDeclarant()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.006"/>
+  <testcase name="testGetAllActiveByDeclarantIdMainInfo()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.006"/>
+  <testcase name="testGetStatehoodSubjectRepresent()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectRepresentResourceTest" time="0.006"/>
+  <system-out><![CDATA[2021-02-09 22:44:13.339 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to update StatehoodSubjectRepresent : StatehoodSubjectRepresentUpdateDTO(representerId=0, privilegeGroupsIds=[value])
+2021-02-09 22:44:13.351 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to check if declarant with ID 0 has access to statehood subject with id 0
+2021-02-09 22:44:13.358 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST to change StatehoodSubjectRepresent context to subject with id: 0
+2021-02-09 22:44:13.369 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to get all StatehoodSubjectRepresents by subject with id: LongFilter []
+2021-02-09 22:44:13.377 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to delete Represent where declarantId: 0 and subjectId: 0
+2021-02-09 22:44:13.385 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to get current subject by active context
+2021-02-09 22:44:13.393 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to save StatehoodSubjectRepresent : StatehoodSubjectRepresentCreateDTO(rnokpp=rnokpp, firstName=firstName, lastName=lastName, middleName=middleName, privilegeGroupsIds=[value])
+2021-02-09 22:44:13.412 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to get current user active context
+2021-02-09 22:44:13.420 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to get all StatehoodSubjectRepresents by current Declarant
+2021-02-09 22:44:13.427 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to get all StatehoodSubjectRepresents by Declarant Id = 0
+2021-02-09 22:44:13.435 DEBUG 7952 --- [    Test worker] .t.w.r.StatehoodSubjectRepresentResource : REST request to get StatehoodSubjectRepresent : 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

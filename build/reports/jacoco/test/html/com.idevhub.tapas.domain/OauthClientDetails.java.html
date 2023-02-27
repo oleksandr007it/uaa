@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OauthClientDetails.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.domain</a> &gt; <span class="el_source">OauthClientDetails.java</span></div><h1>OauthClientDetails.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.domain;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * A OauthClientDetails.
+ */
+@Entity
+@Table(name = &quot;oauth_client_details&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+<span class="fc" id="L16">public class OauthClientDetails implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;sequenceGenerator&quot;)
+    @SequenceGenerator(name = &quot;sequenceGenerator&quot;)
+    private Long id;
+
+    @Column(name = &quot;client_id&quot;)
+    private String clientId;
+
+    @Column(name = &quot;resource_ids&quot;)
+    private String resourceIds;
+
+    @Column(name = &quot;client_secret&quot;)
+    private String clientSecret;
+
+    @Column(name = &quot;scope&quot;)
+    private String scope;
+
+    @Column(name = &quot;authorized_grant_types&quot;)
+    private String authorizedGrantTypes;
+
+    @Column(name = &quot;web_server_redirect_uri&quot;)
+    private String webServerRedirectUri;
+
+    @Column(name = &quot;authorities&quot;)
+    private String authorities;
+
+    @Column(name = &quot;access_token_validity&quot;)
+    private Integer accessTokenValidity;
+
+    @Column(name = &quot;refresh_token_validity&quot;)
+    private Integer refreshTokenValidity;
+
+    @Column(name = &quot;additional_information&quot;)
+    private String additionalInformation;
+
+    @Column(name = &quot;autoapprove&quot;)
+    private String autoapprove;
+
+    @Column(name = &quot;client_url&quot;)
+    private String clientUrl;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="fc" id="L63">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L67">        this.id = id;</span>
+<span class="fc" id="L68">    }</span>
+
+    public String getClientId() {
+<span class="fc" id="L71">        return clientId;</span>
+    }
+
+    public void setClientId(String clientId) {
+<span class="fc" id="L75">        this.clientId = clientId;</span>
+<span class="fc" id="L76">    }</span>
+
+    public OauthClientDetails clientId(String clientId) {
+<span class="nc" id="L79">        this.clientId = clientId;</span>
+<span class="nc" id="L80">        return this;</span>
+    }
+
+    public String getResourceIds() {
+<span class="fc" id="L84">        return resourceIds;</span>
+    }
+
+    public void setResourceIds(String resourceIds) {
+<span class="fc" id="L88">        this.resourceIds = resourceIds;</span>
+<span class="fc" id="L89">    }</span>
+
+    public OauthClientDetails resourceIds(String resourceIds) {
+<span class="nc" id="L92">        this.resourceIds = resourceIds;</span>
+<span class="nc" id="L93">        return this;</span>
+    }
+
+    public String getClientSecret() {
+<span class="fc" id="L97">        return clientSecret;</span>
+    }
+
+    public void setClientSecret(String clientSecret) {
+<span class="fc" id="L101">        this.clientSecret = clientSecret;</span>
+<span class="fc" id="L102">    }</span>
+
+    public OauthClientDetails clientSecret(String clientSecret) {
+<span class="nc" id="L105">        this.clientSecret = clientSecret;</span>
+<span class="nc" id="L106">        return this;</span>
+    }
+
+    public String getScope() {
+<span class="fc" id="L110">        return scope;</span>
+    }
+
+    public void setScope(String scope) {
+<span class="fc" id="L114">        this.scope = scope;</span>
+<span class="fc" id="L115">    }</span>
+
+    public OauthClientDetails scope(String scope) {
+<span class="nc" id="L118">        this.scope = scope;</span>
+<span class="nc" id="L119">        return this;</span>
+    }
+
+    public String getAuthorizedGrantTypes() {
+<span class="fc" id="L123">        return authorizedGrantTypes;</span>
+    }
+
+    public void setAuthorizedGrantTypes(String authorizedGrantTypes) {
+<span class="fc" id="L127">        this.authorizedGrantTypes = authorizedGrantTypes;</span>
+<span class="fc" id="L128">    }</span>
+
+    public OauthClientDetails authorizedGrantTypes(String authorizedGrantTypes) {
+<span class="nc" id="L131">        this.authorizedGrantTypes = authorizedGrantTypes;</span>
+<span class="nc" id="L132">        return this;</span>
+    }
+
+    public String getWebServerRedirectUri() {
+<span class="fc" id="L136">        return webServerRedirectUri;</span>
+    }
+
+    public void setWebServerRedirectUri(String webServerRedirectUri) {
+<span class="fc" id="L140">        this.webServerRedirectUri = webServerRedirectUri;</span>
+<span class="fc" id="L141">    }</span>
+
+    public OauthClientDetails webServerRedirectUri(String webServerRedirectUri) {
+<span class="nc" id="L144">        this.webServerRedirectUri = webServerRedirectUri;</span>
+<span class="nc" id="L145">        return this;</span>
+    }
+
+    public String getAuthorities() {
+<span class="fc" id="L149">        return authorities;</span>
+    }
+
+    public void setAuthorities(String authorities) {
+<span class="fc" id="L153">        this.authorities = authorities;</span>
+<span class="fc" id="L154">    }</span>
+
+    public OauthClientDetails authorities(String authorities) {
+<span class="nc" id="L157">        this.authorities = authorities;</span>
+<span class="nc" id="L158">        return this;</span>
+    }
+
+    public Integer getAccessTokenValidity() {
+<span class="fc" id="L162">        return accessTokenValidity;</span>
+    }
+
+    public void setAccessTokenValidity(Integer accessTokenValidity) {
+<span class="fc" id="L166">        this.accessTokenValidity = accessTokenValidity;</span>
+<span class="fc" id="L167">    }</span>
+
+    public OauthClientDetails accessTokenValidity(Integer accessTokenValidity) {
+<span class="nc" id="L170">        this.accessTokenValidity = accessTokenValidity;</span>
+<span class="nc" id="L171">        return this;</span>
+    }
+
+    public Integer getRefreshTokenValidity() {
+<span class="fc" id="L175">        return refreshTokenValidity;</span>
+    }
+
+    public void setRefreshTokenValidity(Integer refreshTokenValidity) {
+<span class="fc" id="L179">        this.refreshTokenValidity = refreshTokenValidity;</span>
+<span class="fc" id="L180">    }</span>
+
+    public OauthClientDetails refreshTokenValidity(Integer refreshTokenValidity) {
+<span class="nc" id="L183">        this.refreshTokenValidity = refreshTokenValidity;</span>
+<span class="nc" id="L184">        return this;</span>
+    }
+
+    public String getAdditionalInformation() {
+<span class="fc" id="L188">        return additionalInformation;</span>
+    }
+
+    public void setAdditionalInformation(String additionalInformation) {
+<span class="fc" id="L192">        this.additionalInformation = additionalInformation;</span>
+<span class="fc" id="L193">    }</span>
+
+    public OauthClientDetails additionalInformation(String additionalInformation) {
+<span class="nc" id="L196">        this.additionalInformation = additionalInformation;</span>
+<span class="nc" id="L197">        return this;</span>
+    }
+
+    public String getAutoapprove() {
+<span class="fc" id="L201">        return autoapprove;</span>
+    }
+
+    public void setAutoapprove(String autoapprove) {
+<span class="fc" id="L205">        this.autoapprove = autoapprove;</span>
+<span class="fc" id="L206">    }</span>
+
+    public OauthClientDetails autoapprove(String autoapprove) {
+<span class="nc" id="L209">        this.autoapprove = autoapprove;</span>
+<span class="nc" id="L210">        return this;</span>
+    }
+
+    public String getClientUrl() {
+<span class="fc" id="L214">        return clientUrl;</span>
+    }
+
+    public void setClientUrl(String clientUrl) {
+<span class="fc" id="L218">        this.clientUrl = clientUrl;</span>
+<span class="fc" id="L219">    }</span>
+
+    public OauthClientDetails clientUrl(String clientUrl) {
+<span class="nc" id="L222">        this.clientUrl = clientUrl;</span>
+<span class="nc" id="L223">        return this;</span>
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L230">            return true;</span>
+        }
+<span class="nc bnc" id="L232" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L233">            return false;</span>
+        }
+<span class="nc" id="L235">        OauthClientDetails oauthClientDetails = (OauthClientDetails) o;</span>
+<span class="nc bnc" id="L236" title="All 4 branches missed.">        if (oauthClientDetails.getId() == null || getId() == null) {</span>
+<span class="nc" id="L237">            return false;</span>
+        }
+<span class="nc" id="L239">        return Objects.equals(getId(), oauthClientDetails.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L244">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L249">        return &quot;OauthClientDetails{&quot; +</span>
+<span class="fc" id="L250">            &quot;id=&quot; + getId() +</span>
+<span class="fc" id="L251">            &quot;, clientId='&quot; + getClientId() + &quot;'&quot; +</span>
+<span class="fc" id="L252">            &quot;, resourceIds='&quot; + getResourceIds() + &quot;'&quot; +</span>
+<span class="fc" id="L253">            &quot;, clientSecret='&quot; + getClientSecret() + &quot;'&quot; +</span>
+<span class="fc" id="L254">            &quot;, scope='&quot; + getScope() + &quot;'&quot; +</span>
+<span class="fc" id="L255">            &quot;, authorizedGrantTypes='&quot; + getAuthorizedGrantTypes() + &quot;'&quot; +</span>
+<span class="fc" id="L256">            &quot;, webServerRedirectUri='&quot; + getWebServerRedirectUri() + &quot;'&quot; +</span>
+<span class="fc" id="L257">            &quot;, authorities='&quot; + getAuthorities() + &quot;'&quot; +</span>
+<span class="fc" id="L258">            &quot;, accessTokenValidity='&quot; + getAccessTokenValidity() + &quot;'&quot; +</span>
+<span class="fc" id="L259">            &quot;, refreshTokenValidity='&quot; + getRefreshTokenValidity() + &quot;'&quot; +</span>
+<span class="fc" id="L260">            &quot;, additionalInformation='&quot; + getAdditionalInformation() + &quot;'&quot; +</span>
+<span class="fc" id="L261">            &quot;, autoapprove='&quot; + getAutoapprove() + &quot;'&quot; +</span>
+<span class="fc" id="L262">            &quot;, clientUrl='&quot; + getClientUrl() + &quot;'&quot; +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

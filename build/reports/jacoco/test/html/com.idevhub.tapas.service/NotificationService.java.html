@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">NotificationService.java</span></div><h1>NotificationService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.domain.Notification;
+import com.idevhub.tapas.repository.NotificationRepository;
+import com.idevhub.tapas.service.dto.RequestApproveOrReissueDTO;
+import com.idevhub.tapas.service.dto.RequestSuspenseOrRevocationDTO;
+import com.idevhub.tapas.service.dto.StatehoodSubjectDTO;
+import com.idevhub.tapas.service.impl.StatehoodSubjectServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+
+/**
+ * Service Implementation for managing {@link Notification}.
+ */
+@Service
+@Transactional
+public class NotificationService {
+
+<span class="fc" id="L32">    private final Logger log = LoggerFactory.getLogger(NotificationService.class);</span>
+
+    private final NotificationRepository notificationRepository;
+
+    private final MessageSource messageSource;
+
+    private final StatehoodSubjectServiceImpl statehoodSubjectService;
+
+    private final SpringTemplateEngine templateEngine;
+
+    private final MailService mailService;
+
+<span class="fc" id="L44">    public NotificationService(NotificationRepository notificationRepository, MessageSource messageSource, StatehoodSubjectServiceImpl statehoodSubjectService, SpringTemplateEngine templateEngine, MailService mailService) {</span>
+<span class="fc" id="L45">        this.notificationRepository = notificationRepository;</span>
+<span class="fc" id="L46">        this.messageSource = messageSource;</span>
+<span class="fc" id="L47">        this.statehoodSubjectService = statehoodSubjectService;</span>
+
+<span class="fc" id="L49">        this.templateEngine = templateEngine;</span>
+<span class="fc" id="L50">        this.mailService = mailService;</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Save a notification.
+     *
+     * @param notification the entity to save.
+     * @return the persisted entity.
+     */
+    public Notification save(Notification notification) {
+<span class="fc" id="L60">        log.debug(&quot;Request to save Notification : {}&quot;, notification);</span>
+<span class="fc" id="L61">        return notificationRepository.save(notification);</span>
+    }
+
+    /**
+     * Get all the notifications.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List&lt;Notification&gt; findAll() {
+<span class="fc" id="L71">        log.debug(&quot;Request to get all Notifications&quot;);</span>
+<span class="fc" id="L72">        return notificationRepository.findAll();</span>
+    }
+
+
+    // @Scheduled(cron = &quot;0 0 9 ? * MON-FRI&quot;)
+    @Scheduled(cron = &quot;0 0/10 * * * ?&quot;)
+    public void sendAndDelete() {
+<span class="fc" id="L79">        Instant before = Instant.now().minus(5L, ChronoUnit.DAYS);</span>
+<span class="fc" id="L80">        List&lt;Notification&gt; list = notificationRepository.findAllByCreationDateBefore(before);</span>
+<span class="fc" id="L81">        log.info(&quot;sendMail  - &quot; + System.currentTimeMillis() / 1000);</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        for (Notification n : list) {</span>
+<span class="nc" id="L83">            mailService.sendEmail(n.getAddress(), n.getSubject(), n.getContent(), false, true);</span>
+<span class="nc" id="L84">            delete(n.getId());</span>
+<span class="nc" id="L85">        }</span>
+<span class="fc" id="L86">    }</span>
+
+
+//    @Scheduled(cron = &quot;0 0/10 * * * ?&quot;)
+//    public void send() {
+//        List&lt;Notification&gt; list = notificationRepository.findAll();
+//        log.info(&quot;sendMail  - &quot; + System.currentTimeMillis() / 1000);
+//        for (Notification n : list) {
+//            mailService.sendEmail(n.getAddress(), n.getSubject(), n.getContent(), false, true);
+//            delete(n.getId());
+//        }
+//    }
+
+
+    public void saveAproveEmail(RequestApproveOrReissueDTO input, String titleKey, String typeKey) {
+
+<span class="fc" id="L102">        Locale locale = Locale.forLanguageTag(&quot;ua&quot;);</span>
+<span class="fc" id="L103">        Context context = new Context(locale);</span>
+<span class="fc" id="L104">        StatehoodSubjectDTO statehoodSubjectDTO = statehoodSubjectService.findOne(input.getStatehoodSubjectId());</span>
+<span class="fc" id="L105">        String title = messageSource.getMessage(titleKey, null, locale);</span>
+<span class="fc" id="L106">        String type = messageSource.getMessage(typeKey, null, locale);</span>
+
+<span class="fc" id="L108">        HashMap&lt;String, Object&gt; additionalVariables = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L109">        additionalVariables.put(&quot;title&quot;, title);</span>
+<span class="fc" id="L110">        additionalVariables.put(&quot;type&quot;, type);</span>
+<span class="fc" id="L111">        additionalVariables.put(&quot;subjectFullName&quot;, statehoodSubjectDTO.getSubjectName());</span>
+<span class="fc" id="L112">        additionalVariables.put(&quot;subjectFullNameFromRegister&quot;, input.getSubjectFullNameFromRegister());</span>
+<span class="fc" id="L113">        additionalVariables.put(&quot;edrpouFromRegister&quot;, input.getEdrpouFromRegister());</span>
+<span class="fc" id="L114">        additionalVariables.put(&quot;legalAddressFromRegister&quot;, input.getLegalAddressFromRegister());</span>
+<span class="fc" id="L115">        additionalVariables.put(&quot;brokerRegNumber&quot;, input.getBrokerRegNumber());</span>
+<span class="fc" id="L116">        additionalVariables.put(&quot;recordingToRegisterDate&quot;, input.getRecordingToRegisterDate());</span>
+
+<span class="fc" id="L118">        context.setVariables(additionalVariables);</span>
+<span class="fc" id="L119">        String content = templateEngine.process(&quot;mail/&quot; + &quot;businessSubjectApplicationAprAnswerEmail&quot;, context);</span>
+<span class="fc" id="L120">        String subject = messageSource.getMessage(&quot;email.applications.approve.subject&quot;, null, locale);</span>
+
+<span class="fc" id="L122">        saveEmailNotification(content, subject, statehoodSubjectDTO.getEmail());</span>
+<span class="fc" id="L123">    }</span>
+
+
+    public void saveSuspenseEmail(RequestSuspenseOrRevocationDTO input, String titleKey, String typeKey) {
+
+<span class="fc" id="L128">        Locale locale = Locale.forLanguageTag(&quot;ua&quot;);</span>
+<span class="fc" id="L129">        Context context = new Context(locale);</span>
+
+<span class="fc" id="L131">        StatehoodSubjectDTO statehoodSubjectDTO = statehoodSubjectService.findOne(input.getStatehoodSubjectId());</span>
+<span class="fc" id="L132">        String title = messageSource.getMessage(titleKey, null, locale);</span>
+<span class="fc" id="L133">        String type = messageSource.getMessage(typeKey, null, locale);</span>
+
+<span class="fc" id="L135">        HashMap&lt;String, Object&gt; additionalVariables = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L136">        additionalVariables.put(&quot;title&quot;, title);</span>
+<span class="fc" id="L137">        additionalVariables.put(&quot;type&quot;, type);</span>
+<span class="fc" id="L138">        additionalVariables.put(&quot;subjectFullName&quot;, statehoodSubjectDTO.getSubjectName());</span>
+
+
+<span class="fc" id="L141">        context.setVariables(additionalVariables);</span>
+<span class="fc" id="L142">        String content = templateEngine.process(&quot;mail/&quot; + &quot;businessSubjectApplicationSuspnAnswerEmail&quot;, context);</span>
+<span class="fc" id="L143">        String subject = messageSource.getMessage(&quot;email.applications.suspense.subject&quot;, null, locale);</span>
+
+<span class="fc" id="L145">        saveEmailNotification(content, subject, statehoodSubjectDTO.getEmail());</span>
+<span class="fc" id="L146">    }</span>
+
+
+    private void saveEmailNotification(String content, String subject, String email) {
+
+<span class="fc" id="L151">        Notification notification = new Notification();</span>
+<span class="fc" id="L152">        notification.setAddress(email);</span>
+<span class="fc" id="L153">        notification.setContent(content);</span>
+<span class="fc" id="L154">        notification.setSubject(subject);</span>
+<span class="fc" id="L155">        notification.setCreationDate(Instant.now());</span>
+<span class="fc" id="L156">        notification.setType(&quot;EMAIL&quot;);</span>
+<span class="fc" id="L157">        save(notification);</span>
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * Get one notification by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional&lt;Notification&gt; findOne(Long id) {
+<span class="fc" id="L168">        log.debug(&quot;Request to get Notification : {}&quot;, id);</span>
+<span class="fc" id="L169">        return notificationRepository.findById(id);</span>
+    }
+
+    /**
+     * Delete the notification by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+<span class="fc" id="L178">        log.debug(&quot;Request to delete Notification : {}&quot;, id);</span>
+
+<span class="fc" id="L180">        notificationRepository.deleteById(id);</span>
+<span class="fc" id="L181">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

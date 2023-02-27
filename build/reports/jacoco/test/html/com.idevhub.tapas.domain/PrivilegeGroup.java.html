@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrivilegeGroup.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.domain</a> &gt; <span class="el_source">PrivilegeGroup.java</span></div><h1>PrivilegeGroup.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.idevhub.tapas.domain.enumeration.ActiveStatus;
+import com.idevhub.tapas.domain.enumeration.PrivilegeType;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.persistence.*;
+import javax.validation.ValidationException;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.lang.String.format;
+import static java.util.stream.Collectors.toSet;
+
+@SuppressWarnings(&quot;ResultOfMethodCallIgnored&quot;)
+@Entity
+@Data
+@EqualsAndHashCode(of = &quot;code&quot;, callSuper = false)
+@Table(name = &quot;_privilege_group&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@ToString(of = &quot;code&quot;)
+@Accessors(chain = true)
+public class PrivilegeGroup extends AbstractAuditingEntity {
+<span class="fc" id="L33">    private static final Logger log = LoggerFactory.getLogger(PrivilegeGroup.class);</span>
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String code;
+
+<span class="fc" id="L39">    @Enumerated(EnumType.STRING)</span>
+    private ActiveStatus status = ActiveStatus.ACTIVE;
+
+<span class="fc" id="L42">    @Column(name = &quot;is_global&quot;)</span>
+    private boolean global = true;
+
+    private String fullNameUkr;
+
+    private String fullNameEng;
+
+    private String nameInDirectoryService;//DMSU
+
+    @Enumerated(EnumType.STRING)
+    private PrivilegeType privilegeGroupType;
+
+    private String deletedBy;
+
+    private Instant deletedAt;
+
+    @ManyToOne
+    @JsonIgnoreProperties(&quot;&quot;)
+    private StatehoodSubject statehoodSubject;//LEGAL_ENTITY
+
+    @ManyToOne
+    @JsonIgnoreProperties(&quot;&quot;)
+    private CentralExecutiveAuthority centralExecutiveAuthority;//CEA
+
+<span class="fc" id="L66">    @ManyToMany</span>
+    @JoinTable(
+        name = &quot;_privilege_group_to_privilege&quot;,
+        joinColumns = {@JoinColumn(name = &quot;group_code&quot;, referencedColumnName = &quot;code&quot;)},
+        inverseJoinColumns = {@JoinColumn(name = &quot;privilege_code&quot;, referencedColumnName = &quot;code&quot;)})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Privilege&gt; privileges = new HashSet&lt;&gt;();
+
+<span class="fc" id="L74">    public PrivilegeGroup() {</span>
+<span class="fc" id="L75">    }</span>
+
+<span class="fc" id="L77">    public PrivilegeGroup(String code, Set&lt;Privilege&gt; privileges) {</span>
+<span class="fc" id="L78">        this.code = code;</span>
+<span class="fc" id="L79">        this.privileges = privileges;</span>
+<span class="fc" id="L80">    }</span>
+
+    public Set&lt;String&gt; loadAndGetPrivilegeCodes() {
+<span class="fc" id="L83">        log.debug(&quot;Lazy loading. PrivilegeGroup {} has {} privileges&quot;, code, privileges.size());</span>
+
+<span class="fc" id="L85">        return privileges.stream()</span>
+<span class="fc" id="L86">            .map(Privilege::getCode)</span>
+<span class="fc" id="L87">            .collect(toSet());</span>
+    }
+
+    public void checkIsNotGlobal() {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (isGlobal()) throw new ValidationException(&quot;error.privilegeGroup.wrongType&quot;);</span>
+<span class="fc" id="L92">    }</span>
+
+    public void checkType(PrivilegeType expectedType) {
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (privilegeGroupType != expectedType)</span>
+<span class="nc" id="L96">            throw new ValidationException(format(&quot;There is no such group with code=%s and type=%s&quot;, code, expectedType));</span>
+<span class="fc" id="L97">    }</span>
+
+    public void checkIsNotDeleted() {
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (status == ActiveStatus.DELETED)</span>
+<span class="nc" id="L101">            throw new ValidationException(&quot;error.privilegeGroup.wrongStatus&quot;);</span>
+<span class="fc" id="L102">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

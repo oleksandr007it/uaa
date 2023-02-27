@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">NotificationResource.java</span></div><h1>NotificationResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.domain.Notification;
+import com.idevhub.tapas.service.NotificationService;
+import com.idevhub.tapas.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * REST controller for managing {@link com.idevhub.tapas.domain.Notification}.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class NotificationResource {
+
+    private static final String ENTITY_NAME = &quot;notification&quot;;
+<span class="fc" id="L27">    private final Logger log = LoggerFactory.getLogger(NotificationResource.class);</span>
+    private final NotificationService notificationService;
+    @Value(&quot;${jhipster.clientApp.name}&quot;)
+    private String applicationName;
+
+<span class="fc" id="L32">    public NotificationResource(NotificationService notificationService) {</span>
+<span class="fc" id="L33">        this.notificationService = notificationService;</span>
+<span class="fc" id="L34">    }</span>
+
+    /**
+     * {@code POST  /notifications} : Create a new notification.
+     *
+     * @param notification the notification to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new notification, or with status {@code 400 (Bad Request)} if the notification has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping(&quot;/notifications&quot;)
+    public ResponseEntity&lt;Notification&gt; createNotification(@RequestBody Notification notification) throws URISyntaxException {
+<span class="fc" id="L45">        log.debug(&quot;REST request to save Notification : {}&quot;, notification);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (notification.getId() != null) {</span>
+<span class="fc" id="L47">            throw new BadRequestAlertException(&quot;A new notification cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="fc" id="L49">        Notification result = notificationService.save(notification);</span>
+<span class="fc" id="L50">        return ResponseEntity.created(new URI(&quot;/api/notifications/&quot; + result.getId()))</span>
+<span class="fc" id="L51">            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))</span>
+<span class="fc" id="L52">            .body(result);</span>
+    }
+
+    /**
+     * {@code PUT  /notifications} : Updates an existing notification.
+     *
+     * @param notification the notification to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated notification,
+     * or with status {@code 400 (Bad Request)} if the notification is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the notification couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping(&quot;/notifications&quot;)
+    public ResponseEntity&lt;Notification&gt; updateNotification(@RequestBody Notification notification) throws URISyntaxException {
+<span class="fc" id="L66">        log.debug(&quot;REST request to update Notification : {}&quot;, notification);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (notification.getId() == null) {</span>
+<span class="fc" id="L68">            throw new BadRequestAlertException(&quot;Invalid id&quot;, ENTITY_NAME, &quot;idnull&quot;);</span>
+        }
+<span class="fc" id="L70">        Notification result = notificationService.save(notification);</span>
+<span class="fc" id="L71">        return ResponseEntity.ok()</span>
+<span class="fc" id="L72">            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notification.getId().toString()))</span>
+<span class="fc" id="L73">            .body(result);</span>
+    }
+
+    /**
+     * {@code GET  /notifications} : get all the notifications.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of notifications in body.
+     */
+    @GetMapping(&quot;/notifications&quot;)
+    public List&lt;Notification&gt; getAllNotifications() {
+<span class="fc" id="L83">        log.debug(&quot;REST request to get all Notifications&quot;);</span>
+<span class="fc" id="L84">        return notificationService.findAll();</span>
+    }
+
+    /**
+     * {@code GET  /notifications/:id} : get the &quot;id&quot; notification.
+     *
+     * @param id the id of the notification to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the notification, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping(&quot;/notifications/{id}&quot;)
+    public ResponseEntity&lt;Notification&gt; getNotification(@PathVariable Long id) {
+<span class="fc" id="L95">        log.debug(&quot;REST request to get Notification : {}&quot;, id);</span>
+<span class="fc" id="L96">        Optional&lt;Notification&gt; notification = notificationService.findOne(id);</span>
+<span class="fc" id="L97">        return ResponseUtil.wrapOrNotFound(notification);</span>
+    }
+
+    /**
+     * {@code DELETE  /notifications/:id} : delete the &quot;id&quot; notification.
+     *
+     * @param id the id of the notification to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping(&quot;/notifications/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteNotification(@PathVariable Long id) {
+<span class="fc" id="L108">        log.debug(&quot;REST request to delete Notification : {}&quot;, id);</span>
+
+<span class="fc" id="L110">        notificationService.delete(id);</span>
+<span class="fc" id="L111">        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">UserResource.java</span></div><h1>UserResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.config.Constants;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.security.AuthoritiesConstants;
+import com.idevhub.tapas.security.SecurityUtils;
+import com.idevhub.tapas.service.MailService;
+import com.idevhub.tapas.service.UserService;
+import com.idevhub.tapas.service.criteria.BackOfficeUserCriteria;
+import com.idevhub.tapas.service.criteria.DmsuUserCriteria;
+import com.idevhub.tapas.service.dto.*;
+import com.idevhub.tapas.service.feign.LdapIntegrationClient;
+import com.idevhub.tapas.service.mapper.UserMapper;
+import com.idevhub.tapas.web.rest.errors.BadRequestAlertException;
+import com.idevhub.tapas.web.rest.errors.EmailAlreadyUsedException;
+import com.idevhub.tapas.web.rest.errors.LoginAlreadyUsedException;
+import com.idevhub.tapas.web.rest.errors.UserNotFoundException;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.annotation.Generated;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * REST controller for managing users.
+ * &lt;p&gt;
+ * This class accesses the {@link User} entity, and needs to fetch its collection of authorities.
+ * &lt;p&gt;
+ * For a normal use-case, it would be better to have an eager relationship between User and Authority,
+ * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join
+ * which would be good for performance.
+ * &lt;p&gt;
+ * We use a View Model and a DTO for 3 reasons:
+ * &lt;ul&gt;
+ * &lt;li&gt;We want to keep a lazy association between the user and the authorities, because people will
+ * quite often do relationships with the user, and we don't want them to get the authorities all
+ * the time for nothing (for performance reasons). This is the #1 goal: we should not impact our users'
+ * application because of this use-case.&lt;/li&gt;
+ * &lt;li&gt; Not having an outer join causes n+1 requests to the database. This is not a real issue as
+ * we have by default a second-level cache. This means on the first HTTP call we do the n+1 requests,
+ * but then all authorities come from the cache, so in fact it's much better than doing an outer join
+ * (which will get lots of data from the database, for each HTTP call).&lt;/li&gt;
+ * &lt;li&gt; As this manages users, for security reasons, we'd rather have a DTO layer.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;
+ * Another option would be to have a specific JPA entity graph to handle this case.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class UserResource {
+
+<span class="fc" id="L70">    private final Logger log = LoggerFactory.getLogger(UserResource.class);</span>
+    private final UserService userService;
+    private final UserRepository userRepository;
+    private final MailService mailService;
+    private final UserMapper userMapper;
+    private final LdapIntegrationClient ldapIntegrationClient;
+    @Value(&quot;${jhipster.clientApp.name}&quot;)
+    private String applicationName;
+
+    public UserResource(UserService userService,
+                        UserRepository userRepository,
+                        MailService mailService,
+<span class="fc" id="L82">                        UserMapper userMapper, LdapIntegrationClient ldapIntegrationClient) {</span>
+<span class="fc" id="L83">        this.userService = userService;</span>
+<span class="fc" id="L84">        this.userRepository = userRepository;</span>
+<span class="fc" id="L85">        this.mailService = mailService;</span>
+<span class="fc" id="L86">        this.userMapper = userMapper;</span>
+<span class="fc" id="L87">        this.ldapIntegrationClient = ldapIntegrationClient;</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * {@code POST  /users}  : Creates a new user.
+     * &lt;p&gt;
+     * Creates a new user if the login and email are not already used, and sends an
+     * mail with an activation link.
+     * The user needs to be activated on creation.
+     *
+     * @param userDTO the user to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
+     * @throws URISyntaxException       if the Location URI syntax is incorrect.
+     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
+     */
+    @Generated(value = &quot;This is generate a sample java function&quot;)
+    @PostMapping(&quot;/users&quot;)
+    @PreAuthorize(&quot;hasAuthority(\&quot;&quot; + AuthoritiesConstants.ADMIN + &quot;\&quot;)&quot;)
+    public ResponseEntity&lt;User&gt; createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
+<span class="fc" id="L106">        log.debug(&quot;REST request to save User : {}&quot;, userDTO);</span>
+
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (userDTO.getId() != null) {</span>
+<span class="fc" id="L109">            throw new BadRequestAlertException(&quot;A new user cannot already have an ID&quot;, &quot;userManagement&quot;, &quot;idexists&quot;);</span>
+            // Lowercase the user login before comparing with database
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {</span>
+<span class="fc" id="L112">            throw new LoginAlreadyUsedException();</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {</span>
+<span class="fc" id="L114">            throw new EmailAlreadyUsedException();</span>
+        } else {
+<span class="fc" id="L116">            User newUser = userService.createUser(userDTO);</span>
+<span class="fc" id="L117">            mailService.sendCreationEmail(newUser);</span>
+<span class="fc" id="L118">            return ResponseEntity.created(new URI(&quot;/api/users/&quot; + newUser.getLogin()))</span>
+<span class="fc" id="L119">                .headers(HeaderUtil.createAlert(applicationName, &quot;userManagement.created&quot;, newUser.getLogin()))</span>
+<span class="fc" id="L120">                .body(newUser);</span>
+        }
+    }
+
+    @PutMapping(&quot;/users/confirm-email&quot;)
+    public ResponseEntity&lt;Void&gt; sendConfirmationEmail() {
+<span class="nc" id="L126">        userService.sendEmailConfirmationEmail();</span>
+
+<span class="nc" id="L128">        return ResponseEntity</span>
+<span class="nc" id="L129">            .ok()</span>
+<span class="nc" id="L130">            .headers(HeaderUtil.createAlert(applicationName, &quot;profile.notify.confirmationEmailSent&quot;, &quot;&quot;))</span>
+<span class="nc" id="L131">            .build();</span>
+    }
+
+    /**
+     * {@code PUT /users} : Updates an existing User.
+     *
+     * @param userDTO the user to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
+     */
+    @Generated(value = &quot;This is generate a sample java function&quot;)
+    @PutMapping(&quot;/users&quot;)
+    @PreAuthorize(&quot;hasAuthority(\&quot;&quot; + AuthoritiesConstants.ADMIN + &quot;\&quot;)&quot;)
+    public ResponseEntity&lt;UserDTO&gt; updateUser(@Valid @RequestBody UserDTO userDTO) {
+<span class="fc" id="L146">        log.debug(&quot;REST request to update User : {}&quot;, userDTO);</span>
+
+<span class="fc" id="L148">        Optional&lt;User&gt; existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());</span>
+
+<span class="pc bpc" id="L150" title="3 of 4 branches missed.">        if (existingUser.isPresent() &amp;&amp; (!existingUser.get().getId().equals(userDTO.getId()))) {</span>
+<span class="nc" id="L151">            throw new EmailAlreadyUsedException();</span>
+        }
+
+<span class="fc" id="L154">        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());</span>
+
+<span class="pc bpc" id="L156" title="1 of 4 branches missed.">        if (existingUser.isPresent() &amp;&amp; (!existingUser.get().getId().equals(userDTO.getId()))) {</span>
+<span class="nc" id="L157">            throw new LoginAlreadyUsedException();</span>
+        }
+
+<span class="fc" id="L160">        UserDTO updatedUser = userService.updateUser(userDTO);</span>
+
+<span class="fc" id="L162">        return ResponseEntity.ok(updatedUser);</span>
+    }
+
+    /**
+     * {@code GET /users} : get all users.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
+     */
+    @GetMapping(&quot;/users&quot;)
+    public ResponseEntity&lt;List&lt;UserDTO&gt;&gt; getAllUsers(Pageable pageable) {
+<span class="fc" id="L173">        final Page&lt;UserDTO&gt; page = userService.getAllManagedUsers(pageable);</span>
+<span class="fc" id="L174">        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);</span>
+<span class="fc" id="L175">        return new ResponseEntity&lt;&gt;(page.getContent(), headers, HttpStatus.OK);</span>
+    }
+
+
+    @GetMapping(&quot;/backofficeuser&quot;)
+    public BackOfficeUserDTO getBackOfficeCurrentUser() {
+<span class="nc" id="L181">        Optional&lt;User&gt; optionalUser = Optional.ofNullable(userService.getCurrentUser());</span>
+<span class="nc" id="L182">        return optionalUser</span>
+<span class="nc" id="L183">            .map(BackOfficeUserDTO::new)</span>
+<span class="nc" id="L184">            .orElseThrow(UserNotFoundException::new);</span>
+    }
+
+    @GetMapping(&quot;/current-user&quot;)
+    public ShortUserDTO getCurrentUser() {
+<span class="nc" id="L189">        Optional&lt;User&gt; optionalUser = Optional.ofNullable(userService.getCurrentUser());</span>
+
+<span class="nc" id="L191">        return optionalUser</span>
+<span class="nc" id="L192">            .map(userMapper::userToShortUserDTO)</span>
+<span class="nc" id="L193">            .orElseThrow(UserNotFoundException::new);</span>
+    }
+
+
+    @GetMapping(&quot;/backoffice-user-by-id/{id}&quot;)
+    public BackOfficeUserDTO getBackOfficeUserById(@PathVariable Long id) {
+<span class="nc" id="L199">        return userService.getBackOfficeUserById(id)</span>
+<span class="nc" id="L200">            .map(BackOfficeUserDTO::new)</span>
+<span class="nc" id="L201">            .orElseThrow(UserNotFoundException::new);</span>
+    }
+
+
+    @GetMapping(&quot;/backofficeuserlist&quot;)
+    public ResponseEntity&lt;List&lt;BackOfficeUserDTO&gt;&gt; getBackOfficeUserListByCurrentEdrpouCode(Pageable pageable, BackOfficeUserCriteria criteria) {
+<span class="nc" id="L207">        Page&lt;BackOfficeUserDTO&gt; page = userService.findAllBackOfficeUsersByCurrentEdrpouCode(pageable, criteria);</span>
+<span class="nc" id="L208">        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);</span>
+
+<span class="nc" id="L210">        return new ResponseEntity&lt;&gt;(page.getContent(), headers, HttpStatus.OK);</span>
+    }
+
+    /**
+     * Gets a list of all roles.
+     *
+     * @return a string list of all roles.
+     */
+    @Generated(value = &quot;This is generate a sample java function&quot;)
+    @GetMapping(&quot;/users/authorities&quot;)
+    @PreAuthorize(&quot;hasAuthority(\&quot;&quot; + AuthoritiesConstants.ADMIN + &quot;\&quot;)&quot;)
+    public List&lt;String&gt; getAuthorities() {
+<span class="fc" id="L222">        return userService.getAuthorities();</span>
+    }
+
+    /**
+     * {@code GET /users/:login} : get the &quot;login&quot; user.
+     *
+     * @param login the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the &quot;login&quot; user, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping(&quot;/users/{login:&quot; + Constants.LOGIN_REGEX + &quot;}&quot;)
+    public ResponseEntity&lt;UserDTO&gt; getUser(@PathVariable String login) {
+<span class="fc" id="L233">        log.debug(&quot;REST request to get User : {}&quot;, login);</span>
+<span class="fc" id="L234">        return ResponseUtil.wrapOrNotFound(</span>
+<span class="fc" id="L235">            userService.getUserWithAuthoritiesByLogin(login)</span>
+<span class="fc" id="L236">                .map(userMapper::userToUserDTO));</span>
+    }
+
+
+    /**
+     * {@code DELETE /users/:login} : delete the &quot;login&quot; User.
+     *
+     * @param id the login of the user to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @Generated(value = &quot;This is generate a sample java function&quot;)
+    @PostMapping(&quot;/users/delete/{id}&quot;)
+    @PreAuthorize(&quot;hasAuthority(\&quot;&quot; + AuthoritiesConstants.ADMIN + &quot;\&quot;)&quot;)
+    public ResponseEntity&lt;Void&gt; SoftDeleteUser(@PathVariable Long id) {
+<span class="nc" id="L250">        log.debug(&quot;REST request to delete User: {}&quot;, id);</span>
+<span class="nc" id="L251">        userService.softDeleteById(id);</span>
+<span class="nc" id="L252">        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, &quot;userManagement.deleted&quot;, id.toString())).build();</span>
+    }
+
+
+    @GetMapping(&quot;/users/current&quot;)
+    public ResponseEntity&lt;UserDTO&gt; getCurrentLoginUser() {
+<span class="nc" id="L258">        log.debug(&quot;REST request to get current login User&quot;);</span>
+
+<span class="nc" id="L260">        UserDTO currentUserDto = userService.getCurrentLoginUser();</span>
+
+<span class="nc" id="L262">        return ResponseEntity.ok(currentUserDto);</span>
+    }
+
+    @GetMapping(&quot;/user-by-id/{userId}&quot;)
+    public UserDTO findUserById(@PathVariable Long userId) {
+<span class="nc" id="L267">        return userService.getUserById(userId);</span>
+    }
+
+
+    @GetMapping(&quot;/user/current/position&quot;)
+    public String getCurrentUserPosition() {
+<span class="nc" id="L273">        log.debug(&quot;REST request to get current user position&quot;);</span>
+
+<span class="nc" id="L275">        String currentUserPosition = userService.getCurrentUserPosition();</span>
+
+<span class="nc" id="L277">        return currentUserPosition;</span>
+    }
+
+    @GetMapping(&quot;/dmsu/user-list&quot;)
+    public ResponseEntity&lt;List&lt;DmsuListUserDTO&gt;&gt; getDmsuUsersByCurrentUserOrg(@PageableDefault(size = 50) Pageable pageable, DmsuUserCriteria criteria) {
+<span class="nc" id="L282">        log.debug(&quot;REST request to get all dmsu users with the same org of current logged in user&quot;);</span>
+
+<span class="nc" id="L284">        Page&lt;DmsuListUserDTO&gt; page = userService.getDmsuUsersByCurrentUserOrg(pageable, criteria);</span>
+<span class="nc" id="L285">        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);</span>
+
+<span class="nc" id="L287">        return new ResponseEntity&lt;&gt;(page.getContent(), headers, HttpStatus.OK);</span>
+    }
+
+    @GetMapping(&quot;/user/privileges&quot;)
+    public ResponseEntity&lt;List&lt;String&gt;&gt; findAllPrivilegesByCurrentLoggedInUser() {
+<span class="nc" id="L292">        log.debug(&quot;REST request to get all privileges by current logged in user&quot;);</span>
+
+<span class="nc" id="L294">        List&lt;String&gt; targetList = userService.findAllPrivilegesByCurrentLoggedInUser();</span>
+
+<span class="nc" id="L296">        return ResponseEntity.ok(targetList);</span>
+    }
+
+
+    @GetMapping(&quot;/user/ldpapuser&quot;)
+    public UserFromLdapDTO findLoginedUserFromLdap() {
+<span class="nc" id="L302">        log.debug(&quot;REST request to get all privileges by current logged in user&quot;);</span>
+<span class="nc" id="L303">        String searchId = SecurityUtils.getCurrentUserLogin().orElseThrow(() -&gt; new UserNotFoundException());</span>
+<span class="nc" id="L304">        List&lt;UserFromLdapDTO&gt; userFromLdapDTOList = ldapIntegrationClient.getUserFromLdap(searchId);</span>
+<span class="nc bnc" id="L305" title="All 4 branches missed.">        if ((userFromLdapDTOList.size() == 0) || (userFromLdapDTOList.size() &gt; 1)) {</span>
+<span class="nc" id="L306">            throw new RuntimeException(&quot;error find user from Ldap&quot;);</span>
+        }
+<span class="nc" id="L308">        return userFromLdapDTOList.get(0);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

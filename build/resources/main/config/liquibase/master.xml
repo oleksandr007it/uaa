@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <property name="uuidType" value="uuid" dbms="h2, postgresql"/>
+
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200427054608_added_entity_Address.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200427080227_added_entity_Kopfg.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200427082858_added_entity_StatehoodSubject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200814164600_modify_entity_StatehoodSubject_data.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200427101857_added_entity_StatehoodSubjectRepresent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200430131709_added_entity_NaisAtsObjectName.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200430132022_added_entity_NaisAtsObjectType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200504083059_added_entity_NaisAtsObjectStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200504084952_added_entity_NaisAtsObject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200427054608_added_entity_constraints_Address.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200514095717_added_entity_EmailConfirmation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200609085356_added_entity_CentralExecutiveAuthority.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200609103327_added_entity_CEADepartment.xml" relativeToChangelogFile="false"/>
+
+    <include file="config/liquibase/changelog/20200609113222_added_entity_CEAAuthCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200609114601_added_entity_CEAAuth.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200609120330_added_entity_CEAAuthGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200609120330_modify_entity_User.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707144030_added_entity_StatehoodSubjectAuthCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707144030_added_entity_StatehoodSubjectAuth.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200802123100_modify_entity_StatehoodSubjectAuth.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707144030_added_entity_StatehoodSubjectAuthGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903093653_added_entity_Notification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201002103310_modified_entity_CEAAuth.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200918132614_added_entity_PostalCodeParams.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200922161838_dropped_referenced_to_address_foreign_keys.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923112512_modified_entity_Address.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923145436_modified_referenced_to_Address_entities.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201015112951_added_entity_NaisAtsDenormalizedObject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210122151152_modified_entity_NaisAtsObject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210122174141_modified_entity_NaisAtsObjectStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210122180422_modified_entity_NaisAtsObjectType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210126100552_modified_entity_NaisAtsDenormalizedObject.xml" relativeToChangelogFile="false"/>
+
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20200427082858_added_entity_constraints_StatehoodSubject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200427101857_added_entity_constraints_StatehoodSubjectRepresent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200514095717_added_entity_constraints_EmailConfirmation.xml" relativeToChangelogFile="false"/>
+<!--    <include file="config/liquibase/changelog/20200504084952_added_entity_constraints_NaisAtsObject.xml" relativeToChangelogFile="false"/>-->
+    <include file="config/liquibase/changelog/20200610151615_added_entity_OauthClientDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200609151615_added_sql_oauth2schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200609161200_oauth2_client_data_added.xml" relativeToChangelogFile="false"/>
+
+    <include file="config/liquibase/changelog/20200707144030_added_entity_constraints_StatehoodSubjectAuth.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707144030_added_entity_constraints_StatehoodSubjectAuthGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201015120322_added_entity_constraints_NaisAtsDenormalizedObject.xml" relativeToChangelogFile="false"/>
+
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20200429161700_load_data_from_csv.xml" relativeToChangelogFile="false"
+             context="prod"/>
+    <include file="config/liquibase/changelog/20200429161700_load_data_from_csv.xml" relativeToChangelogFile="false"
+             context="dev,test"/>
+    <include file="config/liquibase/changelog/20200826123600_add_unique_constraints_for_Users.xml"
+             relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200926123600_add_new_unique_constraints_for_Users.xml"
+             relativeToChangelogFile="false"/>
+
+    <!-- Remove Redundant-->
+    <include file="config/liquibase/changelog/20201015114000_remove_redundant_tables.xml"
+             relativeToChangelogFile="false"/>
+
+    <!-- Create new good privileges structure -->
+    <include file="config/liquibase/changelog/20201213143600_add_refactored_Privileges_and_Groups.xml"
+             relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201213143600_load_data_to_Privileges_and_Groups.xml"
+             relativeToChangelogFile="false" context="dev,prod"/>
+    <include file="config/liquibase/changelog/20201213235200_load_data_Privileges_for_User.xml"
+             relativeToChangelogFile="false" context="dev,prod"/>
+
+    <include file="config/liquibase/changelog/20201227082858_dropNotNullConstraint_StatehoodSubject.xml"
+             relativeToChangelogFile="false"/>
+
+    <include file="config/liquibase/changelog/20210120082858_addColumns_StatehoodSubjectRepresenter.xml"
+             relativeToChangelogFile="false"/>
+
+    <include file="config/liquibase/changelog/20210204082858_add_unique_Constraint_StatehoodSubject.xml"
+             relativeToChangelogFile="false"/>
+
+
+</databaseChangeLog>

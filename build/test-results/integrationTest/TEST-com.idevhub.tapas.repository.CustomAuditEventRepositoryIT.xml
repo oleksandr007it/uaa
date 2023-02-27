@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.repository.CustomAuditEventRepositoryIT" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:42:32" hostname="iMac-Aleksandr-2.local" time="0.499">
+  <properties/>
+  <testcase name="testAddEventWithWebAuthenticationDetails()" classname="com.idevhub.tapas.repository.CustomAuditEventRepositoryIT" time="0.418"/>
+  <testcase name="testAddEventWithNullData()" classname="com.idevhub.tapas.repository.CustomAuditEventRepositoryIT" time="0.012"/>
+  <testcase name="addAuditEventTruncateLargeData()" classname="com.idevhub.tapas.repository.CustomAuditEventRepositoryIT" time="0.028"/>
+  <testcase name="addAuditEventWithAuthorizationFailureType()" classname="com.idevhub.tapas.repository.CustomAuditEventRepositoryIT" time="0.01"/>
+  <testcase name="addAuditEventWithAnonymousUser()" classname="com.idevhub.tapas.repository.CustomAuditEventRepositoryIT" time="0.011"/>
+  <testcase name="addAuditEvent()" classname="com.idevhub.tapas.repository.CustomAuditEventRepositoryIT" time="0.013"/>
+  <system-out><![CDATA[2021-02-09 22:41:47.040 DEBUG 7937 --- [kground-preinit] org.jboss.logging                        : Logging Provider: org.jboss.logging.Log4j2LoggerProvider
+  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:41:47.862  INFO 7937 --- [    Test worker] c.i.t.r.CustomAuditEventRepositoryIT     : No active profile set, falling back to default profiles: default
+2021-02-09 22:41:57.547 DEBUG 7937 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:41:57.648 DEBUG 7937 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:41:57.718 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:42:09.204 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 11486 ms
+2021-02-09 22:42:09.208  WARN 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Warning, Liquibase took more than 5 seconds to start up!
+2021-02-09 22:42:09.446 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:42:09.468  WARN 7937 --- [    Test worker] c.h.instance.HazelcastInstanceFactory    : Hazelcast is starting in a Java modular environment (Java 9 and newer) but without proper access to required Java packages. Use additional Java arguments to provide Hazelcast access to Java internal API. The internal API access is used to get the best performance results. Arguments to be used:
+ --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
+2021-02-09 22:42:09.606  WARN 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : No discovery service is set up, Hazelcast cannot create a cluster.
+2021-02-09 22:42:09.756  INFO 7937 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Prefer IPv4 stack is true, prefer IPv6 addresses is false
+2021-02-09 22:42:09.779 DEBUG 7937 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Trying to bind inet socket address: 0.0.0.0/0.0.0.0:5701
+2021-02-09 22:42:09.781 DEBUG 7937 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Bind successful to inet socket address: /0:0:0:0:0:0:0:0:5701
+2021-02-09 22:42:09.784  INFO 7937 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Picked [192.168.255.30]:5701, using socket ServerSocket[addr=/0:0:0:0:0:0:0:0,localport=5701], bind any local is true
+2021-02-09 22:42:09.867  INFO 7937 --- [    Test worker] com.hazelcast.system                     : [192.168.255.30]:5701 [dev] [3.12.7] Hazelcast 3.12.7 (20200430 - bf4b643) starting at [192.168.255.30]:5701
+2021-02-09 22:42:09.868  INFO 7937 --- [    Test worker] com.hazelcast.system                     : [192.168.255.30]:5701 [dev] [3.12.7] Copyright (c) 2008-2020, Hazelcast, Inc. All Rights Reserved.
+2021-02-09 22:42:09.868 DEBUG 7937 --- [    Test worker] com.hazelcast.system                     : [192.168.255.30]:5701 [dev] [3.12.7] Configured Hazelcast Serialization version: 1
+2021-02-09 22:42:10.524  INFO 7937 --- [    Test worker] c.h.s.i.o.impl.BackpressureRegulator     : [192.168.255.30]:5701 [dev] [3.12.7] Backpressure is disabled
+2021-02-09 22:42:10.577 DEBUG 7937 --- [    Test worker] h.s.i.o.i.InboundResponseHandlerSupplier : [192.168.255.30]:5701 [dev] [3.12.7] Running with 2 response threads
+2021-02-09 22:42:12.199  INFO 7937 --- [    Test worker] c.h.s.i.o.impl.OperationExecutorImpl     : [192.168.255.30]:5701 [dev] [3.12.7] Starting 4 partition threads and 3 generic threads (1 dedicated for priority tasks)
+2021-02-09 22:42:12.202  INFO 7937 --- [    Test worker] c.h.internal.diagnostics.Diagnostics     : [192.168.255.30]:5701 [dev] [3.12.7] Diagnostics disabled. To enable add -Dhazelcast.diagnostics.enabled=true to the JVM arguments.
+2021-02-09 22:42:12.212  INFO 7937 --- [    Test worker] com.hazelcast.core.LifecycleService      : [192.168.255.30]:5701 [dev] [3.12.7] [192.168.255.30]:5701 is STARTING
+2021-02-09 22:42:12.213 DEBUG 7937 --- [    Test worker] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Adding Member [192.168.255.30]:5701 - 71b0068d-c522-4581-8a3a-4c85ff3ae3ee this
+2021-02-09 22:42:12.216 DEBUG 7937 --- [    Test worker] c.h.i.networking.nio.NioNetworking       : [192.168.255.30]:5701 [dev] [3.12.7] TcpIpConnectionManager configured with Non Blocking IO-threading model: 3 input threads and 3 output threads
+2021-02-09 22:42:12.216 DEBUG 7937 --- [    Test worker] c.h.i.networking.nio.NioNetworking       : [192.168.255.30]:5701 [dev] [3.12.7] IO threads selector mode is SELECT
+2021-02-09 22:42:12.237  WARN 7937 --- [    Test worker] com.hazelcast.instance.Node              : [192.168.255.30]:5701 [dev] [3.12.7] No join method is enabled! Starting standalone.
+2021-02-09 22:42:12.237 DEBUG 7937 --- [    Test worker] c.h.internal.cluster.ClusterService      : [192.168.255.30]:5701 [dev] [3.12.7] Setting master address to [192.168.255.30]:5701
+2021-02-09 22:42:12.238 DEBUG 7937 --- [    Test worker] c.h.i.cluster.impl.MembershipManager     : [192.168.255.30]:5701 [dev] [3.12.7] Local member list join version is set to 1
+2021-02-09 22:42:12.294  INFO 7937 --- [    Test worker] com.hazelcast.core.LifecycleService      : [192.168.255.30]:5701 [dev] [3.12.7] [192.168.255.30]:5701 is STARTED
+2021-02-09 22:42:12.450 DEBUG 7937 --- [cached.thread-2] s.n.www.protocol.http.HttpURLConnection  : sun.net.www.MessageHeader@35e35f35 pairs: {GET /ping?version=3.12.7&m=71b0068d-c522-4581-8a3a-4c85ff3ae3ee&p=maven&c=0e67fe20-fa09-452a-b1e0-68feb91872c3&crsz=A&cssz=A&cuptm=47&nuptm=32015&jvmn=Java+HotSpot%28TM%29+64-Bit+Server+VM&jvmv=11.0.9&jetv=&ccpp=0&cdn=0&cjv=0&cnjs=0&cpy=0&cgo=0&osn=Mac+OS+X&osa=x86_64&osv=10.13.6&mclicense=MC_NOT_CONFIGURED&mcver=MC_NOT_CONFIGURED HTTP/1.1: null}{User-Agent: Mozilla/5.0}{Host: phonehome.hazelcast.com}{Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2}{Connection: keep-alive}
+2021-02-09 22:42:12.577 DEBUG 7937 --- [cached.thread-2] s.n.www.protocol.http.HttpURLConnection  : sun.net.www.MessageHeader@6444850d6 pairs: {null: HTTP/1.1 200 OK}{Server: Apache-Coyote/1.1}{Content-Type: text/plain;charset=UTF-8}{Transfer-Encoding: chunked}{Date: Tue, 09 Feb 2021 20:42:11 GMT}{Connection: close}
+2021-02-09 22:42:13.751  WARN 7937 --- [    Test worker] org.hibernate.id.UUIDHexGenerator        : HHH000409: Using org.hibernate.id.UUIDHexGenerator which does not generate IETF RFC 4122 compliant UUID values; consider using org.hibernate.id.UUIDGenerator instead
+2021-02-09 22:42:18.758 DEBUG 7937 --- [    Test worker] i.m.c.u.i.logging.InternalLoggerFactory  : Using SLF4J as the default logging framework
+2021-02-09 22:42:19.172  WARN 7937 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2021-02-09 22:42:19.173  INFO 7937 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2021-02-09 22:42:19.191 DEBUG 7937 --- [    Test worker] c.n.hystrix.strategy.HystrixPlugins      : Created HystrixDynamicProperties. Using class : com.netflix.hystrix.strategy.properties.archaius.HystrixDynamicPropertiesArchaius
+2021-02-09 22:42:19.231  INFO 7937 --- [    Test worker] c.netflix.config.DynamicPropertyFactory  : DynamicPropertyFactory is initialized with configuration sources: com.netflix.config.ConcurrentCompositeConfiguration@59216115
+2021-02-09 22:42:22.052 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:42:26.606  WARN 7937 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2021-02-09 22:42:26.606  INFO 7937 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2021-02-09 22:42:29.859  INFO 7937 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:42:30.235 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:42:30.236 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:42:30.246 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:42:30.246 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:42:32.187  INFO 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:42:32.197 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:42:32.197 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:42:32.233  INFO 7937 --- [    Test worker] c.i.t.r.CustomAuditEventRepositoryIT     : Started CustomAuditEventRepositoryIT in 47.906 seconds (JVM running for 51.961)
+2021-02-09 22:42:32.700  WARN 7937 --- [    Test worker] c.i.t.r.CustomAuditEventRepository       : Event data for test-key too long (265) has been truncated to 255. Consider increasing column width.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

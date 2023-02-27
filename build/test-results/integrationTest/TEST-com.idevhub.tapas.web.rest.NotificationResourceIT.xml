@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.NotificationResourceIT" tests="8" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:25" hostname="iMac-Aleksandr-2.local" time="0.166">
+  <properties/>
+  <testcase name="getNotification()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.035"/>
+  <testcase name="createNotification()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.034"/>
+  <testcase name="getAllNotifications()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.014"/>
+  <testcase name="deleteNotification()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.024"/>
+  <testcase name="updateNotification()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.017"/>
+  <testcase name="updateNonExistingNotification()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.013"/>
+  <testcase name="createNotificationWithExistingId()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.012"/>
+  <testcase name="getNonExistingNotification()" classname="com.idevhub.tapas.web.rest.NotificationResourceIT" time="0.011"/>
+  <system-out><![CDATA[2021-02-09 22:43:25.246 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to get Notification : 1551
+2021-02-09 22:43:25.257 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to get Notification : 1551
+2021-02-09 22:43:25.264 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['id']
+2021-02-09 22:43:25.265 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['content']
+2021-02-09 22:43:25.265 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['subject']
+2021-02-09 22:43:25.266 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['address']
+2021-02-09 22:43:25.267 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['type']
+2021-02-09 22:43:25.268 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['creationDate']
+2021-02-09 22:43:25.289 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to save Notification : Notification{id=null, content='AAAAAAAAAA', subject='AAAAAAAAAA', address='AAAAAAAAAA', type='AAAAAAAAAA', creationDate='1970-01-01T00:00:00Z'}
+2021-02-09 22:43:25.299 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to save Notification : Notification{id=null, content='AAAAAAAAAA', subject='AAAAAAAAAA', address='AAAAAAAAAA', type='AAAAAAAAAA', creationDate='1970-01-01T00:00:00Z'}
+2021-02-09 22:43:25.313 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to get all Notifications
+2021-02-09 22:43:25.313 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to get all Notifications
+2021-02-09 22:43:25.317 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['id']
+2021-02-09 22:43:25.318 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['content']
+2021-02-09 22:43:25.318 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['subject']
+2021-02-09 22:43:25.318 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['address']
+2021-02-09 22:43:25.318 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['type']
+2021-02-09 22:43:25.319 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['creationDate']
+2021-02-09 22:43:25.325 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to save Notification : Notification{id=null, content='AAAAAAAAAA', subject='AAAAAAAAAA', address='AAAAAAAAAA', type='AAAAAAAAAA', creationDate='1970-01-01T00:00:00Z'}
+2021-02-09 22:43:25.330 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to delete Notification : 1554
+2021-02-09 22:43:25.330 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to delete Notification : 1554
+2021-02-09 22:43:25.350 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to save Notification : Notification{id=null, content='AAAAAAAAAA', subject='AAAAAAAAAA', address='AAAAAAAAAA', type='AAAAAAAAAA', creationDate='1970-01-01T00:00:00Z'}
+2021-02-09 22:43:25.357 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to update Notification : Notification{id=1555, content='BBBBBBBBBB', subject='BBBBBBBBBB', address='BBBBBBBBBB', type='BBBBBBBBBB', creationDate='2021-02-09T20:43:25.231Z'}
+2021-02-09 22:43:25.357 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to save Notification : Notification{id=1555, content='BBBBBBBBBB', subject='BBBBBBBBBB', address='BBBBBBBBBB', type='BBBBBBBBBB', creationDate='2021-02-09T20:43:25.231Z'}
+2021-02-09 22:43:25.371 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to update Notification : Notification{id=null, content='AAAAAAAAAA', subject='AAAAAAAAAA', address='AAAAAAAAAA', type='AAAAAAAAAA', creationDate='1970-01-01T00:00:00Z'}
+2021-02-09 22:43:25.373 ERROR 7937 --- [    Test worker] io.github.jhipster.web.util.HeaderUtil   : Entity processing failed, Invalid id
+2021-02-09 22:43:25.373  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Bad Request: Invalid id
+2021-02-09 22:43:25.385 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to save Notification : Notification{id=1, content='AAAAAAAAAA', subject='AAAAAAAAAA', address='AAAAAAAAAA', type='AAAAAAAAAA', creationDate='1970-01-01T00:00:00Z'}
+2021-02-09 22:43:25.386 ERROR 7937 --- [    Test worker] io.github.jhipster.web.util.HeaderUtil   : Entity processing failed, A new notification cannot already have an ID
+2021-02-09 22:43:25.386  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Bad Request: A new notification cannot already have an ID
+2021-02-09 22:43:25.397 DEBUG 7937 --- [    Test worker] c.i.tapas.web.rest.NotificationResource  : REST request to get Notification : 9223372036854775807
+2021-02-09 22:43:25.397 DEBUG 7937 --- [    Test worker] c.i.tapas.service.NotificationService    : Request to get Notification : 9223372036854775807
+2021-02-09 22:43:25.399  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Not Found: 404 NOT_FOUND
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,8 @@
+ ${AnsiColor.RED} __    __       ___           ___
+ ${AnsiColor.RED}|  |  |  |     /   \         /   \
+ ${AnsiColor.RED}|  |  |  |    /  ^  \       /  ^  \
+ ${AnsiColor.RED}|  |  |  |   /  /_\  \     /  /_\  \
+ ${AnsiColor.RED}|  `--'  |  /  _____  \   /  _____  \
+ ${AnsiColor.RED} \______/  /__/     \__\ /__/     \__\
+
+${AnsiColor.BRIGHT_BLUE}:: IDEV-HUB 🤓  :: Running Spring Boot ${spring-boot.version} ::${AnsiColor.DEFAULT}

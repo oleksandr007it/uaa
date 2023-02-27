@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.thirdapp.ThirdAppAuthenticationProviderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:41" hostname="iMac-Aleksandr-2.local" time="0.016">
+  <properties/>
+  <testcase name="testAuthenticate()" classname="com.idevhub.tapas.security.thirdapp.ThirdAppAuthenticationProviderTest" time="0.009"/>
+  <testcase name="testSupports()" classname="com.idevhub.tapas.security.thirdapp.ThirdAppAuthenticationProviderTest" time="0.001"/>
+  <testcase name="testAuthenticate_ThrowsAuthenticationException()" classname="com.idevhub.tapas.security.thirdapp.ThirdAppAuthenticationProviderTest" time="0.005"/>
+  <system-out><![CDATA[2021-02-09 22:43:41.707  INFO   --- [    Test worker] c.i.t.s.t.ThirdAppAuthenticationProvider : Start authenticate thirdAppprovider
+2021-02-09 22:43:41.708  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:41.714  INFO   --- [    Test worker] c.i.t.s.t.ThirdAppAuthenticationProvider : Authentication success. Authorities: []
+2021-02-09 22:43:41.719  INFO   --- [    Test worker] c.i.t.s.t.ThirdAppAuthenticationProvider : Start authenticate thirdAppprovider
+2021-02-09 22:43:41.720  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:41.721 ERROR   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : UserInfothirdApp must not be empty
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

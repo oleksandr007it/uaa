@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrivilegeForSubjectCreationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">PrivilegeForSubjectCreationService.java</span></div><h1>PrivilegeForSubjectCreationService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.domain.PrivilegeGroup;
+import com.idevhub.tapas.domain.StatehoodSubject;
+import com.idevhub.tapas.repository.PrivilegeGroupRepository;
+import com.idevhub.tapas.service.dto.PrivilegeGroupWithPrivilegesDTO;
+import com.idevhub.tapas.service.mapper.PrivilegeGroupMapper;
+import com.idevhub.tapas.service.mapper.PrivilegeMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import javax.transaction.Transactional;
+
+import static com.idevhub.tapas.domain.enumeration.PrivilegeType.LEGAL_ENTITY;
+import static com.idevhub.tapas.security.SecurityUtils.getCurrentUserIdIfExists;
+import static java.util.UUID.randomUUID;
+
+<span class="fc" id="L20">@Slf4j</span>
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class PrivilegeForSubjectCreationService {
+
+    private final PrivilegeGroupRepository privilegeGroupRepository;
+
+    private final PrivilegeGroupMapper privilegeGroupMapper;
+    private final PrivilegeMapper privilegeMapper;
+
+    private final PrivilegesCheckService privilegesCheckService;
+    private final PrivilegeGroupCheckService privilegeGroupCheckService;
+    private final StatehoodSubjectCheckService statehoodSubjectCheckService;
+    private final StatehoodSubjectRepresentCheckService statehoodSubjectRepresentCheckService;
+
+    public PrivilegeGroupWithPrivilegesDTO createOrUpdateGroup(Long subjectId, PrivilegeGroupWithPrivilegesDTO groupDto) {
+<span class="fc" id="L37">        performChecks(subjectId, groupDto);</span>
+
+<span class="fc" id="L39">        var group = createEntity(subjectId, groupDto);</span>
+<span class="fc" id="L40">        var savedGroup = privilegeGroupRepository.save(group);</span>
+
+<span class="fc" id="L42">        return privilegeGroupMapper.toDto(savedGroup);</span>
+    }
+
+    private void performChecks(Long subjectId, PrivilegeGroupWithPrivilegesDTO groupDto) {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        var isUpdating = !StringUtils.isEmpty(groupDto.getCode());</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (isUpdating) {</span>
+<span class="fc" id="L48">            var storedGroup = privilegeGroupRepository.findById(groupDto.getCode()).orElseThrow();</span>
+<span class="fc" id="L49">            storedGroup.checkIsNotGlobal();</span>
+<span class="fc" id="L50">            storedGroup.checkIsNotDeleted();</span>
+<span class="fc" id="L51">            storedGroup.checkType(LEGAL_ENTITY);</span>
+        }
+<span class="fc" id="L53">        privilegeGroupCheckService.checkOtherWithSameNameNotExists(groupDto, LEGAL_ENTITY);</span>
+<span class="fc" id="L54">        statehoodSubjectCheckService.checkSubjectIsActive(subjectId);</span>
+<span class="fc" id="L55">        statehoodSubjectRepresentCheckService.checkDeclarantIsActiveAndHaveSubject(getCurrentUserIdIfExists(), subjectId);</span>
+<span class="fc" id="L56">        privilegesCheckService.checkStoredPrivilegesType(groupDto.getPrivileges(), LEGAL_ENTITY);</span>
+<span class="fc" id="L57">    }</span>
+
+    private PrivilegeGroup createEntity(Long subjectId, PrivilegeGroupWithPrivilegesDTO groupDto) {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        var code = groupDto.getCode() == null ? randomUUID().toString() : groupDto.getCode();</span>
+<span class="fc" id="L61">        var subject = new StatehoodSubject(subjectId);</span>
+<span class="fc" id="L62">        var privileges = privilegeMapper.toEntity(groupDto.getPrivileges());</span>
+
+<span class="fc" id="L64">        return new PrivilegeGroup()</span>
+<span class="fc" id="L65">            .setCode(code)</span>
+<span class="fc" id="L66">            .setGlobal(false)</span>
+<span class="fc" id="L67">            .setFullNameUkr(groupDto.getFullNameUkr())</span>
+<span class="fc" id="L68">            .setPrivilegeGroupType(LEGAL_ENTITY)</span>
+<span class="fc" id="L69">            .setStatehoodSubject(subject)</span>
+<span class="fc" id="L70">            .setPrivileges(privileges);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.domain.NotificationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:43" hostname="iMac-Aleksandr-2.local" time="0.0">
+  <properties/>
+  <testcase name="equalsVerifier()" classname="com.idevhub.tapas.domain.NotificationTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BackOfficeUserDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.dto</a> &gt; <span class="el_source">BackOfficeUserDTO.java</span></div><h1>BackOfficeUserDTO.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.dto;
+
+import com.idevhub.tapas.domain.User;
+import lombok.Data;
+
+
+@Data
+public class BackOfficeUserDTO {
+
+    private Long id;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String middleName;
+
+    private String org;
+
+    private String orgUnit;
+
+    private String rnokpp;
+
+    private String edrpouCode;
+
+    private String position;
+
+    private String email;
+
+    private String phoneNumber;
+
+<span class="nc" id="L32">    public BackOfficeUserDTO(User user) {</span>
+
+<span class="nc" id="L34">        this.id = user.getId();</span>
+<span class="nc" id="L35">        this.firstName = user.getFirstName();</span>
+<span class="nc" id="L36">        this.lastName = user.getLastName();</span>
+<span class="nc" id="L37">        this.middleName = user.getMiddleName();</span>
+<span class="nc" id="L38">        this.rnokpp = user.getRnokpp();</span>
+<span class="nc" id="L39">        this.edrpouCode = user.getEdrpouCode();</span>
+<span class="nc" id="L40">        this.email = user.getEmail();</span>
+<span class="nc" id="L41">        this.phoneNumber = user.getPhoneNumber();</span>
+<span class="nc" id="L42">        this.org = user.getOrg();</span>
+<span class="nc" id="L43">        this.orgUnit = user.getOrgUnit();</span>
+<span class="nc" id="L44">        this.position = user.getPosition();</span>
+
+
+<span class="nc" id="L47">    }</span>
+
+<span class="nc" id="L49">    public BackOfficeUserDTO() {</span>
+
+<span class="nc" id="L51">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

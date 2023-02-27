@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:26" hostname="iMac-Aleksandr-2.local" time="0.099">
+  <properties/>
+  <testcase name="testGetDepartment()" classname="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" time="0.021"/>
+  <testcase name="testGetAllActiveDepartments()" classname="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" time="0.008"/>
+  <testcase name="testFindAll()" classname="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" time="0.008"/>
+  <testcase name="testFindOne()" classname="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" time="0.007"/>
+  <testcase name="testSave()" classname="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" time="0.036"/>
+  <testcase name="testGetByCode()" classname="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" time="0.006"/>
+  <testcase name="testDelete()" classname="com.idevhub.tapas.service.impl.CentralExecutiveAuthorityServiceImplTest" time="0.006"/>
+  <system-out><![CDATA[2021-02-09 22:44:26.399 DEBUG 7952 --- [    Test worker] s.i.CentralExecutiveAuthorityServiceImpl : Trying to get cea department by cea code = edrpou and department id = 0
+2021-02-09 22:44:26.411 DEBUG 7952 --- [    Test worker] s.i.CentralExecutiveAuthorityServiceImpl : Trying to get department list of cea (code = edrpou)
+2021-02-09 22:44:26.420 DEBUG 7952 --- [    Test worker] s.i.CentralExecutiveAuthorityServiceImpl : Request to get all CentralExecutiveAuthorities
+2021-02-09 22:44:26.428 DEBUG 7952 --- [    Test worker] s.i.CentralExecutiveAuthorityServiceImpl : Request to get CentralExecutiveAuthority : 0
+2021-02-09 22:44:26.437 DEBUG 7952 --- [    Test worker] s.i.CentralExecutiveAuthorityServiceImpl : Request to save CentralExecutiveAuthority : CentralExecutiveAuthorityDTO{id=0, centralExecutiveAuthorityStatus='ACTIVE', createdAt='2020-01-01T00:00:00Z', updatedAt='2020-01-01T00:00:00Z', deletedAt='2020-01-01T00:00:00Z', code='code', fullNameUkr='fullNameUkr', fullNameEng='fullNameEng', telNumber='telNumber', email='email', createdBy=null, updatedBy='null', deletedBy='null', address=null}
+2021-02-09 22:44:26.473 DEBUG 7952 --- [    Test worker] s.i.CentralExecutiveAuthorityServiceImpl : Request to get CentralExecutiveAuthority : edrpou
+2021-02-09 22:44:26.480 DEBUG 7952 --- [    Test worker] s.i.CentralExecutiveAuthorityServiceImpl : Request to delete CentralExecutiveAuthority : 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

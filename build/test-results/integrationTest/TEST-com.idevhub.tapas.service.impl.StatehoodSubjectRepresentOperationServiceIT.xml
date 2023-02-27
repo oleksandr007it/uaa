@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" tests="7" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:26" hostname="iMac-Aleksandr-2.local" time="0.137">
+  <properties/>
+  <testcase name="testChekRepresenterAndReturnDataForSignEx2()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" time="0.019"/>
+  <testcase name="testUpdateRepresenterStatusEmptyEdrpou()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" time="0.032"/>
+  <testcase name="testChekRepresenterAndReturnDataForSign()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" time="0.018"/>
+  <testcase name="testChekRepresenterAndReturnDataForSignEx()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" time="0.016"/>
+  <testcase name="testUpdateRepresenterStatusEmptyEdrpouEX()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" time="0.015"/>
+  <testcase name="testUpdateRepresenterStatusEmptyEdrpouWrongRnEX()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" time="0.015"/>
+  <testcase name="testUpdateRepresenterStatus()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentOperationServiceIT" time="0.015"/>
+  <system-out><![CDATA[2021-02-09 22:43:26.016 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try to make chekRepresenterAndReturnDataForSign
+2021-02-09 22:43:26.035 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try to make updateRepresenterStatus
+2021-02-09 22:43:26.036 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try  to checkStatehoodSubjectAndReturnRnokpp
+2021-02-09 22:43:26.050 DEBUG 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Request to get StatehoodSubject by ID : 1411
+2021-02-09 22:43:26.052 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : check StatehoodSubject And Return Rnokpp success
+2021-02-09 22:43:26.066 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try to make chekRepresenterAndReturnDataForSign
+2021-02-09 22:43:26.068 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try  to checkStatehoodSubjectAndReturnRnokpp
+2021-02-09 22:43:26.068 DEBUG 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Request to get StatehoodSubject by ID : 1412
+2021-02-09 22:43:26.069 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : check StatehoodSubject And Return Rnokpp success
+2021-02-09 22:43:26.087 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try to make chekRepresenterAndReturnDataForSign
+2021-02-09 22:43:26.089 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try  to checkStatehoodSubjectAndReturnRnokpp
+2021-02-09 22:43:26.089 DEBUG 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Request to get StatehoodSubject by ID : 1413
+2021-02-09 22:43:26.089 ERROR 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : The status of SubjectStatus  is wrong. It must be ACTIVE 
+2021-02-09 22:43:26.104 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try to make updateRepresenterStatus
+2021-02-09 22:43:26.104 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try  to checkStatehoodSubjectAndReturnRnokpp
+2021-02-09 22:43:26.104 DEBUG 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Request to get StatehoodSubject by ID : 1414
+2021-02-09 22:43:26.105 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : check StatehoodSubject And Return Rnokpp success
+2021-02-09 22:43:26.106 ERROR 7937 --- [    Test worker] c.i.tapas.service.utils.CompareUtils     : Declarant full Name or Rnokpp not Equals data  from  sign
+2021-02-09 22:43:26.120 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try to make updateRepresenterStatus
+2021-02-09 22:43:26.120 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try  to checkStatehoodSubjectAndReturnRnokpp
+2021-02-09 22:43:26.120 DEBUG 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Request to get StatehoodSubject by ID : 1415
+2021-02-09 22:43:26.120 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : check StatehoodSubject And Return Rnokpp success
+2021-02-09 22:43:26.122 ERROR 7937 --- [    Test worker] c.i.tapas.service.utils.CompareUtils     : Declarant full Name or Rnokpp not Equals data  from  sign
+2021-02-09 22:43:26.135 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try to make updateRepresenterStatus
+2021-02-09 22:43:26.135 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : try  to checkStatehoodSubjectAndReturnRnokpp
+2021-02-09 22:43:26.136 DEBUG 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Request to get StatehoodSubject by ID : 1416
+2021-02-09 22:43:26.136 DEBUG 7937 --- [    Test worker] tatehoodSubjectRepresentOperationService : check StatehoodSubject And Return Rnokpp success
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

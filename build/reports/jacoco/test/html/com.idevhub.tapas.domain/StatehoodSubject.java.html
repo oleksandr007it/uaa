@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatehoodSubject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.domain</a> &gt; <span class="el_source">StatehoodSubject.java</span></div><h1>StatehoodSubject.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.idevhub.tapas.domain.address.Address;
+import com.idevhub.tapas.domain.constants.UserStatus;
+import com.idevhub.tapas.domain.enumeration.AccountDetailsStatus;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Objects;
+
+/**
+ * A StatehoodSubject.
+ */
+@Entity
+@Table(name = &quot;statehood_subject&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class StatehoodSubject implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;sequenceGenerator&quot;)
+    @SequenceGenerator(name = &quot;sequenceGenerator&quot;)
+    private Long id;
+
+<span class="fc" id="L34">    @NotNull</span>
+    private String subjectStatus = UserStatus.ACTIVE;
+
+<span class="fc" id="L37">    @NotNull</span>
+    @Enumerated(EnumType.STRING)
+    private AccountDetailsStatus accountDetailsStatus = AccountDetailsStatus.NOT_FULL;
+
+    @NotNull
+    private String subjectCode;
+
+    @NotNull
+    private String subjectName;
+
+    @NotNull
+    private String subjectShortName;
+
+    private String headFullName;
+
+    @NotNull
+    private String telNumber;
+
+    @NotNull
+    private String email;
+
+    @NotNull
+    private boolean isEmailApproved;
+
+    @NotNull
+    private String eori;
+
+    @NotNull
+    private boolean isActualSameAsLegalAddress;
+
+    @CreatedBy
+    @JsonIgnore
+    private String createdBy;
+
+    @CreatedDate
+    private Instant createdAt;
+
+    @LastModifiedBy
+    @JsonIgnore
+    private String updatedBy;
+
+    private Instant updatedAt;
+
+    @JsonIgnore
+    private String deletedBy;
+
+    private Instant deletedAt;
+
+    @JsonIgnore
+    @NotNull
+    @ManyToOne(optional = false)
+    private Kopfg kopfg;
+
+    @JsonIgnore
+    @NotNull
+    @ManyToOne(optional = false)
+    private Address legalAddress;
+
+    @JsonIgnore
+    @NotNull
+    @ManyToOne(optional = false)
+    private Address actualAddress;
+
+<span class="fc" id="L100">    public StatehoodSubject(Long subjectId) {</span>
+<span class="fc" id="L101">        this.id = subjectId;</span>
+<span class="fc" id="L102">    }</span>
+
+<span class="fc" id="L104">    public StatehoodSubject() {</span>
+<span class="fc" id="L105">    }</span>
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="fc" id="L109">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L113">        this.id = id;</span>
+<span class="fc" id="L114">    }</span>
+
+    public StatehoodSubject id(Long id) {
+<span class="fc" id="L117">        this.id = id;</span>
+<span class="fc" id="L118">        return this;</span>
+    }
+
+    public String getSubjectStatus() {
+<span class="fc" id="L122">        return subjectStatus;</span>
+    }
+
+    public void setSubjectStatus(String subjectStatus) {
+<span class="fc" id="L126">        this.subjectStatus = subjectStatus;</span>
+<span class="fc" id="L127">    }</span>
+
+    public StatehoodSubject subjectStatus(String subjectStatus) {
+<span class="fc" id="L130">        this.subjectStatus = subjectStatus;</span>
+<span class="fc" id="L131">        return this;</span>
+    }
+
+    public AccountDetailsStatus getAccountDetailsStatus() {
+<span class="fc" id="L135">        return accountDetailsStatus;</span>
+    }
+
+    public void setAccountDetailsStatus(AccountDetailsStatus accountDetailsStatus) {
+<span class="fc" id="L139">        this.accountDetailsStatus = accountDetailsStatus;</span>
+<span class="fc" id="L140">    }</span>
+
+    public StatehoodSubject accountDetailsStatus(AccountDetailsStatus accountDetailsStatus) {
+<span class="fc" id="L143">        this.accountDetailsStatus = accountDetailsStatus;</span>
+<span class="fc" id="L144">        return this;</span>
+    }
+
+    public Instant getCreatedAt() {
+<span class="fc" id="L148">        return createdAt;</span>
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+<span class="fc" id="L152">        this.createdAt = createdAt;</span>
+<span class="fc" id="L153">    }</span>
+
+    public StatehoodSubject createdAt(Instant createdAt) {
+<span class="fc" id="L156">        this.createdAt = createdAt;</span>
+<span class="fc" id="L157">        return this;</span>
+    }
+
+    public Instant getUpdatedAt() {
+<span class="fc" id="L161">        return updatedAt;</span>
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+<span class="fc" id="L165">        this.updatedAt = updatedAt;</span>
+<span class="fc" id="L166">    }</span>
+
+    public StatehoodSubject updatedAt(Instant updatedAt) {
+<span class="fc" id="L169">        this.updatedAt = updatedAt;</span>
+<span class="fc" id="L170">        return this;</span>
+    }
+
+    public Instant getDeletedAt() {
+<span class="fc" id="L174">        return deletedAt;</span>
+    }
+
+    public void setDeletedAt(Instant deletedAt) {
+<span class="nc" id="L178">        this.deletedAt = deletedAt;</span>
+<span class="nc" id="L179">    }</span>
+
+    public StatehoodSubject deletedAt(Instant deletedAt) {
+<span class="nc" id="L182">        this.deletedAt = deletedAt;</span>
+<span class="nc" id="L183">        return this;</span>
+    }
+
+    public String getSubjectCode() {
+<span class="fc" id="L187">        return subjectCode;</span>
+    }
+
+    public void setSubjectCode(String subjectCode) {
+<span class="fc" id="L191">        this.subjectCode = subjectCode;</span>
+<span class="fc" id="L192">    }</span>
+
+    public StatehoodSubject subjectCode(String subjectCode) {
+<span class="fc" id="L195">        this.subjectCode = subjectCode;</span>
+<span class="fc" id="L196">        return this;</span>
+    }
+
+    public String getSubjectName() {
+<span class="fc" id="L200">        return subjectName;</span>
+    }
+
+    public void setSubjectName(String subjectName) {
+<span class="fc" id="L204">        this.subjectName = subjectName;</span>
+<span class="fc" id="L205">    }</span>
+
+    public StatehoodSubject subjectName(String subjectName) {
+<span class="fc" id="L208">        this.subjectName = subjectName;</span>
+<span class="fc" id="L209">        return this;</span>
+    }
+
+    public String getSubjectShortName() {
+<span class="fc" id="L213">        return subjectShortName;</span>
+    }
+
+    public void setSubjectShortName(String subjectShortName) {
+<span class="fc" id="L217">        this.subjectShortName = subjectShortName;</span>
+<span class="fc" id="L218">    }</span>
+
+    public StatehoodSubject subjectShortName(String subjectShortName) {
+<span class="fc" id="L221">        this.subjectShortName = subjectShortName;</span>
+<span class="fc" id="L222">        return this;</span>
+    }
+
+    public String getHeadFullName() {
+<span class="fc" id="L226">        return headFullName;</span>
+    }
+
+    public void setHeadFullName(String headFullName) {
+<span class="nc" id="L230">        this.headFullName = headFullName;</span>
+<span class="nc" id="L231">    }</span>
+
+    public StatehoodSubject headFullName(String headFullName) {
+<span class="fc" id="L234">        this.headFullName = headFullName;</span>
+<span class="fc" id="L235">        return this;</span>
+    }
+
+    public String getTelNumber() {
+<span class="fc" id="L239">        return telNumber;</span>
+    }
+
+    public void setTelNumber(String telNumber) {
+<span class="fc" id="L243">        this.telNumber = telNumber;</span>
+<span class="fc" id="L244">    }</span>
+
+    public StatehoodSubject telNumber(String telNumber) {
+<span class="fc" id="L247">        this.telNumber = telNumber;</span>
+<span class="fc" id="L248">        return this;</span>
+    }
+
+    public String getEmail() {
+<span class="fc" id="L252">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="fc" id="L256">        this.email = email;</span>
+<span class="fc" id="L257">    }</span>
+
+    public StatehoodSubject email(String email) {
+<span class="fc" id="L260">        this.email = email;</span>
+<span class="fc" id="L261">        return this;</span>
+    }
+
+    public Boolean isIsEmailApproved() {
+<span class="fc" id="L265">        return isEmailApproved;</span>
+    }
+
+    public StatehoodSubject isEmailApproved(Boolean isEmailApproved) {
+<span class="fc" id="L269">        this.isEmailApproved = isEmailApproved;</span>
+<span class="fc" id="L270">        return this;</span>
+    }
+
+    public void setIsEmailApproved(Boolean isEmailApproved) {
+<span class="fc" id="L274">        this.isEmailApproved = isEmailApproved;</span>
+<span class="fc" id="L275">    }</span>
+
+    public String getEori() {
+<span class="fc" id="L278">        return eori;</span>
+    }
+
+    public void setEori(String eori) {
+<span class="fc" id="L282">        this.eori = eori;</span>
+<span class="fc" id="L283">    }</span>
+
+    public StatehoodSubject eori(String eori) {
+<span class="fc" id="L286">        this.eori = eori;</span>
+<span class="fc" id="L287">        return this;</span>
+    }
+
+    public Boolean isIsActualSameAsLegalAddress() {
+<span class="fc" id="L291">        return isActualSameAsLegalAddress;</span>
+    }
+
+    public StatehoodSubject isActualSameAsLegalAddress(Boolean isActualSameAsLegalAddress) {
+<span class="fc" id="L295">        this.isActualSameAsLegalAddress = isActualSameAsLegalAddress;</span>
+<span class="fc" id="L296">        return this;</span>
+    }
+
+    public void setIsActualSameAsLegalAddress(Boolean isActualSameAsLegalAddress) {
+<span class="fc" id="L300">        this.isActualSameAsLegalAddress = isActualSameAsLegalAddress;</span>
+<span class="fc" id="L301">    }</span>
+
+    public String getCreatedBy() {
+<span class="fc" id="L304">        return createdBy;</span>
+    }
+
+    public void setCreatedBy(String createdBy) {
+<span class="fc" id="L308">        this.createdBy = createdBy;</span>
+<span class="fc" id="L309">    }</span>
+
+    public StatehoodSubject createdBy(String createdBy) {
+<span class="fc" id="L312">        this.createdBy = createdBy;</span>
+<span class="fc" id="L313">        return this;</span>
+    }
+
+    public String getUpdatedBy() {
+<span class="fc" id="L317">        return updatedBy;</span>
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+<span class="fc" id="L321">        this.updatedBy = updatedBy;</span>
+<span class="fc" id="L322">    }</span>
+
+    public StatehoodSubject updatedBy(String updatedBy) {
+<span class="nc" id="L325">        this.updatedBy = updatedBy;</span>
+<span class="nc" id="L326">        return this;</span>
+    }
+
+    public String getDeletedBy() {
+<span class="fc" id="L330">        return deletedBy;</span>
+    }
+
+    public void setDeletedBy(String deletedBy) {
+<span class="nc" id="L334">        this.deletedBy = deletedBy;</span>
+<span class="nc" id="L335">    }</span>
+
+    public StatehoodSubject deletedBy(String deletedBy) {
+<span class="nc" id="L338">        this.deletedBy = deletedBy;</span>
+<span class="nc" id="L339">        return this;</span>
+    }
+
+    public Kopfg getKopfg() {
+<span class="fc" id="L343">        return kopfg;</span>
+    }
+
+    public void setKopfg(Kopfg kopfg) {
+<span class="fc" id="L347">        this.kopfg = kopfg;</span>
+<span class="fc" id="L348">    }</span>
+
+    public StatehoodSubject kopfg(Kopfg kopfg) {
+<span class="fc" id="L351">        this.kopfg = kopfg;</span>
+<span class="fc" id="L352">        return this;</span>
+    }
+
+    public Address getLegalAddress() {
+<span class="fc" id="L356">        return legalAddress;</span>
+    }
+
+    public void setLegalAddress(Address address) {
+<span class="fc" id="L360">        this.legalAddress = address;</span>
+<span class="fc" id="L361">    }</span>
+
+    public StatehoodSubject legalAddress(Address address) {
+<span class="fc" id="L364">        this.legalAddress = address;</span>
+<span class="fc" id="L365">        return this;</span>
+    }
+
+    public Address getActualAddress() {
+<span class="fc" id="L369">        return actualAddress;</span>
+    }
+
+    public void setActualAddress(Address address) {
+<span class="fc" id="L373">        this.actualAddress = address;</span>
+<span class="fc" id="L374">    }</span>
+
+    public StatehoodSubject actualAddress(Address address) {
+<span class="fc" id="L377">        this.actualAddress = address;</span>
+<span class="fc" id="L378">        return this;</span>
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L384" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L385">            return true;</span>
+        }
+<span class="nc bnc" id="L387" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L388">            return false;</span>
+        }
+<span class="nc" id="L390">        StatehoodSubject statehoodSubject = (StatehoodSubject) o;</span>
+<span class="nc bnc" id="L391" title="All 4 branches missed.">        if (statehoodSubject.getId() == null || getId() == null) {</span>
+<span class="nc" id="L392">            return false;</span>
+        }
+<span class="nc" id="L394">        return Objects.equals(getId(), statehoodSubject.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L399">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L404">        return &quot;StatehoodSubject{&quot; +</span>
+<span class="nc" id="L405">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L406">            &quot;, subjectStatus='&quot; + getSubjectStatus() + &quot;'&quot; +</span>
+<span class="nc" id="L407">            &quot;, accountDetailsStatus='&quot; + getAccountDetailsStatus() + &quot;'&quot; +</span>
+<span class="nc" id="L408">            &quot;, createdAt='&quot; + getCreatedAt() + &quot;'&quot; +</span>
+<span class="nc" id="L409">            &quot;, updatedAt='&quot; + getUpdatedAt() + &quot;'&quot; +</span>
+<span class="nc" id="L410">            &quot;, deletedAt='&quot; + getDeletedAt() + &quot;'&quot; +</span>
+<span class="nc" id="L411">            &quot;, subjectCode='&quot; + getSubjectCode() + &quot;'&quot; +</span>
+<span class="nc" id="L412">            &quot;, subjectName='&quot; + getSubjectName() + &quot;'&quot; +</span>
+<span class="nc" id="L413">            &quot;, subjectShortName='&quot; + getSubjectShortName() + &quot;'&quot; +</span>
+<span class="nc" id="L414">            &quot;, headFullName='&quot; + getHeadFullName() + &quot;'&quot; +</span>
+<span class="nc" id="L415">            &quot;, telNumber='&quot; + getTelNumber() + &quot;'&quot; +</span>
+<span class="nc" id="L416">            &quot;, email='&quot; + getEmail() + &quot;'&quot; +</span>
+<span class="nc" id="L417">            &quot;, isEmailApproved='&quot; + isIsEmailApproved() + &quot;'&quot; +</span>
+<span class="nc" id="L418">            &quot;, eori='&quot; + getEori() + &quot;'&quot; +</span>
+<span class="nc" id="L419">            &quot;, isActualSameAsLegalAddress='&quot; + isIsActualSameAsLegalAddress() + &quot;'&quot; +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

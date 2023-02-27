@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminServicesRequestResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">AdminServicesRequestResource.java</span></div><h1>AdminServicesRequestResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.service.AdminServiceRequestService;
+import com.idevhub.tapas.service.NotificationService;
+import com.idevhub.tapas.service.dto.*;
+import io.micrometer.core.annotation.Timed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
+
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class AdminServicesRequestResource {
+<span class="fc" id="L18">    private final Logger log = LoggerFactory.getLogger(AdminServicesRequestResource.class);</span>
+
+    private final AdminServiceRequestService service;
+    private final NotificationService notificationService;
+
+<span class="fc" id="L23">    public AdminServicesRequestResource(AdminServiceRequestService service, NotificationService notificationService) {</span>
+<span class="fc" id="L24">        this.service = service;</span>
+<span class="fc" id="L25">        this.notificationService = notificationService;</span>
+<span class="fc" id="L26">    }</span>
+
+    @GetMapping(&quot;/admin-service-request/data&quot;)
+    @Timed
+    public AdminServiceRequestFullRespDTO getAdminServiceRequestData(@RequestParam(&quot;declarantId&quot;) Long declarantId,
+                                                                     @RequestParam(&quot;statehoodSubjectId&quot;) Long statehoodSubjectId) {
+<span class="fc" id="L32">        log.debug(&quot;REST request to get all AdminServiceRequest data&quot;);</span>
+<span class="fc" id="L33">        AdminServiceRequestFullRespDTO target = service.getFullRespDTO(declarantId, statehoodSubjectId);</span>
+
+<span class="fc" id="L35">        return target;</span>
+    }
+
+    @GetMapping(&quot;/current-admin-service-request/data&quot;)
+    @Timed
+    public AdminServiceRequestFullRespDTO getCurrentUserAdminServiceRequestData(@RequestParam(&quot;statehoodSubjectId&quot;) Long statehoodSubjectId) {
+<span class="fc" id="L41">        log.debug(&quot;REST request to get all AdminServiceRequest data&quot;);</span>
+<span class="fc" id="L42">        AdminServiceRequestFullRespDTO target = service.getCurrentUserFullRespDTO(statehoodSubjectId);</span>
+
+<span class="fc" id="L44">        return target;</span>
+    }
+
+    @GetMapping(&quot;/admin-service-request/brokerage-create-data&quot;)
+    @Timed
+    public AdminServiceRequestBrokerageCreateDTO getASRBrokerageCreateData() {
+<span class="fc" id="L50">        log.debug(&quot;REST request to get Brokerage create request data&quot;);</span>
+<span class="fc" id="L51">        AdminServiceRequestBrokerageCreateDTO target = service.getASRBrokerageCreateData();</span>
+
+<span class="fc" id="L53">        return target;</span>
+    }
+
+    @GetMapping(&quot;/admin-service-request/warehouse-create-data&quot;)
+    @Timed
+    public AdminServiceRequestWarehouseDTO getASRWarehouseCreateData() {
+<span class="fc" id="L59">        log.debug(&quot;REST request to get Warehouse create request data&quot;);</span>
+<span class="fc" id="L60">        AdminServiceRequestWarehouseDTO target = service.getASRWarehouseCreateData();</span>
+
+<span class="fc" id="L62">        return target;</span>
+    }
+
+    @GetMapping(&quot;/admin-service-request/brokerage-update-data&quot;)
+    @Timed
+    public List&lt;AdminServiceRequestBrokerageUpdateDTO&gt; getASRBrokerageUpdateData(@RequestParam Set&lt;Long&gt; subjectsIds) {
+<span class="fc" id="L68">        log.debug(&quot;REST request to get Brokerage update request data&quot;);</span>
+<span class="fc" id="L69">        List&lt;AdminServiceRequestBrokerageUpdateDTO&gt; target = service.getASRBrokerageUpdateData(subjectsIds);</span>
+
+<span class="fc" id="L71">        return target;</span>
+    }
+
+    @GetMapping(&quot;/admin-service-request/warehouse-update-data&quot;)
+    @Timed
+    public List&lt;AdminServiceRequestWarehouseDTO&gt; getASRWarehouseUpdateData(@RequestParam Set&lt;Long&gt; subjectsIds) {
+<span class="fc" id="L77">        log.debug(&quot;REST request to get Warehouse update request data&quot;);</span>
+<span class="fc" id="L78">        List&lt;AdminServiceRequestWarehouseDTO&gt; target = service.getASRWarehouseUpdateData(subjectsIds);</span>
+
+<span class="fc" id="L80">        return target;</span>
+    }
+
+    @GetMapping(&quot;/statehood-subject-represents/data-to-approve-request&quot;)
+    @Timed
+    public DataToApproveRequestDTO getDataToApproveRequest() {
+<span class="fc" id="L86">        log.debug(&quot;REST request to get Warehouse update request data&quot;);</span>
+<span class="fc" id="L87">        DataToApproveRequestDTO target = service.getDataToApproveRequest();</span>
+
+<span class="fc" id="L89">        return target;</span>
+    }
+
+    @PostMapping(&quot;/asr/email/request-approve&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; sendRequestApproveEmail(@RequestBody RequestApproveOrReissueDTO input) {
+<span class="fc" id="L95">        log.debug(&quot;REST request to send request approve email to applicant with id :{} &quot;, input.getApplicantId());</span>
+<span class="fc" id="L96">        notificationService.saveAproveEmail(input, &quot;email.applications.approve.title&quot;, &quot;email.applications.approve.type&quot;);</span>
+<span class="fc" id="L97">        return ResponseEntity.ok().build();</span>
+    }
+
+    @PostMapping(&quot;/asr/email/request-reissue&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; sendRequestReissueEmail(@RequestBody RequestApproveOrReissueDTO input) {
+<span class="fc" id="L103">        log.debug(&quot;REST request to send request reissue email to applicant with id :{} &quot;, input.getApplicantId());</span>
+<span class="fc" id="L104">        notificationService.saveAproveEmail(input, &quot;email.applications.reissue.title&quot;, &quot;email.applications.reissue.type&quot;);</span>
+<span class="fc" id="L105">        return ResponseEntity.ok().build();</span>
+    }
+
+    @PostMapping(&quot;/asr/email/request-suspense&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; sendRequestSuspenseEmail(@RequestBody RequestSuspenseOrRevocationDTO input) {
+<span class="fc" id="L111">        log.debug(&quot;REST request to send request suspense email to applicant with id :{} &quot;, input.getApplicantId());</span>
+<span class="fc" id="L112">        notificationService.saveSuspenseEmail(input, &quot;email.applications.suspense.title&quot;, &quot;email.applications.suspense.type&quot;);</span>
+<span class="fc" id="L113">        return ResponseEntity.ok().build();</span>
+    }
+
+    @PostMapping(&quot;/asr/email/request-revocation&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; sendRequestRevocationEmail(@RequestBody RequestSuspenseOrRevocationDTO input) {
+<span class="fc" id="L119">        log.debug(&quot;REST request to send request revocation email to applicant with id :{} &quot;, input.getApplicantId());</span>
+<span class="fc" id="L120">        notificationService.saveSuspenseEmail(input, &quot;email.applications.revocation.title&quot;, &quot;email.applications.revocation.type&quot;);</span>
+<span class="fc" id="L121">        return ResponseEntity.ok().build();</span>
+    }
+
+    @GetMapping(&quot;/asr/data-to-appoint-request&quot;)
+    @Timed
+    public DataToAppointRequestDTO getDataToAppointRequest(@RequestParam(&quot;executantId&quot;) Long executantId) {
+<span class="nc" id="L127">        log.debug(&quot;REST request get data to appoint request by executant with id :{} &quot;, executantId);</span>
+
+<span class="nc" id="L129">        DataToAppointRequestDTO target =</span>
+<span class="nc" id="L130">            service.getDataToAppointRequest(executantId);</span>
+
+<span class="nc" id="L132">        return target;</span>
+    }
+
+    @GetMapping(&quot;/asr/org/head-id&quot;)
+    @Timed
+    public Long getOrgHeadId() {
+<span class="nc" id="L138">        log.debug(&quot;REST request get current logged in user organization head id.&quot;);</span>
+
+<span class="nc" id="L140">        Long target = service.getOrgHeadId();</span>
+
+<span class="nc" id="L142">        return target;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

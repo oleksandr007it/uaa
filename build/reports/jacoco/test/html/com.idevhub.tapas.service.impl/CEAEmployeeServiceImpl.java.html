@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CEAEmployeeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.impl</a> &gt; <span class="el_source">CEAEmployeeServiceImpl.java</span></div><h1>CEAEmployeeServiceImpl.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.impl;
+
+import com.idevhub.tapas.domain.CEADepartment;
+import com.idevhub.tapas.domain.CEAEmployee;
+import com.idevhub.tapas.domain.CentralExecutiveAuthority;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.domain.constants.UserStatus;
+import com.idevhub.tapas.domain.enumeration.CEADepartmentStatus;
+import com.idevhub.tapas.domain.enumeration.CentralExecutiveAuthorityStatus;
+import com.idevhub.tapas.domain.enumeration.PositionType;
+import com.idevhub.tapas.domain.enumeration.PrivilegeCode;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.security.AuthoritiesConstants;
+import com.idevhub.tapas.security.SecurityUtils;
+import com.idevhub.tapas.service.CEAEmployeeService;
+import com.idevhub.tapas.service.CentralExecutiveAuthorityService;
+import com.idevhub.tapas.service.UserService;
+import com.idevhub.tapas.service.criteria.CEAEmployeeCriteria;
+import com.idevhub.tapas.service.criteria.CEAEmployeeSpecificationHelper;
+import com.idevhub.tapas.service.dto.CEAEmployeeContextDTO;
+import com.idevhub.tapas.service.dto.CEAEmployeeDTO;
+import com.idevhub.tapas.service.dto.CeaEmployeeMainInfoDTO;
+import com.idevhub.tapas.service.errors.*;
+import com.idevhub.tapas.service.mapper.UserMapper;
+import io.github.jhipster.service.filter.StringFilter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+<span class="fc" id="L37">@Slf4j</span>
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class CEAEmployeeServiceImpl implements CEAEmployeeService {
+
+    private final CEAEmployeeSpecificationHelper specificationHelper;
+    private final UserRepository repository;
+    private final UserService userService;
+    private final CentralExecutiveAuthorityService ceaService;
+    private final UserMapper mapper;
+
+    @Override
+    public CEAEmployeeDTO saveEmployee(CEAEmployeeDTO toSave) {
+
+<span class="fc" id="L52">        log.debug(&quot;Trying to save cea(edrpou={}) employee (id={})...&quot;, toSave.getEdrpouCode(), toSave.getId());</span>
+
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        CEAEmployeeContextDTO initiatorContext = toSave.getId() == null ?</span>
+<span class="nc" id="L55">            getInitiatorAndCheckAuth(PrivilegeCode.V2_1_5) :</span>
+<span class="fc" id="L56">            getInitiatorAndCheckAuth(PrivilegeCode.V2_1_3);</span>
+
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (!initiatorContext.getCeaCode().equals(toSave.getEdrpouCode()))</span>
+<span class="nc" id="L59">            throw new InappropriateParametersException(&quot;error.cea.inappropriate.codes&quot;, initiatorContext.getCeaCode(), toSave.getEdrpouCode());</span>
+
+<span class="fc" id="L61">        CEAEmployee employee = buildEmployee(toSave);</span>
+
+<span class="fc" id="L63">        return mapper.toCeaEmployeeDto(userService.saveCeaEmployeeAccount(employee));</span>
+    }
+
+    @Override
+    public void deleteEmployee(Long employeeId) {
+<span class="fc" id="L68">        log.debug(&quot;Trying to delete cea employee with id={}...&quot;, employeeId);</span>
+<span class="fc" id="L69">        CEAEmployeeContextDTO initiatorContext = getInitiatorAndCheckAuth(PrivilegeCode.V2_1_4);</span>
+<span class="fc" id="L70">        userService.softDeleteCeaEmployeeAccount(employeeId, initiatorContext.getCeaCode());</span>
+<span class="fc" id="L71">    }</span>
+
+    @Override
+    public Page&lt;CEAEmployeeDTO&gt; findAll(Pageable pageable, CEAEmployeeCriteria criteria) {
+<span class="fc" id="L75">        log.debug(&quot;Request to get all CEAEmployees by pageable and criteria&quot;);</span>
+
+<span class="fc" id="L77">        CEAEmployeeContextDTO initiatorContext = getInitiatorAndCheckAuth(PrivilegeCode.V2_1_1);</span>
+
+<span class="fc" id="L79">        StringFilter statusFilter = new StringFilter();</span>
+<span class="fc" id="L80">        statusFilter.setNotEquals(UserStatus.DELETED);</span>
+
+<span class="fc" id="L82">        StringFilter ceaCodeFilter = new StringFilter();</span>
+<span class="fc" id="L83">        ceaCodeFilter.setEquals(initiatorContext.getCeaCode());</span>
+
+<span class="fc" id="L85">        criteria.setStatus(statusFilter);</span>
+<span class="fc" id="L86">        criteria.setCeaCode(ceaCodeFilter);</span>
+
+<span class="fc" id="L88">        Specification&lt;User&gt; specification =</span>
+<span class="fc" id="L89">            specificationHelper.createSpecification(criteria);</span>
+
+<span class="fc" id="L91">        return repository.findAll(specification, pageable)</span>
+<span class="fc" id="L92">            .map(mapper::toCeaEmployeeDto);</span>
+    }
+
+    @Override
+    public CEAEmployeeDTO getById(Long employeeId) {
+<span class="fc" id="L97">        log.debug(&quot;Trying to get cea employee with id={}...&quot;, employeeId);</span>
+<span class="fc" id="L98">        CEAEmployeeContextDTO initiatorContext = getInitiatorAndCheckAuth(PrivilegeCode.V2_1_2);</span>
+<span class="fc" id="L99">        User user = repository.findCeaEmployee(employeeId, initiatorContext.getCeaCode())</span>
+<span class="pc" id="L100">            .orElseThrow(() -&gt; new UserNotFoundException(&quot;error.user.not.found.by.id.and.cea.code&quot;, employeeId.toString(), initiatorContext.getCeaCode()));</span>
+<span class="fc" id="L101">        return mapper.toCeaEmployeeDto(user);</span>
+    }
+
+    @Override
+    public CEAEmployeeContextDTO getDepartmentHead(Long departmentId) {
+<span class="fc" id="L106">        log.debug(&quot;Trying to get head of cea department with id={}...&quot;, departmentId);</span>
+<span class="fc" id="L107">        CEAEmployeeContextDTO initiatorContext = getInitiatorAndCheckAuth(PrivilegeCode.V2_1_2);</span>
+<span class="fc" id="L108">        User user = repository.findAllCeaEmployeeByDepartmentId(departmentId, initiatorContext.getCeaCode()).stream()</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            .filter(employee -&gt; PositionType.HEAD == employee.getPositionType())</span>
+<span class="fc" id="L110">            .findFirst()</span>
+<span class="pc" id="L111">            .orElseThrow(() -&gt; new UserNotFoundException(&quot;error.user.not.found&quot;));</span>
+<span class="fc" id="L112">        return mapper.toCeaEmployeeContextDto(user);</span>
+    }
+
+    @Override
+    public CEAEmployeeContextDTO getCurrentContext() {
+<span class="fc" id="L117">        log.debug(&quot;Request to get current CEAEmployee context&quot;);</span>
+
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.CEA_EMPLOYEE))</span>
+<span class="nc" id="L120">            throw new WrongUserTypeException(&quot;error.user.wrong.type&quot;);</span>
+
+<span class="fc" id="L122">        User currentUser = userService.getCurrentUser();</span>
+
+<span class="fc" id="L124">        return mapper.toCeaEmployeeContextDto(currentUser);</span>
+    }
+
+    @Override
+    public CeaEmployeeMainInfoDTO getCeaUserMainInfo() {
+<span class="fc" id="L129">        User ceaUser = userService.getCurrentUser();</span>
+
+<span class="fc" id="L131">        CeaEmployeeMainInfoDTO target =</span>
+<span class="fc" id="L132">            mapper.toCeaEmployeeMainInfoDto(ceaUser);</span>
+
+<span class="fc" id="L134">        return target;</span>
+    }
+
+    @Override
+    public CEAEmployeeContextDTO getCeaEmployeeContext(Long userId, String ceaCode) {
+
+<span class="fc" id="L140">        log.debug(&quot;Trying to get employee by user id={} and cea code={}&quot;, userId, ceaCode);</span>
+
+<span class="fc" id="L142">        User currentUser = repository.findCeaEmployee(userId, ceaCode)</span>
+<span class="pc" id="L143">            .orElseThrow(() -&gt; new UserNotFoundException(&quot;error.user.not.found.by.id.and.cea.code&quot;, userId.toString(), ceaCode));</span>
+
+<span class="fc" id="L145">        return mapper.toCeaEmployeeContextDto(currentUser);</span>
+    }
+
+    @Override
+    public List&lt;CEAEmployeeContextDTO&gt; getAllActiveCeaEmployeeHasAuth(String fullNameLike, PrivilegeCode privilegeCode) {
+<span class="fc" id="L150">        log.debug(&quot;Trying to get active cea employees that has privilegeCode={}&quot;, privilegeCode);</span>
+
+<span class="fc" id="L152">        CEAEmployeeContextDTO initiatorContext = getInitiatorAndCheckAuth(PrivilegeCode.V2_1_1);</span>
+
+<span class="fc" id="L154">        CEAEmployeeCriteria criteria = new CEAEmployeeCriteria();</span>
+
+<span class="fc" id="L156">        StringFilter ceaCodeFilter = new StringFilter();</span>
+<span class="fc" id="L157">        ceaCodeFilter.setEquals(initiatorContext.getCeaCode());</span>
+<span class="fc" id="L158">        criteria.setCeaCode(ceaCodeFilter);</span>
+
+<span class="fc" id="L160">        StringFilter statusFilter = new StringFilter();</span>
+<span class="fc" id="L161">        statusFilter.setEquals(UserStatus.ACTIVE);</span>
+<span class="fc" id="L162">        criteria.setStatus(statusFilter);</span>
+
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (fullNameLike != null) {</span>
+<span class="fc" id="L165">            StringFilter fullNameLikeFilter = new StringFilter();</span>
+<span class="fc" id="L166">            fullNameLikeFilter.setContains(fullNameLike);</span>
+<span class="fc" id="L167">            criteria.setFullName(fullNameLikeFilter);</span>
+        }
+
+<span class="fc" id="L170">        Specification&lt;User&gt; specification = specificationHelper.createSpecification(criteria);</span>
+
+<span class="fc" id="L172">        return repository.findAll(specification).stream()</span>
+<span class="fc" id="L173">            .map(mapper::toCeaEmployeeContextDto)</span>
+<span class="fc" id="L174">            .filter(employee -&gt; employee.getPrivilegeCodes().contains(privilegeCode))</span>
+<span class="fc" id="L175">            .collect(Collectors.toList());</span>
+    }
+
+    private CEAEmployee buildEmployee(CEAEmployeeDTO employeeDTO) {
+
+<span class="fc" id="L180">        CentralExecutiveAuthority cea = ceaService.getByCode(employeeDTO.getEdrpouCode());</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (cea.getCentralExecutiveAuthorityStatus() != CentralExecutiveAuthorityStatus.ACTIVE)</span>
+<span class="nc" id="L182">            throw new EntityStatusException(&quot;error.cea.inactive.status&quot;, cea.getCode(), cea.getCentralExecutiveAuthorityStatus().name());</span>
+
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        CEADepartment department = employeeDTO.getDepartmentId() == null ? null : ceaService.getDepartment(employeeDTO.getEdrpouCode(), employeeDTO.getDepartmentId());</span>
+<span class="pc bpc" id="L185" title="2 of 4 branches missed.">        if (department != null &amp;&amp; department.getCeaDepartmentStatus() != CEADepartmentStatus.ACTIVE)</span>
+<span class="nc" id="L186">            throw new EntityStatusException(&quot;error.cea.department.inactive.status&quot;, department.getId().toString(), department.getCeaDepartmentStatus().name());</span>
+
+<span class="fc" id="L188">        return CEAEmployee.builder()</span>
+<span class="fc" id="L189">            .id(employeeDTO.getId())</span>
+<span class="fc" id="L190">            .firstName(employeeDTO.getFirstName())</span>
+<span class="fc" id="L191">            .lastName(employeeDTO.getLastName())</span>
+<span class="fc" id="L192">            .middleName(employeeDTO.getMiddleName())</span>
+<span class="fc" id="L193">            .rnokpp(employeeDTO.getRnokpp())</span>
+<span class="fc" id="L194">            .email(employeeDTO.getEmail())</span>
+<span class="fc" id="L195">            .phoneNumber(employeeDTO.getPhoneNumber())</span>
+<span class="fc" id="L196">            .cea(cea)</span>
+<span class="fc" id="L197">            .ceaDepartment(department)</span>
+<span class="fc" id="L198">            .position(employeeDTO.getPosition())</span>
+<span class="fc" id="L199">            .positionType(employeeDTO.getPositionType())</span>
+<span class="fc" id="L200">            .build();</span>
+    }
+
+    private CEAEmployeeContextDTO getInitiatorAndCheckAuth(PrivilegeCode privilege) {
+<span class="fc" id="L204">        log.debug(&quot;Getting initiator context and check privilege code {}&quot;, privilege);</span>
+<span class="fc" id="L205">        CEAEmployeeContextDTO initiatorContext = getCurrentContext();</span>
+<span class="fc" id="L206">        throwIfNoAuth(privilege, initiatorContext);</span>
+<span class="fc" id="L207">        return initiatorContext;</span>
+    }
+
+    private void throwIfNoAuth(PrivilegeCode privilege, CEAEmployeeContextDTO employeeToCheck) {
+//        log.debug(&quot;Checking privilege with code={} for user {}...&quot;, privilege, employeeToCheck.getUserId());
+//        if (!employeeToCheck.getPrivilegeCodes().contains(privilege))
+//            throw new AuthException(&quot;error.user.no.privilege&quot;, employeeToCheck.getUserId().toString(), privilege.name());
+//        log.debug(&quot;User {} has privilege {}&quot;, employeeToCheck.getUserId(), privilege);
+<span class="fc" id="L215">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

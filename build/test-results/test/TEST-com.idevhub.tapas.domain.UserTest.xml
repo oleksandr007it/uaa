@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.domain.UserTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:43" hostname="iMac-Aleksandr-2.local" time="0.002">
+  <properties/>
+  <testcase name="getId()" classname="com.idevhub.tapas.domain.UserTest" time="0.0"/>
+  <testcase name="setId()" classname="com.idevhub.tapas.domain.UserTest" time="0.0"/>
+  <testcase name="testEquals()" classname="com.idevhub.tapas.domain.UserTest" time="0.001"/>
+  <testcase name="setLogin()" classname="com.idevhub.tapas.domain.UserTest" time="0.0"/>
+  <testcase name="getLogin()" classname="com.idevhub.tapas.domain.UserTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

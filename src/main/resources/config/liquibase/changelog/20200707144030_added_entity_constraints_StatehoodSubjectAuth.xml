@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="20200707144030-2" author="e.ukhanov">
+
+        <addForeignKeyConstraint baseColumnNames="statehood_subject_auth_category_id"
+                                 baseTableName="statehood_subject_auth"
+                                 constraintName="fk_state_subj_auth_state_subj_auth_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="statehood_subject_auth_category"/>
+
+    </changeSet>
+</databaseChangeLog>

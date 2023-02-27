@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.NaisAtsDictionaryResourceIT" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:09" hostname="iMac-Aleksandr-2.local" time="5.221">
+  <properties/>
+  <testcase name="denormalizeAtsObjectDictionary()" classname="com.idevhub.tapas.web.rest.NaisAtsDictionaryResourceIT" time="5.102"/>
+  <testcase name="searchLocalitiesByName()" classname="com.idevhub.tapas.web.rest.NaisAtsDictionaryResourceIT" time="0.095"/>
+  <testcase name="searchLocalityObjectsByName()" classname="com.idevhub.tapas.web.rest.NaisAtsDictionaryResourceIT" time="0.022"/>
+  <system-out><![CDATA[  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:43:01.370  INFO 7937 --- [    Test worker] c.i.t.w.r.NaisAtsDictionaryResourceIT    : No active profile set, falling back to default profiles: default
+2021-02-09 22:43:03.222 DEBUG 7937 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:43:03.245 DEBUG 7937 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:43:03.254 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:43:04.405 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 1150 ms
+2021-02-09 22:43:04.537 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:43:04.537 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Hazelcast already initialized
+2021-02-09 22:43:06.750 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:43:08.078  WARN 7937 --- [    Test worker] o.s.c.n.a.ArchaiusAutoConfiguration      : Netflix ConfigurationManager has already been installed, unable to re-install
+2021-02-09 22:43:08.539  INFO 7937 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:43:08.710 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:43:08.710 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:43:08.712 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:43:08.713 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:43:09.579  INFO 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:43:09.582 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:43:09.583 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:43:09.600  INFO 7937 --- [    Test worker] c.i.t.w.r.NaisAtsDictionaryResourceIT    : Started NaisAtsDictionaryResourceIT in 8.853 seconds (JVM running for 89.329)
+2021-02-09 22:43:09.678 DEBUG 7937 --- [    Test worker] c.i.t.w.rest.NaisAtsDictionaryResource   : REST request to denormalize ats dictionary
+2021-02-09 22:43:09.678 DEBUG 7937 --- [    Test worker] .t.s.NaisAtsObjectDenormalizationService : Trying to denormalize ats object dictionary...
+2021-02-09 22:43:09.684 DEBUG 7937 --- [pool-2-thread-1] .t.s.NaisAtsObjectDenormalizationService : Running new object denormalization job...
+2021-02-09 22:43:09.752 DEBUG 7937 --- [pool-2-thread-1] .t.s.NaisAtsObjectDenormalizationService : Shutting down object denormalization job...
+2021-02-09 22:43:12.155 DEBUG 7937 --- [cached.thread-1] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Checking partition state, version: 272
+2021-02-09 22:43:12.168 DEBUG 7937 --- [cached.thread-4] c.h.i.cluster.impl.MembershipManager     : [192.168.255.30]:5701 [dev] [3.12.7] Sending member list to the non-master nodes: 
+
+Members {size:1, ver:1} [
+	Member [192.168.255.30]:5701 - 71b0068d-c522-4581-8a3a-4c85ff3ae3ee this
+]
+
+2021-02-09 22:43:14.725 DEBUG 7937 --- [    Test worker] c.i.t.w.rest.NaisAtsDictionaryResource   : REST request to search ats localities by name like: ???
+2021-02-09 22:43:14.740 DEBUG 7937 --- [    Test worker] c.i.t.service.NaisAtsDictionaryService   : Searching active localities, contains name - ???
+2021-02-09 22:43:14.742 DEBUG 7937 --- [    Test worker] c.i.t.service.NaisAtsDictionaryService   : Trying to get all ats object by criteria: NaisAtsDenormalizedObjectCriteria(parentId=LongFilter [], searchName=StringFilter [contains=???, ], type=NaisAtsObjectTypeFilter [equals=LOCALITY, ], status=NaisAtsObjectStatusFilter [equals=ACTIVE, ])
+2021-02-09 22:43:14.806 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $
+2021-02-09 22:43:14.807 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['id']
+2021-02-09 22:43:14.807 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['name']
+2021-02-09 22:43:14.820 DEBUG 7937 --- [    Test worker] c.i.t.w.rest.NaisAtsDictionaryResource   : REST request to search ats locality (id = 26) objects by name like: ????????
+2021-02-09 22:43:14.820 DEBUG 7937 --- [    Test worker] c.i.t.service.NaisAtsDictionaryService   : Searching active locality (id = 26) objects, contains name - ????????
+2021-02-09 22:43:14.821 DEBUG 7937 --- [    Test worker] c.i.t.service.NaisAtsDictionaryService   : Trying to get all ats object by criteria: NaisAtsDenormalizedObjectCriteria(parentId=LongFilter [equals=26, ], searchName=StringFilter [contains=????????, ], type=NaisAtsObjectTypeFilter [equals=LOCALITY_OBJECT, ], status=NaisAtsObjectStatusFilter [equals=ACTIVE, ])
+2021-02-09 22:43:14.829 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $
+2021-02-09 22:43:14.830 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['id']
+2021-02-09 22:43:14.830 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['name']
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

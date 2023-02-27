@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailConfirmationResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">EmailConfirmationResource.java</span></div><h1>EmailConfirmationResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.service.EmailConfirmationService;
+import com.idevhub.tapas.service.dto.EmailConfirmationDTO;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * REST controller for managing EmailConfirmation.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class EmailConfirmationResource {
+
+    private static final String ENTITY_NAME = &quot;emailConfirmation&quot;;
+<span class="fc" id="L25">    private final Logger log = LoggerFactory.getLogger(EmailConfirmationResource.class);</span>
+    private final EmailConfirmationService emailConfirmationService;
+    @Value(&quot;${jhipster.clientApp.name}&quot;)
+    private String applicationName;
+
+<span class="fc" id="L30">    public EmailConfirmationResource(EmailConfirmationService emailConfirmationService) {</span>
+<span class="fc" id="L31">        this.emailConfirmationService = emailConfirmationService;</span>
+<span class="fc" id="L32">    }</span>
+
+    @PostMapping(&quot;/email-confirmations/confirm&quot;)
+    @Timed
+    public EmailConfirmationDTO confirmEmail(@RequestParam(&quot;confirmationId&quot;) String confirmationId,
+                                             @RequestParam(&quot;email&quot;) String email,
+                                             @RequestParam(&quot;ipAddress&quot;) String ipAddress) {
+<span class="fc" id="L39">        log.debug(&quot;REST request to confirm Email where confirmationId : {} and email(URLEncoded) : {}&quot;, confirmationId, email);</span>
+
+<span class="fc" id="L41">        EmailConfirmationDTO result = emailConfirmationService.confirmEmail(Long.valueOf(confirmationId), email, ipAddress);</span>
+
+<span class="fc" id="L43">        return result;</span>
+    }
+
+    @GetMapping(&quot;/email-confirmations&quot;)
+    @Timed
+    public List&lt;EmailConfirmationDTO&gt; getAllEmailConfirmations() {
+<span class="fc" id="L49">        log.debug(&quot;REST request to get all EmailConfirmations&quot;);</span>
+<span class="fc" id="L50">        return emailConfirmationService.findAllActive();</span>
+    }
+
+    @GetMapping(&quot;/email-confirmations/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;EmailConfirmationDTO&gt; getEmailConfirmation(@PathVariable Long id) {
+<span class="fc" id="L56">        log.debug(&quot;REST request to get EmailConfirmation : {}&quot;, id);</span>
+<span class="fc" id="L57">        Optional&lt;EmailConfirmationDTO&gt; emailConfirmationDTO = emailConfirmationService.findOne(id);</span>
+<span class="fc" id="L58">        return ResponseUtil.wrapOrNotFound(emailConfirmationDTO);</span>
+    }
+
+    @DeleteMapping(&quot;/email-confirmations/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteEmailConfirmation(@PathVariable Long id) {
+<span class="fc" id="L64">        log.debug(&quot;REST request to delete EmailConfirmation : {}&quot;, id);</span>
+
+<span class="fc" id="L66">        emailConfirmationService.delete(id);</span>
+<span class="fc" id="L67">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

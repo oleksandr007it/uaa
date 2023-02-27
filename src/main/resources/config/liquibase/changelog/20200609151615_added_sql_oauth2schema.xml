@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+
+    <changeSet id="create_table_oauth_client_token" author="o.shvydanenko">
+        <sql dbms="postgresql, oracle"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">create table oauth_client_token (
+            token_id VARCHAR(256),
+            token BYTEA,
+            authentication_id VARCHAR(256) PRIMARY KEY,
+            user_name VARCHAR(256),
+            client_id VARCHAR(256)
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_table_oauth_access_token" author="o.shvydanenko">
+        <sql dbms="postgresql, oracle"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">create table oauth_access_token (
+            token_id VARCHAR(256),
+            token BYTEA,
+            authentication_id VARCHAR(256) PRIMARY KEY,
+            user_name VARCHAR(256),
+            client_id VARCHAR(256),
+            authentication BYTEA,
+            refresh_token VARCHAR(256)
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_table_oauth_refresh_token" author="o.shvydanenko">
+        <sql dbms="postgresql, oracle"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">create table oauth_refresh_token (
+            token_id VARCHAR(256),
+            token BYTEA,
+            authentication BYTEA
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_table_oauth_approvals" author="o.shvydanenko">
+        <sql dbms="postgresql, oracle"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">create table oauth_approvals (
+            userId VARCHAR(256),
+            clientId VARCHAR(256),
+            scope VARCHAR(256),
+            status VARCHAR(10),
+            expiresAt TIMESTAMP,
+            lastModifiedAt TIMESTAMP
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_table_oauth_code" author="o.shvydanenko">
+        <sql dbms="postgresql, oracle"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">create table oauth_code (
+            code VARCHAR(256), authentication BYTEA
+            )
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

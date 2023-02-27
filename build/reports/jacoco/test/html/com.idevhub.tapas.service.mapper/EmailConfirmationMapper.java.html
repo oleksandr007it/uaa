@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailConfirmationMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.mapper</a> &gt; <span class="el_source">EmailConfirmationMapper.java</span></div><h1>EmailConfirmationMapper.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.mapper;
+
+import com.idevhub.tapas.domain.EmailConfirmation;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.domain.enumeration.EmailConfirmationStatus;
+import com.idevhub.tapas.service.dto.EmailConfirmationDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.time.Instant;
+
+/**
+ * Mapper for the entity EmailConfirmation and its DTO EmailConfirmationDTO.
+ */
+@Mapper(componentModel = &quot;spring&quot;, uses = {UserMapper.class, StatehoodSubjectMapper.class})
+public interface EmailConfirmationMapper extends EntityMapper&lt;EmailConfirmationDTO, EmailConfirmation&gt; {
+
+    @Mapping(source = &quot;createdBy.id&quot;, target = &quot;createdById&quot;)
+    @Mapping(source = &quot;declarant.id&quot;, target = &quot;declarantId&quot;)
+    @Mapping(source = &quot;statehoodSubject.id&quot;, target = &quot;statehoodSubjectId&quot;)
+    EmailConfirmationDTO toDto(EmailConfirmation emailConfirmation);
+
+    @Mapping(source = &quot;createdById&quot;, target = &quot;createdBy&quot;)
+    @Mapping(source = &quot;declarantId&quot;, target = &quot;declarant&quot;)
+    @Mapping(source = &quot;statehoodSubjectId&quot;, target = &quot;statehoodSubject&quot;)
+    EmailConfirmation toEntity(EmailConfirmationDTO emailConfirmationDTO);
+
+    @Mapping(target = &quot;confirmationStatus&quot;, expression = &quot;java(getDefaultStatus())&quot;)
+    @Mapping(target = &quot;createdAt&quot;, expression = &quot;java(getNow())&quot;)
+    @Mapping(source = &quot;langKey&quot;, target = &quot;langKey&quot;)
+    @Mapping(source = &quot;user.id&quot;, target = &quot;createdBy&quot;)
+    @Mapping(target = &quot;email&quot;, ignore = true)
+    @Mapping(target = &quot;declarant&quot;, ignore = true)
+    @Mapping(target = &quot;htmlTemplateName&quot;, ignore = true)
+    @Mapping(target = &quot;validUntil&quot;, ignore = true)
+    @Mapping(target = &quot;rejectedAt&quot;, ignore = true)
+    @Mapping(target = &quot;rejectDescription&quot;, ignore = true)
+    @Mapping(target = &quot;approvedAt&quot;, ignore = true)
+    @Mapping(target = &quot;ipAddress&quot;, ignore = true)
+    @Mapping(target = &quot;statehoodSubject&quot;, ignore = true)
+    EmailConfirmation toEntity(User user);
+
+    default EmailConfirmationStatus getDefaultStatus() {
+<span class="nc" id="L44">        return EmailConfirmationStatus.ACTIVE;</span>
+    }
+
+    default Instant getNow() {
+<span class="nc" id="L48">        return Instant.now();</span>
+    }
+
+    default EmailConfirmation fromId(Long id) {
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L53">            return null;</span>
+        }
+<span class="nc" id="L55">        EmailConfirmation emailConfirmation = new EmailConfirmation();</span>
+<span class="nc" id="L56">        emailConfirmation.setId(id);</span>
+<span class="nc" id="L57">        return emailConfirmation;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- NAIS import -->
+    <changeSet id="Load nais_ats_object_type data" author="d.chaban" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="nais_ats_object_type"/>
+        </preConditions>
+        <loadUpdateData tableName="nais_ats_object_type"
+                        primaryKey="level,code"
+                        separator=";"
+                        file="config/liquibase/data/nais_ats_object_type.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+    <changeSet id="Load nais_ats_object_status data" author="d.chaban" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="nais_ats_object_status"/>
+        </preConditions>
+        <loadUpdateData tableName="nais_ats_object_status"
+                        primaryKey="code"
+                        separator=";"
+                        file="config/liquibase/data/nais_ats_object_status.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+    <!-- ADDRESSES import -->
+    <changeSet id="Load addresses_dev data" author="e.ukhanov" context="dev" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="address"/>
+        </preConditions>
+        <loadUpdateData tableName="address"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/dev/address_dev.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+    <!-- KOPFG import -->
+    <changeSet id="Load kopfg data" author="e.ukhanov" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="kopfg"/>
+        </preConditions>
+        <loadUpdateData tableName="kopfg"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/kopfg.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+    <!-- USERS import -->
+    <changeSet id="Load user_prod data" author="e.ukhanov" context="prod" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="jhi_user"/>
+        </preConditions>
+        <loadUpdateData tableName="jhi_user"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/user_prod.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+    <changeSet id="Load user_dev data" author="e.ukhanov" context="dev" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="jhi_user"/>
+        </preConditions>
+        <loadUpdateData tableName="jhi_user"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/dev/user_dev.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+    <!-- NEW USERS AUTHORITY import -->
+    <changeSet id="Load user_authority_prod data" author="e.ukhanov" context="prod" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="jhi_user_authority"/>
+        </preConditions>
+        <loadUpdateData tableName="jhi_user_authority"
+                        primaryKey="user_id,authority_name"
+                        separator=";"
+                        file="config/liquibase/data/user_authority_prod.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+    <changeSet id="Load user_authority_dev data" author="e.ukhanov" context="dev" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="jhi_user_authority"/>
+        </preConditions>
+        <loadUpdateData tableName="jhi_user_authority"
+                        primaryKey="user_id,authority_name"
+                        separator=";"
+                        file="config/liquibase/data/dev/user_authority_dev.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+    <!-- STATEHOOD SUBJECTS + REPRESENTS import -->
+    <changeSet id="Load statehood_subject_dev data" author="e.ukhanov" context="dev" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="statehood_subject"/>
+        </preConditions>
+        <loadUpdateData tableName="statehood_subject"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/dev/statehood_subject_dev.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+    <changeSet id="Load statehood_subject_represent_dev data" author="e.ukhanov" context="dev" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="statehood_subject_represent"/>
+        </preConditions>
+        <loadUpdateData tableName="statehood_subject_represent"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/dev/statehood_subject_represent_dev.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+    <!-- CEA import -->
+    <changeSet id="Load central_executive_authority_dev data" author="e.ukhanov" context="dev, test" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="central_executive_authority"/>
+        </preConditions>
+        <loadUpdateData tableName="central_executive_authority"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/dev/central_executive_authority_dev.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+    <changeSet id="Load central_exec_auth_department_dev data" author="e.ukhanov" context="dev, test" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="central_exec_auth_department"/>
+        </preConditions>
+        <loadUpdateData tableName="central_exec_auth_department"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/dev/central_exec_auth_department_dev.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+    <changeSet id="Load central_executive_authority data" author="d.chaban" context="prod" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="central_executive_authority"/>
+        </preConditions>
+        <loadUpdateData tableName="central_executive_authority"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/central_executive_authority.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+    <changeSet id="Load central_exec_auth_department data" author="d.chaban" context="prod" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="central_exec_auth_department"/>
+        </preConditions>
+        <loadUpdateData tableName="central_exec_auth_department"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/central_exec_auth_department.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrivilegeResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">PrivilegeResource.java</span></div><h1>PrivilegeResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.HasPrivilege;
+import com.idevhub.tapas.domain.enumeration.PrivilegeType;
+import com.idevhub.tapas.privilege.service.constant.PRIVILEGE;
+import com.idevhub.tapas.security.SecurityUtils;
+import com.idevhub.tapas.service.*;
+import com.idevhub.tapas.service.dto.PrivilegeCategoryDTO;
+import com.idevhub.tapas.service.dto.PrivilegeGroupGeneralDTO;
+import com.idevhub.tapas.service.dto.PrivilegeGroupWithPrivilegesDTO;
+import com.idevhub.tapas.web.rest.errors.BadRequestAlertException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.concat;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
+/**
+ * REST controller for managing Address.
+ */
+@RestController
+@RequestMapping(&quot;/api/privileges-and-groups&quot;)
+@RequiredArgsConstructor
+<span class="fc" id="L31">@Slf4j</span>
+public class PrivilegeResource {
+
+    private final PrivilegeForRepresentService privilegeForRepresentService;
+    private final PrivilegeForUserService privilegeForUserService;
+    private final PrivilegeForSubjectFindService privilegeForSubjectFindService;
+    private final PrivilegeForSubjectDeleteService privilegeForSubjectDeleteService;
+    private final PrivilegeForSubjectCreationService privilegeForSubjectCreationService;
+    private final PrivilegeCategoriesService privilegeCategoriesService;
+
+    @RequestMapping(method = GET, value = {
+        &quot;/user/{userId}/privilege-codes&quot;,
+        &quot;/user/privilege-codes&quot;
+    })
+    public Set&lt;String&gt; getUserPrivilegeCodes(@PathVariable(name = &quot;userId&quot;, required = false) Optional&lt;Long&gt; optionalUserId) {
+<span class="fc" id="L46">        var userId = optionalUserId.orElse(SecurityUtils.getCurrentUserIdIfExists());</span>
+<span class="fc" id="L47">        log.debug(&quot;Request for getting all privileges for userId={}&quot;, userId);</span>
+
+<span class="fc" id="L49">        var userPrivileges = privilegeForUserService.getPrivilegeCodesForUser(userId);</span>
+<span class="fc" id="L50">        var representPrivileges = privilegeForRepresentService.getPrivilegeCodesForUserCurrentRepresent(userId);</span>
+
+<span class="fc" id="L52">        return concat(userPrivileges.stream(), representPrivileges.stream()).collect(toSet());</span>
+    }
+
+
+    @HasPrivilege(PRIVILEGE.LEGAL_ENTITY.V1_2_1)
+    @GetMapping(&quot;/subject/{subjectId}/groups&quot;)
+    public Set&lt;PrivilegeGroupGeneralDTO&gt; getSubjectGroups(@PathVariable Long subjectId) {
+<span class="fc" id="L59">        log.debug(&quot;Request for getting privilege groups for subjectId={}&quot;, subjectId);</span>
+
+<span class="fc" id="L61">        return privilegeForSubjectFindService.getGroupsForSubject(subjectId);</span>
+    }
+
+    @HasPrivilege(PRIVILEGE.LEGAL_ENTITY.V1_2_5)
+    @GetMapping(value = &quot;/subject/{subjectId}/groups/{groupCode}&quot;)
+    public PrivilegeGroupWithPrivilegesDTO getSubjectGroup(@PathVariable Long subjectId, @PathVariable String groupCode) {
+<span class="fc" id="L67">        log.debug(&quot;Request for getting privilege groups&quot;);</span>
+
+<span class="fc" id="L69">        return privilegeForSubjectFindService.getGroupForSubject(subjectId, groupCode);</span>
+    }
+
+    @HasPrivilege(PRIVILEGE.LEGAL_ENTITY.V1_2_4)
+    @DeleteMapping(&quot;/subject/groups/{groupCode}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteSubjectGroup(@PathVariable String groupCode) {
+<span class="fc" id="L75">        log.debug(&quot;Request for getting privilege groups for groupCode={}&quot;, groupCode);</span>
+
+<span class="fc" id="L77">        privilegeForSubjectDeleteService.deleteGroupForSubject(SecurityUtils.getCurrentUserIdIfExists(), groupCode);</span>
+
+<span class="fc" id="L79">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @HasPrivilege(PRIVILEGE.LEGAL_ENTITY.V1_2_2)
+    @PostMapping(value = &quot;/subject/{subjectId}/groups&quot;)
+    public PrivilegeGroupWithPrivilegesDTO createSubjectGroup(@PathVariable Long subjectId, @Valid @RequestBody PrivilegeGroupWithPrivilegesDTO groupDto) {
+<span class="fc" id="L85">        log.debug(&quot;Request for getting privilege groups&quot;);</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (groupDto.getCode() != null)</span>
+<span class="nc" id="L87">            throw new BadRequestAlertException(&quot;New group can't have a group code&quot;, &quot;privileges&quot;, &quot;groupCodeShouldNotExist&quot;);</span>
+
+<span class="fc" id="L89">        return privilegeForSubjectCreationService.createOrUpdateGroup(subjectId, groupDto);</span>
+    }
+
+    @HasPrivilege(PRIVILEGE.LEGAL_ENTITY.V1_2_3)
+    @PutMapping(value = &quot;/subject/{subjectId}/groups&quot;)
+    public PrivilegeGroupWithPrivilegesDTO updateSubjectGroup(@PathVariable Long subjectId, @Valid @RequestBody PrivilegeGroupWithPrivilegesDTO groupDto) {
+<span class="fc" id="L95">        log.debug(&quot;Request for getting privilege groups&quot;);</span>
+
+<span class="fc" id="L97">        return privilegeForSubjectCreationService.createOrUpdateGroup(subjectId, groupDto);</span>
+    }
+
+
+    @GetMapping(&quot;/represent/{representId}/groups&quot;)
+    public Set&lt;PrivilegeGroupGeneralDTO&gt; getRepresentGroups(@PathVariable Long representId) {
+<span class="fc" id="L103">        log.debug(&quot;Request for getting privilege groups for representId={}&quot;, representId);</span>
+
+<span class="fc" id="L105">        return privilegeForRepresentService.getPrivilegeGroupsForRepresent(representId);</span>
+    }
+
+    @GetMapping(&quot;/categories&quot;)
+    public Set&lt;PrivilegeCategoryDTO&gt; getPrivilegeCategories(@RequestParam PrivilegeType privilegeType) {
+<span class="fc" id="L110">        log.debug(&quot;Request for getting privilege categories by type={}&quot;, privilegeType);</span>
+
+<span class="fc" id="L112">        return privilegeCategoriesService.getCategoriesWithPrivileges(privilegeType);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

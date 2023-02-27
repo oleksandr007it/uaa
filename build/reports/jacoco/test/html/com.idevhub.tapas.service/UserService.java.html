@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.config.Constants;
+import com.idevhub.tapas.domain.*;
+import com.idevhub.tapas.domain.address.Address;
+import com.idevhub.tapas.domain.constants.PropertyStatus;
+import com.idevhub.tapas.domain.constants.RepoConst;
+import com.idevhub.tapas.domain.constants.UserStatus;
+import com.idevhub.tapas.domain.constants.UserType;
+import com.idevhub.tapas.repository.AddressRepository;
+import com.idevhub.tapas.repository.AuthorityRepository;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.security.AuthoritiesConstants;
+import com.idevhub.tapas.security.SecurityUtils;
+import com.idevhub.tapas.service.criteria.*;
+import com.idevhub.tapas.service.dto.BackOfficeUserDTO;
+import com.idevhub.tapas.service.dto.DmsuListUserDTO;
+import com.idevhub.tapas.service.dto.UserDTO;
+import com.idevhub.tapas.service.errors.EmailAlreadyUsedException;
+import com.idevhub.tapas.service.errors.IncorrectValueException;
+import com.idevhub.tapas.service.errors.UserNotFoundException;
+import com.idevhub.tapas.service.errors.UserNotLoggedInException;
+import com.idevhub.tapas.service.mapper.UserMapper;
+import io.github.jhipster.security.RandomUtil;
+import io.github.jhipster.service.filter.StringFilter;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.constraints.NotNull;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.idevhub.tapas.domain.constants.UserStatus.ACTIVE;
+
+/**
+ * Service class for managing users.
+ */
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class UserService {
+
+    private final Logger log = LoggerFactory.getLogger(UserService.class);
+
+    private final UserRepository userRepository;
+    private final BackOfficeUserHelper backOfficeUserHelper;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthorityRepository authorityRepository;
+    private final CacheManager cacheManager;
+    private final MailService mailService;
+    private final EmailConfirmationService emailConfirmationService;
+    private final UserMapper userMapper;
+    private final UserSpecificationHelper userHelper;
+    private final AddressRepository addressRepository;
+    private final DmsuUserHelper dmsuUserHelper;
+
+    public User createUser(UserDTO userDTO) {
+<span class="fc" id="L67">        User user = new User();</span>
+<span class="fc" id="L68">        user.setLogin(userDTO.getLogin().toLowerCase());</span>
+<span class="fc" id="L69">        user.setFirstName(userDTO.getFirstName());</span>
+<span class="fc" id="L70">        user.setLastName(userDTO.getLastName());</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (userDTO.getEmail() != null) {</span>
+<span class="fc" id="L72">            user.setEmail(userDTO.getEmail().toLowerCase());</span>
+        }
+
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (userDTO.getLangKey() == null) {</span>
+<span class="nc" id="L76">            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language</span>
+        } else {
+<span class="fc" id="L78">            user.setLangKey(userDTO.getLangKey());</span>
+        }
+<span class="fc" id="L80">        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());</span>
+<span class="fc" id="L81">        user.setPassword(encryptedPassword);</span>
+<span class="fc" id="L82">        user.setResetKey(RandomUtil.generateResetKey());</span>
+<span class="fc" id="L83">        user.setResetDate(Instant.now());</span>
+<span class="fc" id="L84">        user.setActivated(true);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (userDTO.getAuthorities() != null) {</span>
+<span class="fc" id="L86">            Set&lt;Authority&gt; authorities = userDTO.getAuthorities().stream()</span>
+<span class="fc" id="L87">                .map(authorityRepository::findById)</span>
+<span class="fc" id="L88">                .filter(Optional::isPresent)</span>
+<span class="fc" id="L89">                .map(Optional::get)</span>
+<span class="fc" id="L90">                .collect(Collectors.toSet());</span>
+<span class="fc" id="L91">            user.setAuthorities(authorities);</span>
+        }
+
+<span class="fc" id="L94">        userRepository.save(user);</span>
+<span class="fc" id="L95">        this.clearUserCaches(user);</span>
+<span class="fc" id="L96">        log.debug(&quot;Created Information for User: {}&quot;, user);</span>
+<span class="fc" id="L97">        return user;</span>
+    }
+
+    /**
+     * Update basic information (first name, last name, email, language) for the current user.
+     *
+     * @param firstName first name of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
+     */
+    public void updateUser(String firstName, String lastName, String email, String langKey) {
+<span class="fc" id="L109">        SecurityUtils.getCurrentUserLogin()</span>
+<span class="fc" id="L110">            .flatMap(userRepository::findOneByLogin)</span>
+<span class="fc" id="L111">            .ifPresent(user -&gt; {</span>
+<span class="fc" id="L112">                user.setFirstName(firstName);</span>
+<span class="fc" id="L113">                user.setLastName(lastName);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">                if (email != null) {</span>
+<span class="fc" id="L115">                    user.setEmail(email.toLowerCase());</span>
+                }
+<span class="fc" id="L117">                user.setLangKey(langKey);</span>
+<span class="fc" id="L118">                this.clearUserCaches(user);</span>
+<span class="fc" id="L119">                log.debug(&quot;Changed Information for User: {}&quot;, user);</span>
+<span class="fc" id="L120">            });</span>
+<span class="fc" id="L121">    }</span>
+
+
+    public void softDeleteById(Long id) {
+<span class="nc" id="L125">        userRepository.findOneById(id).ifPresent(this::softDelete);</span>
+<span class="nc" id="L126">    }</span>
+
+    private void softDelete(User user) {
+<span class="nc" id="L129">        SecurityUtils.getCurrentUserLogin().ifPresent(initiator -&gt; {</span>
+<span class="nc" id="L130">            user.setStatus(UserStatus.DELETED);</span>
+<span class="nc" id="L131">            user.setDeletedDate(Instant.now());</span>
+<span class="nc" id="L132">            user.setDeletedBy(initiator);</span>
+<span class="nc" id="L133">            user.setActivated(false);</span>
+<span class="nc" id="L134">            this.clearUserCaches(user);</span>
+<span class="nc" id="L135">            log.debug(&quot;Soft Deleted User: {}&quot;, user);</span>
+<span class="nc" id="L136">        });</span>
+<span class="nc" id="L137">    }</span>
+
+
+    public Optional&lt;UserDTO&gt; updateDeclaratntAccount(UserDTO userDTO) {
+
+<span class="nc" id="L142">        return Optional.of(userRepository</span>
+<span class="nc" id="L143">            .findById(userDTO.getId()))</span>
+<span class="nc" id="L144">            .filter(Optional::isPresent)</span>
+<span class="nc" id="L145">            .map(Optional::get)</span>
+<span class="nc" id="L146">            .map(user -&gt; {</span>
+<span class="nc" id="L147">                this.clearUserCaches(user);</span>
+
+<span class="nc" id="L149">                user.setFirstName(userDTO.getFirstName());</span>
+<span class="nc" id="L150">                user.setLastName(userDTO.getLastName());</span>
+<span class="nc" id="L151">                user.setMiddleName(userDTO.getMiddleName());</span>
+<span class="nc" id="L152">                String fullName = userDTO.getLastName() + &quot; &quot; + userDTO.getFirstName() + &quot; &quot; + userDTO.getMiddleName();</span>
+<span class="nc" id="L153">                user.setFullName(fullName);</span>
+<span class="nc" id="L154">                user.setPasportSn(userDTO.getPasportSn());</span>
+<span class="nc" id="L155">                user.setPasportDate(userDTO.getPasportDate());</span>
+<span class="nc" id="L156">                user.setPhoneNumber(userDTO.getPhoneNumber());</span>
+<span class="nc" id="L157">                user.setPasportIssuedBy(userDTO.getPasportIssuedBy());</span>
+<span class="nc" id="L158">                user.setPropertyStatus(userDTO.getPropertyStatus());</span>
+
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                if (userDTO.getEmail() != null) {</span>
+<span class="nc" id="L161">                    user.setEmail(userDTO.getEmail().toLowerCase());</span>
+<span class="nc" id="L162">                    user.setEmailApprove(userDTO.getEmailApprove());</span>
+                }
+<span class="nc" id="L164">                this.clearUserCaches(user);</span>
+<span class="nc" id="L165">                log.debug(&quot;Changed Information for User: {}&quot;, user);</span>
+<span class="nc" id="L166">                return user;</span>
+            })
+<span class="nc" id="L168">            .map(userMapper::userToUserDTO);</span>
+    }
+
+
+    public void updateLangKey(String langKey) {
+<span class="nc" id="L173">        User currentUser = getCurrentUser();</span>
+<span class="nc" id="L174">        currentUser.setLangKey(langKey);</span>
+<span class="nc" id="L175">        clearUserCaches(currentUser);</span>
+<span class="nc" id="L176">        userRepository.save(currentUser);</span>
+<span class="nc" id="L177">    }</span>
+
+    /**
+     * Update all information for a specific user, and return the modified user.
+     *
+     * @param userDTO user to update.
+     * @return updated user.
+     */
+    public UserDTO updateUser(UserDTO userDTO) {
+<span class="fc" id="L186">        User user = userRepository.findOneById(userDTO.getId())</span>
+<span class="pc" id="L187">            .orElseThrow(() -&gt; new UserNotFoundException(&quot;error.user.not.found.by.id&quot;, userDTO.getId().toString()));</span>
+
+<span class="fc" id="L189">        clearUserCaches(user);</span>
+<span class="fc" id="L190">        checkDataValidation(userDTO);</span>
+
+<span class="fc" id="L192">        user.setLogin(userDTO.getLogin());</span>
+<span class="fc" id="L193">        user.setFirstName(userDTO.getFirstName());</span>
+<span class="fc" id="L194">        user.setLastName(userDTO.getLastName());</span>
+<span class="fc" id="L195">        user.setMiddleName(userDTO.getMiddleName());</span>
+<span class="fc" id="L196">        user.setPhoneNumber(userDTO.getPhoneNumber());</span>
+
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (!userDTO.getEmail().equals(user.getEmail())) {</span>
+<span class="fc" id="L199">            user.setEmail(userDTO.getEmail().toLowerCase());</span>
+<span class="fc" id="L200">            user.setEmailApprove(false);</span>
+        }
+
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">        if (!userDTO.getPasportSn().equals(user.getPasportSn())) {</span>
+<span class="fc" id="L204">            user.setPasportSn(userDTO.getPasportSn());</span>
+<span class="fc" id="L205">            user.setPasportIssuedBy(userDTO.getPasportIssuedBy());</span>
+<span class="fc" id="L206">            user.setPasportDate(user.getPasportDate());</span>
+        }
+
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">        if (userDTO.getLegalAddress() != null) {</span>
+            //TODO fix after changing address architecture
+//            Address legalAddress = addressMapper.toEntity(userDTO.getLegalAddress());
+<span class="nc" id="L212">            String addressId = userDTO.getLegalAddress().getId();</span>
+<span class="nc" id="L213">            Address legalAddress =</span>
+<span class="nc" id="L214">                addressRepository.findById(addressId)</span>
+<span class="nc" id="L215">                    .orElseThrow(() -&gt; new RuntimeException(&quot;Address with id: &quot; + addressId + &quot;not found!!!&quot;));</span>
+
+<span class="nc" id="L217">            user.setLegalAddress(legalAddress);</span>
+        }
+
+<span class="fc" id="L220">        user.setActivated(userDTO.isActivated());</span>
+<span class="fc" id="L221">        user.setLangKey(userDTO.getLangKey());</span>
+
+<span class="fc" id="L223">        Set&lt;Authority&gt; managedAuthorities = user.getAuthorities();</span>
+<span class="fc" id="L224">        managedAuthorities.clear();</span>
+<span class="fc" id="L225">        userDTO.getAuthorities().stream()</span>
+<span class="fc" id="L226">            .map(authorityRepository::findById)</span>
+<span class="fc" id="L227">            .filter(Optional::isPresent)</span>
+<span class="fc" id="L228">            .map(Optional::get)</span>
+<span class="fc" id="L229">            .forEach(managedAuthorities::add);</span>
+
+<span class="fc" id="L231">        user.setLastModifiedBy(userDTO.getLogin());</span>
+<span class="fc" id="L232">        user.setLastModifiedDate(Instant.now());</span>
+<span class="fc" id="L233">        user.setPropertyStatus(PropertyStatus.NOT_CONFIRMED);</span>
+
+<span class="fc" id="L235">        user.setRnokpp(userDTO.getRnokpp());</span>
+<span class="fc" id="L236">        user.setEmailApprove(userDTO.getEmailApprove());</span>
+
+<span class="fc" id="L238">        clearUserCaches(user);</span>
+
+<span class="fc" id="L240">        user = userRepository.save(user);</span>
+
+<span class="fc" id="L242">        log.debug(&quot;Changed Information for User: {}&quot;, user);</span>
+
+<span class="fc" id="L244">        return userMapper.userToUserDTO(user);</span>
+    }
+
+    private void checkDataValidation(UserDTO userDTO) {
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        if (userDTO.getFirstName() == null ||</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">            userDTO.getLastName() == null ||</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">            userDTO.getPhoneNumber() == null ||</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">            userDTO.getEmail() == null ||</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">            userDTO.getPasportSn() == null ||</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">            userDTO.getPasportIssuedBy() == null ||</span>
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">            userDTO.getPasportDate() == null)</span>
+
+<span class="nc" id="L256">            throw new IncorrectValueException(&quot;error.incorrect.value&quot;);</span>
+<span class="fc" id="L257">    }</span>
+
+
+    @Transactional(readOnly = true)
+    public Optional&lt;User&gt; getUserOneById(Long id) {
+<span class="nc" id="L262">        return userRepository.findOneById(id);</span>
+
+    }
+
+
+    public Page&lt;BackOfficeUserDTO&gt; findAllBackOfficeUsersByCurrentEdrpouCode(Pageable pageable, BackOfficeUserCriteria criteria) {
+<span class="nc" id="L268">        log.debug(&quot;Request to get all findAllBackOfficeUsers by pageable and criteria&quot;);</span>
+<span class="nc" id="L269">        User currentUser = getCurrentUser();</span>
+<span class="nc" id="L270">        String edrpouCode = currentUser.getEdrpouCode();</span>
+<span class="nc bnc" id="L271" title="All 4 branches missed.">        if (edrpouCode != null &amp;&amp; !edrpouCode.isEmpty()) {</span>
+<span class="nc" id="L272">            StringFilter edrpouCodeFilter = new StringFilter();</span>
+<span class="nc" id="L273">            String filter = edrpouCode;</span>
+<span class="nc" id="L274">            edrpouCodeFilter.setEquals(filter);</span>
+<span class="nc" id="L275">            criteria.setEdrpouCode(edrpouCodeFilter);</span>
+        }
+<span class="nc" id="L277">        Specification&lt;User&gt; specification = backOfficeUserHelper.createSpecification(criteria);</span>
+<span class="nc" id="L278">        return userRepository.findAll(specification, pageable)</span>
+<span class="nc" id="L279">            .map(BackOfficeUserDTO::new);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Page&lt;UserDTO&gt; getAllManagedUsers(Pageable pageable) {
+<span class="fc" id="L284">        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(userMapper::userToUserDTO);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Optional&lt;User&gt; getUserWithAuthoritiesByLogin(String login) {
+<span class="fc" id="L289">        return userRepository.findOneWithAuthoritiesByLogin(login);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Optional&lt;User&gt; getUserWithAuthorities(Long id) {
+<span class="nc" id="L294">        return userRepository.findOneWithAuthoritiesById(id);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Optional&lt;User&gt; getUserWithAuthorities() {
+<span class="fc" id="L299">        Optional&lt;String&gt; currentUserLoginOpt = SecurityUtils.getCurrentUserLogin();</span>
+<span class="fc" id="L300">        Optional&lt;User&gt; userOpt = currentUserLoginOpt.flatMap(userRepository::findOneWithAuthoritiesByLogin);</span>
+
+<span class="fc" id="L302">        return userOpt;</span>
+    }
+
+
+    /**
+     * Gets a list of all the authorities.
+     *
+     * @return a list of all the authorities.
+     */
+    public List&lt;String&gt; getAuthorities() {
+<span class="fc" id="L312">        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());</span>
+    }
+
+
+    public void clearUserCaches(User user) {
+<span class="fc" id="L317">        Objects.requireNonNull(cacheManager.getCache(RepoConst.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());</span>
+<span class="fc" id="L318">        Objects.requireNonNull(cacheManager.getCache(RepoConst.USERS_BY_ID_CACHE)).evict(user.getId());</span>
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">        if (user.getEmail() != null) {</span>
+<span class="fc" id="L320">            Objects.requireNonNull(cacheManager.getCache(RepoConst.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());</span>
+        }
+<span class="fc" id="L322">    }</span>
+
+    public void sendEmailConfirmationEmail() {
+<span class="nc" id="L325">        User currentUser = getCurrentUser();</span>
+
+<span class="nc" id="L327">        String htmlTemplateName = &quot;userEmailConfimEmail&quot;;</span>
+
+<span class="nc" id="L329">        EmailConfirmation confirmation = emailConfirmationService.save(currentUser, htmlTemplateName, currentUser.getEmail(), null);</span>
+
+<span class="nc" id="L331">        mailService.sendUserEmailConfirmationEmail(confirmation.getId(), currentUser, htmlTemplateName);</span>
+<span class="nc" id="L332">    }</span>
+
+
+    public Optional&lt;User&gt; getBackOfficeUserById(Long id) {
+
+<span class="nc" id="L337">        Optional&lt;User&gt; currentUserOpt = userRepository.findOneById(id);</span>
+
+<span class="nc bnc" id="L339" title="All 2 branches missed.">        if (!currentUserOpt.isPresent())</span>
+<span class="nc" id="L340">            throw new UserNotFoundException(&quot;error.user.not.found.by.id&quot;, id.toString());</span>
+
+<span class="nc" id="L342">        return currentUserOpt;</span>
+    }
+
+    public User getCurrentUser() {
+<span class="nc" id="L346">        Long currentUserId = SecurityUtils.getCurrentUserIdIfExists();</span>
+
+<span class="nc bnc" id="L348" title="All 2 branches missed.">        if (currentUserId == null)</span>
+<span class="nc" id="L349">            throw new UserNotLoggedInException(&quot;You need to be logged in!!!&quot;);</span>
+
+<span class="nc" id="L351">        Optional&lt;User&gt; currentUserOpt = userRepository.findOneById(currentUserId);</span>
+
+<span class="nc bnc" id="L353" title="All 2 branches missed.">        if (currentUserOpt.isPresent()) {</span>
+<span class="nc" id="L354">            return currentUserOpt.get();</span>
+        } else {
+<span class="nc" id="L356">            throw new UserNotFoundException(&quot;error.user.not.found.by.id&quot;, currentUserId.toString());</span>
+        }
+
+    }
+
+    public UserDTO getCurrentLoginUser() {
+<span class="nc" id="L362">        User currentUser = getCurrentUser();</span>
+
+<span class="nc" id="L364">        return userMapper.userToUserDTO(currentUser);</span>
+    }
+
+    public UserDTO getUserById(Long id) {
+<span class="nc" id="L368">        Optional&lt;User&gt; targetUserOpt = getUserOneById(id);</span>
+
+<span class="nc bnc" id="L370" title="All 2 branches missed.">        if (!targetUserOpt.isPresent())</span>
+<span class="nc" id="L371">            throw new UserNotFoundException(&quot;error.user.not.found.by.id&quot;, id.toString());</span>
+
+<span class="nc" id="L373">        return userMapper.userToUserDTO(targetUserOpt.get());</span>
+    }
+
+
+
+    public String getCurrentUserPosition() {
+<span class="nc" id="L379">        User currentUser = getCurrentUser();</span>
+<span class="nc" id="L380">        return currentUser.getPosition();</span>
+    }
+
+    public User getActiveUserByRnokppAndNames(@NotNull String rnokpp, @NotNull String firstName, @NotNull String lastName, String middleName) {
+<span class="nc" id="L384">        Specification&lt;User&gt; specification =</span>
+<span class="nc" id="L385">            userHelper.createRepresentSpecification(ACTIVE, rnokpp, firstName, lastName, middleName);</span>
+
+<span class="nc" id="L387">        User target = userRepository.findOne(specification)</span>
+<span class="nc" id="L388">            .orElseThrow(() -&gt; new UserNotFoundException(&quot;error.user.not.found&quot;));</span>
+
+<span class="nc" id="L390">        return target;</span>
+    }
+
+    public Page&lt;DmsuListUserDTO&gt; getDmsuUsersByCurrentUserOrg(Pageable pageable, DmsuUserCriteria criteria) {
+<span class="nc" id="L394">        User currentUser = getCurrentUser();</span>
+
+<span class="nc" id="L396">        StringFilter orgFilter = new StringFilter();</span>
+<span class="nc" id="L397">        orgFilter.setEquals(currentUser.getOrg());</span>
+<span class="nc" id="L398">        criteria.setOrg(orgFilter);</span>
+
+<span class="nc" id="L400">        Specification&lt;User&gt; specification =</span>
+<span class="nc" id="L401">            dmsuUserHelper.createSpecification(criteria);</span>
+
+<span class="nc" id="L403">        return userRepository.findAll(specification, pageable)</span>
+<span class="nc" id="L404">            .map(DmsuListUserDTO::new);</span>
+    }
+
+    public Long getOrgHeadId() {
+<span class="nc" id="L408">        User current = getCurrentUser();</span>
+<span class="nc" id="L409">        User head =</span>
+<span class="nc" id="L410">            userRepository.findByOrgAndPosition(current.getOrg(), &quot;DIRECTOR&quot;)</span>
+<span class="nc" id="L411">                .orElseThrow(() -&gt; new RuntimeException(&quot;User with org: &quot; + current.getOrg() + &quot; and position: DIRECTOR not found!&quot;));</span>
+
+<span class="nc" id="L413">        return head.getId();</span>
+    }
+
+    public List&lt;String&gt; findAllPrivilegesByCurrentLoggedInUser() {
+        // TODO: Rewrite
+<span class="nc" id="L418">        return Collections.emptyList();</span>
+    }
+
+    public User saveCeaEmployeeAccount(CEAEmployee toSave) {
+
+<span class="nc" id="L423">        userRepository.findOneByEmailIgnoreCase(toSave.getEmail()).ifPresent(user -&gt; {</span>
+<span class="nc bnc" id="L424" title="All 4 branches missed.">            if (toSave.getId() == null || !Objects.equals(toSave.getId(), user.getId()))</span>
+<span class="nc" id="L425">                throw new EmailAlreadyUsedException();</span>
+<span class="nc" id="L426">        });</span>
+
+<span class="nc bnc" id="L428" title="All 2 branches missed.">        User user = toSave.getId() == null ?</span>
+<span class="nc" id="L429">            createCeaEmployeeTypeUser(toSave) :</span>
+<span class="nc" id="L430">            userRepository.findCeaEmployee(toSave.getId(), toSave.getCea().getCode())</span>
+<span class="nc" id="L431">                .orElseThrow(RuntimeException::new);</span>
+
+<span class="nc" id="L433">        user.setId(toSave.getId());</span>
+<span class="nc" id="L434">        user.setFirstName(toSave.getFirstName());</span>
+<span class="nc" id="L435">        user.setLastName(toSave.getLastName());</span>
+<span class="nc" id="L436">        user.setMiddleName(toSave.getMiddleName());</span>
+<span class="nc" id="L437">        user.setFullName(toSave.getFullName());</span>
+<span class="nc" id="L438">        user.setRnokpp(toSave.getRnokpp());</span>
+<span class="nc" id="L439">        user.setEdrpouCode(toSave.getCea().getCode());</span>
+<span class="nc" id="L440">        user.setEmail(toSave.getEmail().toLowerCase());</span>
+<span class="nc" id="L441">        user.setPhoneNumber(toSave.getPhoneNumber());</span>
+<span class="nc" id="L442">        user.setPosition(toSave.getPosition());</span>
+<span class="nc" id="L443">        user.setPositionType(toSave.getPositionType());</span>
+<span class="nc" id="L444">        user.setCeaDepartment(toSave.getCeaDepartment());</span>
+<span class="nc" id="L445">        user.setCentralExecutiveAuthority(toSave.getCea());</span>
+<span class="nc" id="L446">        user.setPropertyStatus(PropertyStatus.CONFIRMED);</span>
+
+<span class="nc" id="L448">        return userRepository.saveAndFlush(user);</span>
+    }
+
+    public void softDeleteCeaEmployeeAccount(Long id, String ceaCode) throws UserNotFoundException {
+<span class="nc" id="L452">        userRepository.findCeaEmployee(id, ceaCode).ifPresent(this::softDelete);</span>
+<span class="nc" id="L453">    }</span>
+
+    private User createCeaEmployeeTypeUser(CEAEmployee employee) {
+<span class="nc" id="L456">        User user = new User();</span>
+<span class="nc" id="L457">        user.setLogin(RandomUtil.generateResetKey());</span>
+<span class="nc" id="L458">        user.setPassword(passwordEncoder.encode(RandomUtil.generatePassword()));</span>
+<span class="nc" id="L459">        user.setUserType(UserType.CEA_EMPLOYEE);</span>
+<span class="nc" id="L460">        user.setStatus(UserStatus.ACTIVE);</span>
+<span class="nc" id="L461">        user.setActivated(true);</span>
+<span class="nc" id="L462">        user.setLangKey(Constants.DEFAULT_LANGUAGE);</span>
+<span class="nc" id="L463">        Authority authority = new Authority();</span>
+<span class="nc" id="L464">        authority.setName(AuthoritiesConstants.CEA_EMPLOYEE);</span>
+<span class="nc" id="L465">        user.getAuthorities().add(authority);</span>
+<span class="nc" id="L466">        return user;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

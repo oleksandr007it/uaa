@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.AuditResourceIT" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:25" hostname="iMac-Aleksandr-2.local" time="0.11">
+  <properties/>
+  <testcase name="getNonExistingAudit()" classname="com.idevhub.tapas.web.rest.AuditResourceIT" time="0.022"/>
+  <testcase name="getNonExistingAuditsByDate()" classname="com.idevhub.tapas.web.rest.AuditResourceIT" time="0.033"/>
+  <testcase name="getAllAudits()" classname="com.idevhub.tapas.web.rest.AuditResourceIT" time="0.019"/>
+  <testcase name="getAuditsByDate()" classname="com.idevhub.tapas.web.rest.AuditResourceIT" time="0.013"/>
+  <testcase name="testPersistentAuditEventEquals()" classname="com.idevhub.tapas.web.rest.AuditResourceIT" time="0.007"/>
+  <testcase name="getAudit()" classname="com.idevhub.tapas.web.rest.AuditResourceIT" time="0.012"/>
+  <system-out><![CDATA[2021-02-09 22:43:25.430  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Not Found: 404 NOT_FOUND
+2021-02-09 22:43:25.486 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['principal']
+2021-02-09 22:43:25.500 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['principal']
+2021-02-09 22:43:25.520 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['principal']
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

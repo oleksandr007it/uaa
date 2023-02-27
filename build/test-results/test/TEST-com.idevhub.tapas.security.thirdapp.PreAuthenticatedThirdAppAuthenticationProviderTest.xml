@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.thirdapp.PreAuthenticatedThirdAppAuthenticationProviderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:41" hostname="iMac-Aleksandr-2.local" time="0.009">
+  <properties/>
+  <testcase name="testAuthenticate()" classname="com.idevhub.tapas.security.thirdapp.PreAuthenticatedThirdAppAuthenticationProviderTest" time="0.004"/>
+  <testcase name="testAuthenticateEx()" classname="com.idevhub.tapas.security.thirdapp.PreAuthenticatedThirdAppAuthenticationProviderTest" time="0.001"/>
+  <testcase name="testAuthenticateEx2()" classname="com.idevhub.tapas.security.thirdapp.PreAuthenticatedThirdAppAuthenticationProviderTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

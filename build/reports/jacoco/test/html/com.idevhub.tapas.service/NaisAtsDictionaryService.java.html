@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NaisAtsDictionaryService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">NaisAtsDictionaryService.java</span></div><h1>NaisAtsDictionaryService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.domain.address.NaisAtsDenormalizedObject;
+import com.idevhub.tapas.repository.NaisAtsDenormalizedObjectRepository;
+import com.idevhub.tapas.service.criteria.NaisAtsDenormalizedObjectCriteria;
+import com.idevhub.tapas.service.criteria.NaisAtsDenormalizedObjectSpecificationHelper;
+import com.idevhub.tapas.service.dto.NaisAtsObjectNameDTO;
+import com.idevhub.tapas.service.mapper.NaisAtsDenormalizedObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+
+import static com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectStatus.ACTIVE;
+import static com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectType.LOCALITY;
+import static com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectType.LOCALITY_OBJECT;
+
+<span class="fc" id="L21">@Slf4j</span>
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class NaisAtsDictionaryService {
+
+    private final NaisAtsDenormalizedObjectRepository atsDenormObjectRepository;
+    private final NaisAtsDenormalizedObjectSpecificationHelper atsDenormObjectSpecificationHelper;
+    private final NaisAtsDenormalizedObjectMapper atsDenormObjectMapper;
+
+    public List&lt;NaisAtsObjectNameDTO&gt; searchActiveLocalitiesContainsName(String searchName) {
+<span class="fc" id="L32">        log.debug(&quot;Searching active localities, contains name - {}&quot;, searchName);</span>
+<span class="fc" id="L33">        return atsDenormObjectMapper.toDto(getAllAtsObjectsByCriteria(NaisAtsDenormalizedObjectCriteria.of(LOCALITY, ACTIVE, searchName)));</span>
+    }
+
+    public List&lt;NaisAtsObjectNameDTO&gt; searchActiveLocalityObjectsContainsName(Long parentId, String searchName) {
+<span class="fc" id="L37">        log.debug(&quot;Searching active locality (id = {}) objects, contains name - {}&quot;, parentId, searchName);</span>
+<span class="fc" id="L38">        return atsDenormObjectMapper.toDto(getAllAtsObjectsByCriteria(NaisAtsDenormalizedObjectCriteria.of(LOCALITY_OBJECT, ACTIVE, searchName, parentId)));</span>
+    }
+
+    public List&lt;NaisAtsDenormalizedObject&gt; getAllAtsObjectsByCriteria(NaisAtsDenormalizedObjectCriteria criteria) {
+<span class="fc" id="L42">        log.debug(&quot;Trying to get all ats object by criteria: {}&quot;, criteria);</span>
+<span class="fc" id="L43">        var specification = atsDenormObjectSpecificationHelper.createSpecification(criteria);</span>
+<span class="fc" id="L44">        return atsDenormObjectRepository.findAll(specification);</span>
+    }
+
+    public Optional&lt;NaisAtsDenormalizedObject&gt; getById(Long id) {
+<span class="nc" id="L48">        log.debug(&quot;Trying to get ats object by id = {}&quot;, id);</span>
+<span class="nc" id="L49">        return atsDenormObjectRepository.findById(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

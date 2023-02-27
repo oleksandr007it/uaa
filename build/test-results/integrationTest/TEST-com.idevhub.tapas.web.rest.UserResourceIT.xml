@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.UserResourceIT" tests="16" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:42:46" hostname="iMac-Aleksandr-2.local" time="1.924">
+  <properties/>
+  <testcase name="createUserWithExistingEmail()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.88"/>
+  <testcase name="createUserWithExistingLogin()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.056"/>
+  <testcase name="getAllUsers()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.173"/>
+  <testcase name="updateUser()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.133"/>
+  <testcase name="getAllAuthorities()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.035"/>
+  <testcase name="getUser()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.049"/>
+  <testcase name="createUserWithExistingId()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.032"/>
+  <testcase name="testUserDTOtoUser()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.034"/>
+  <testcase name="testUserEquals()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.013"/>
+  <testcase name="getNonExistingUser()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.041"/>
+  <testcase name="testAuthorityEquals()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.016"/>
+  <testcase name="updateUserExistingEmail()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.078"/>
+  <testcase name="updateUserExistingLogin()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.031"/>
+  <testcase name="createUser()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.248"/>
+  <testcase name="updateUserLogin()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.05"/>
+  <testcase name="testUserToUserDTO()" classname="com.idevhub.tapas.web.rest.UserResourceIT" time="0.017"/>
+  <system-out><![CDATA[  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:42:35.116  INFO 7937 --- [    Test worker] c.idevhub.tapas.web.rest.UserResourceIT  : No active profile set, falling back to default profiles: default
+2021-02-09 22:42:37.254 DEBUG 7937 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:42:37.279 DEBUG 7937 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:42:37.287 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:42:38.733 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 1444 ms
+2021-02-09 22:42:38.888 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:42:38.888 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Hazelcast already initialized
+2021-02-09 22:42:41.706 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:42:42.155 DEBUG 7937 --- [cached.thread-1] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Checking partition state, version: 272
+2021-02-09 22:42:43.666  WARN 7937 --- [    Test worker] o.s.c.n.a.ArchaiusAutoConfiguration      : Netflix ConfigurationManager has already been installed, unable to re-install
+2021-02-09 22:42:44.821  INFO 7937 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:42:45.335 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:42:45.336 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:42:45.340 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:42:45.345 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:42:46.892  INFO 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:42:46.896 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:42:46.897 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:42:46.926  INFO 7937 --- [    Test worker] c.idevhub.tapas.web.rest.UserResourceIT  : Started UserResourceIT in 13.194 seconds (JVM running for 66.654)
+2021-02-09 22:42:47.538 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to save User : UserDTO(id=null, login=anotherlogin, firstName=john, lastName=doe, email=johndoe@localhost, activated=true, langKey=en, userType=null, middleName=null, fullName=null, status=null, rnokpp=null, edrpouCode=null, org=null, orgUnit=null, position=null, propertyStatus=null, phoneNumber=null, pasportSn=null, pasportIssuedBy=null, pasportDate=null, emailApprove=null, createdBy=null, createdDate=null, lastModifiedBy=null, lastModifiedDate=null, legalAddress=null, authorities=[ROLE_USER], ceaDepartment=null, centralExecutiveAuthority=null)
+2021-02-09 22:42:47.653 DEBUG 7937 --- [    Test worker] io.sentry.config.FileResourceLoader      : The configuration file sentry.properties (which resolves to absolute path /Users/aleksandrshvydanenko/wsidea/customs/uaa/sentry.properties) doesn't exist, is not a file or is not readable.
+2021-02-09 22:42:47.659  WARN 7937 --- [    Test worker] io.sentry.dsn.Dsn                        : *** Couldn't find a suitable DSN, Sentry operations will do nothing! See documentation: https://docs.sentry.io/clients/java/ ***
+2021-02-09 22:42:47.674 DEBUG 7937 --- [    Test worker] io.sentry.DefaultSentryClientFactory     : Using noop to send events.
+2021-02-09 22:42:47.678 DEBUG 7937 --- [    Test worker] io.sentry.config.Lookup                  : Found async=false in DSN.
+2021-02-09 22:42:47.682 DEBUG 7937 --- [    Test worker] io.sentry.SentryClient                   : Adding 'io.sentry.event.helper.HttpEventBuilderHelper@14248de3' to the list of builder helpers.
+2021-02-09 22:42:47.683 DEBUG 7937 --- [    Test worker] io.sentry.SentryClient                   : Adding 'io.sentry.event.helper.ContextBuilderHelper@138e8b33' to the list of builder helpers.
+2021-02-09 22:42:47.686 DEBUG 7937 --- [    Test worker] io.sentry.SentryClientFactory            : Configuring uncaught exception handler.
+2021-02-09 22:42:47.687  WARN 7937 --- [    Test worker] io.sentry.DefaultSentryClientFactory     : No 'stacktrace.app.packages' was configured, this option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: https://docs.sentry.io/clients/java/config/#in-application-stack-frames
+2021-02-09 22:42:47.704 DEBUG 7937 --- [    Test worker] i.s.event.EventBuilder$HostnameCache     : Updating the hostname cache
+2021-02-09 22:42:47.711 ERROR 7937 --- [    Test worker] io.github.jhipster.web.util.HeaderUtil   : Entity processing failed, Email is already in use!
+2021-02-09 22:42:47.713  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Bad Request: Email is already in use!
+2021-02-09 22:42:47.862 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to save User : UserDTO(id=null, login=johndoe, firstName=john, lastName=doe, email=anothermail@localhost, activated=true, langKey=en, userType=null, middleName=null, fullName=null, status=null, rnokpp=null, edrpouCode=null, org=null, orgUnit=null, position=null, propertyStatus=null, phoneNumber=null, pasportSn=null, pasportIssuedBy=null, pasportDate=null, emailApprove=null, createdBy=null, createdDate=null, lastModifiedBy=null, lastModifiedDate=null, legalAddress=null, authorities=[ROLE_USER], ceaDepartment=null, centralExecutiveAuthority=null)
+2021-02-09 22:42:47.865 ERROR 7937 --- [    Test worker] io.github.jhipster.web.util.HeaderUtil   : Entity processing failed, Login name already used!
+2021-02-09 22:42:47.866  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Bad Request: Login name already used!
+2021-02-09 22:42:48.057 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['login']
+2021-02-09 22:42:48.072 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['firstName']
+2021-02-09 22:42:48.073 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['lastName']
+2021-02-09 22:42:48.074 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['email']
+2021-02-09 22:42:48.074 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['langKey']
+2021-02-09 22:42:48.141 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to update User : UserDTO(id=1154, login=johndoe, firstName=Firstamejhipster, lastName=Lastnamejhipster, email=jhipster@localhost, activated=true, langKey=fr, userType=null, middleName=null, fullName=null, status=null, rnokpp=null, edrpouCode=null, org=null, orgUnit=null, position=null, propertyStatus=null, phoneNumber=380631234987, pasportSn=??984573, pasportIssuedBy=admin, pasportDate=2021-02-09T20:42:48.116403Z, emailApprove=null, createdBy=user, createdDate=2021-02-09T20:42:48.098021Z, lastModifiedBy=user, lastModifiedDate=2021-02-09T20:42:48.098021Z, legalAddress=null, authorities=[ROLE_USER], ceaDepartment=null, centralExecutiveAuthority=null)
+2021-02-09 22:42:48.186 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.UserService    : Changed Information for User: User(id=1154, login=johndoe)
+2021-02-09 22:42:48.241 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $
+2021-02-09 22:42:48.245 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $
+2021-02-09 22:42:48.277 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to get User : johndoe
+2021-02-09 22:42:48.293 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['login']
+2021-02-09 22:42:48.294 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['firstName']
+2021-02-09 22:42:48.294 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['lastName']
+2021-02-09 22:42:48.295 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['email']
+2021-02-09 22:42:48.295 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['langKey']
+2021-02-09 22:42:48.318 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to save User : UserDTO(id=1, login=johndoe, firstName=john, lastName=doe, email=johndoe@localhost, activated=true, langKey=en, userType=null, middleName=null, fullName=null, status=null, rnokpp=null, edrpouCode=null, org=null, orgUnit=null, position=null, propertyStatus=null, phoneNumber=null, pasportSn=null, pasportIssuedBy=null, pasportDate=null, emailApprove=null, createdBy=null, createdDate=null, lastModifiedBy=null, lastModifiedDate=null, legalAddress=null, authorities=[ROLE_USER], ceaDepartment=null, centralExecutiveAuthority=null)
+2021-02-09 22:42:48.320 ERROR 7937 --- [    Test worker] io.github.jhipster.web.util.HeaderUtil   : Entity processing failed, A new user cannot already have an ID
+2021-02-09 22:42:48.320  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Bad Request: A new user cannot already have an ID
+2021-02-09 22:42:48.400 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to get User : unknown
+2021-02-09 22:42:48.410  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Not Found: 404 NOT_FOUND
+2021-02-09 22:42:48.512  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Bad Request: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.idevhub.tapas.service.dto.UserDTO> com.idevhub.tapas.web.rest.UserResource.updateUser(com.idevhub.tapas.service.dto.UserDTO): [Field error in object 'userDTO' on field 'pasportSn': rejected value [AD984573]; codes [ValidPassportNo.userDTO.pasportSn,ValidPassportNo.pasportSn,ValidPassportNo.java.lang.String,ValidPassportNo]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userDTO.pasportSn,pasportSn]; arguments []; default message [pasportSn]]; default message [must match "{regexp}"]] 
+2021-02-09 22:42:48.552  WARN 7937 --- [    Test worker] o.z.problem.spring.common.AdviceTraits   : Bad Request: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.idevhub.tapas.service.dto.UserDTO> com.idevhub.tapas.web.rest.UserResource.updateUser(com.idevhub.tapas.service.dto.UserDTO): [Field error in object 'userDTO' on field 'pasportSn': rejected value [AD984573]; codes [ValidPassportNo.userDTO.pasportSn,ValidPassportNo.pasportSn,ValidPassportNo.java.lang.String,ValidPassportNo]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userDTO.pasportSn,pasportSn]; arguments []; default message [pasportSn]]; default message [must match "{regexp}"]] 
+2021-02-09 22:42:48.578 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to save User : UserDTO(id=null, login=johndoe, firstName=john, lastName=doe, email=johndoe@localhost, activated=true, langKey=en, userType=null, middleName=null, fullName=null, status=null, rnokpp=null, edrpouCode=null, org=null, orgUnit=null, position=null, propertyStatus=null, phoneNumber=null, pasportSn=null, pasportIssuedBy=null, pasportDate=null, emailApprove=null, createdBy=null, createdDate=null, lastModifiedBy=null, lastModifiedDate=null, legalAddress=null, authorities=[ROLE_USER], ceaDepartment=null, centralExecutiveAuthority=null)
+2021-02-09 22:42:48.769 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.UserService    : Created Information for User: User(id=1160, login=johndoe)
+2021-02-09 22:42:48.835 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.web.rest.UserResource  : REST request to update User : UserDTO(id=1161, login=jhipster, firstName=Firstamejhipster, lastName=Lastnamejhipster, email=jhipster@localhost, activated=true, langKey=fr, userType=null, middleName=null, fullName=null, status=null, rnokpp=null, edrpouCode=null, org=null, orgUnit=null, position=null, propertyStatus=null, phoneNumber=380631234987, pasportSn=??984573, pasportIssuedBy=admin, pasportDate=2021-02-09T20:42:48.829053Z, emailApprove=null, createdBy=user, createdDate=2021-02-09T20:42:48.824485Z, lastModifiedBy=user, lastModifiedDate=2021-02-09T20:42:48.824485Z, legalAddress=null, authorities=[ROLE_USER], ceaDepartment=null, centralExecutiveAuthority=null)
+2021-02-09 22:42:48.844 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.UserService    : Changed Information for User: User(id=1161, login=jhipster)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

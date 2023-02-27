@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CEADepartmentServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.impl</a> &gt; <span class="el_source">CEADepartmentServiceImpl.java</span></div><h1>CEADepartmentServiceImpl.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.impl;
+
+import com.idevhub.tapas.domain.CEADepartment;
+import com.idevhub.tapas.repository.CEADepartmentRepository;
+import com.idevhub.tapas.service.CEADepartmentService;
+import com.idevhub.tapas.service.dto.CEADepartmentDTO;
+import com.idevhub.tapas.service.mapper.CEADepartmentMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Service Implementation for managing CEADepartment.
+ */
+@Service
+@Transactional
+public class CEADepartmentServiceImpl implements CEADepartmentService {
+
+<span class="fc" id="L25">    private final Logger log = LoggerFactory.getLogger(CEADepartmentServiceImpl.class);</span>
+
+    private final CEADepartmentRepository ceaDepartmentRepository;
+
+    private final CEADepartmentMapper ceaDepartmentMapper;
+
+    public CEADepartmentServiceImpl(CEADepartmentRepository ceaDepartmentRepository,
+<span class="fc" id="L32">                                    CEADepartmentMapper ceaDepartmentMapper) {</span>
+
+<span class="fc" id="L34">        this.ceaDepartmentRepository = ceaDepartmentRepository;</span>
+<span class="fc" id="L35">        this.ceaDepartmentMapper = ceaDepartmentMapper;</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Save a ceaDepartment.
+     *
+     * @param ceaDepartmentDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public CEADepartmentDTO save(CEADepartmentDTO ceaDepartmentDTO) {
+<span class="nc" id="L46">        log.debug(&quot;Request to save CEADepartment : {}&quot;, ceaDepartmentDTO);</span>
+<span class="nc" id="L47">        CEADepartment ceaDepartment = ceaDepartmentMapper.toEntity(ceaDepartmentDTO);</span>
+<span class="nc" id="L48">        ceaDepartment = ceaDepartmentRepository.save(ceaDepartment);</span>
+<span class="nc" id="L49">        return ceaDepartmentMapper.toDto(ceaDepartment);</span>
+    }
+
+    /**
+     * Get all the ceaDepartments.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;CEADepartmentDTO&gt; findAll() {
+<span class="nc" id="L60">        log.debug(&quot;Request to get all CEADepartments&quot;);</span>
+<span class="nc" id="L61">        return ceaDepartmentRepository.findAll().stream()</span>
+<span class="nc" id="L62">            .map(ceaDepartmentMapper::toDto)</span>
+<span class="nc" id="L63">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+
+    /**
+     * Get one ceaDepartment by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;CEADepartmentDTO&gt; findOne(Long id) {
+<span class="nc" id="L76">        log.debug(&quot;Request to get CEADepartment : {}&quot;, id);</span>
+<span class="nc" id="L77">        return ceaDepartmentRepository.findById(id)</span>
+<span class="nc" id="L78">            .map(ceaDepartmentMapper::toDto);</span>
+    }
+
+    /**
+     * Delete the ceaDepartment by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="nc" id="L88">        log.debug(&quot;Request to delete CEADepartment : {}&quot;, id);</span>
+<span class="nc" id="L89">        ceaDepartmentRepository.deleteById(id);</span>
+<span class="nc" id="L90">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

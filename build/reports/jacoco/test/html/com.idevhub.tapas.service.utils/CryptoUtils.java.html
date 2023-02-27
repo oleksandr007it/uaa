@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CryptoUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.utils</a> &gt; <span class="el_source">CryptoUtils.java</span></div><h1>CryptoUtils.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.utils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.idevhub.tapas.service.dto.SignForApprove;
+import com.idevhub.tapas.service.feign.RemoteCryptographyServiceClient;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import ua.idevhub.dto.SignerInfo;
+import ua.idevhub.dto.VerifyByDataDTO;
+
+import java.time.Instant;
+import java.util.Base64;
+
+<span class="fc" id="L15">@Slf4j</span>
+public final class CryptoUtils {
+    private CryptoUtils() {
+    }
+
+
+
+
+<span class="nc" id="L23">    @SneakyThrows</span>
+    public static String makeBase64ForSign(String code, String name, String action){
+<span class="fc" id="L25">        SignForApprove signForApprove = new SignForApprove();</span>
+<span class="fc" id="L26">        signForApprove.setAction(action);</span>
+<span class="fc" id="L27">        signForApprove.setLegalEntityCode(code);</span>
+<span class="fc" id="L28">        signForApprove.setLegalEntityName(name);</span>
+<span class="fc" id="L29">        signForApprove.setInitiationTimestamp(Instant.now());</span>
+<span class="fc" id="L30">        ObjectMapper objectMapper = new ObjectMapper();</span>
+<span class="fc" id="L31">        String signForApproveJson = objectMapper.writeValueAsString(signForApprove);</span>
+<span class="fc" id="L32">        String signForApproveBase64 = Base64.getEncoder().encodeToString(signForApproveJson.getBytes());</span>
+<span class="fc" id="L33">        return signForApproveBase64;</span>
+    }
+
+
+    public static SignerInfo verifyByData(String rawDataBase64, String signedBase64, RemoteCryptographyServiceClient remoteCryptographyServiceClient) {
+<span class="fc" id="L38">        VerifyByDataDTO verifyByDataDTO = new VerifyByDataDTO();</span>
+<span class="fc" id="L39">        verifyByDataDTO.setDataBase64(rawDataBase64);</span>
+<span class="fc" id="L40">        verifyByDataDTO.setDigitalSignatureBase64(signedBase64);</span>
+        try {
+<span class="fc" id="L42">            SignerInfo signerInfo = remoteCryptographyServiceClient.verifyByData(verifyByDataDTO);</span>
+<span class="fc" id="L43">            return signerInfo;</span>
+<span class="nc" id="L44">        } catch (Exception e) {</span>
+<span class="nc" id="L45">            log.error(&quot;Verify Sinature error = {}&quot;, e.getMessage());</span>
+<span class="nc" id="L46">            throw new RuntimeException(&quot;Verify Sinature error&quot;);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

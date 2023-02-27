@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity StatehoodSubject.
+    -->
+    <changeSet id="20200427082858-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="kopfg_id"
+                                 baseTableName="statehood_subject"
+                                 constraintName="fk_statehood_subject_kopfg_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="kopfg"/>
+
+        <addForeignKeyConstraint baseColumnNames="legal_address_id"
+                                 baseTableName="statehood_subject"
+                                 constraintName="fk_statehood_subject_legal_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+
+        <addForeignKeyConstraint baseColumnNames="actual_address_id"
+                                 baseTableName="statehood_subject"
+                                 constraintName="fk_statehood_subject_actual_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+
+        <addForeignKeyConstraint baseColumnNames="legal_address_id"
+                                 baseTableName="jhi_user"
+                                 constraintName="fk_jhi_user_legal_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+
+    </changeSet>
+</databaseChangeLog>

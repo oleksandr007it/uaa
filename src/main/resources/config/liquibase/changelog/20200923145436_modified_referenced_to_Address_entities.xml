@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!--
+        Modified referenced to Address entities
+    -->
+
+    <changeSet id="20200923145436-Modify_jhi_user_table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="jhi_user"/>
+        </preConditions>
+
+        <modifyDataType tableName="jhi_user"
+                        columnName="legal_address_id"
+                        newDataType="varchar(32)"/>
+    </changeSet>
+
+    <changeSet id="20200923145436-Modify_statehood_subject_table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="statehood_subject"/>
+        </preConditions>
+
+        <modifyDataType tableName="statehood_subject"
+                        columnName="legal_address_id"
+                        newDataType="varchar(32)"/>
+
+        <modifyDataType tableName="statehood_subject"
+                        columnName="actual_address_id"
+                        newDataType="varchar(32)"/>
+    </changeSet>
+
+    <changeSet id="20200923145436-Modify_central_exec_auth_department_table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="central_exec_auth_department"/>
+        </preConditions>
+
+        <modifyDataType tableName="central_exec_auth_department"
+                        columnName="address_id"
+                        newDataType="varchar(32)"/>
+    </changeSet>
+
+    <changeSet id="20200923145436-Modify_central_executive_authority_table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="central_executive_authority"/>
+        </preConditions>
+
+        <modifyDataType tableName="central_executive_authority"
+                        columnName="address_id"
+                        newDataType="varchar(32)"/>
+    </changeSet>
+
+</databaseChangeLog>

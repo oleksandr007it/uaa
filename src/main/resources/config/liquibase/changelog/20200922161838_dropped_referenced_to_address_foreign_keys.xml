@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!--
+        Drop referenced to address foreign keys on
+         jhi_user statehood_subject central_exec_auth_department and central_executive_authority tables
+    -->
+    <changeSet id="20200922161838-Drop_user_fk_referenced_to_address_id" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <foreignKeyConstraintExists foreignKeyTableName="jhi_user"
+                                        foreignKeyName="fk_jhi_user_legal_address_id"/>
+        </preConditions>
+
+        <dropForeignKeyConstraint baseTableName="jhi_user"
+                                  constraintName="fk_jhi_user_legal_address_id"/>
+    </changeSet>
+
+    <changeSet id="20200922161838-Drop_statehood_subject_fk_referenced_to_legal_address_id" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <foreignKeyConstraintExists foreignKeyTableName="statehood_subject"
+                                        foreignKeyName="fk_statehood_subject_legal_address_id"/>
+        </preConditions>
+
+        <dropForeignKeyConstraint baseTableName="statehood_subject"
+                                  constraintName="fk_statehood_subject_legal_address_id"/>
+    </changeSet>
+
+    <changeSet id="20200922161838-Drop_statehood_subject_fk_referenced_to_actual_address_id" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <foreignKeyConstraintExists foreignKeyTableName="statehood_subject"
+                                        foreignKeyName="fk_statehood_subject_actual_address_id"/>
+        </preConditions>
+
+        <dropForeignKeyConstraint baseTableName="statehood_subject"
+                                  constraintName="fk_statehood_subject_actual_address_id"/>
+    </changeSet>
+
+    <changeSet id="20200922161838-Drop_central_exec_auth_department_fk_referenced_to_address_id" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <foreignKeyConstraintExists foreignKeyTableName="central_exec_auth_department"
+                                        foreignKeyName="fk_central_executive_authority_department_address_id"/>
+        </preConditions>
+
+        <dropForeignKeyConstraint baseTableName="central_exec_auth_department"
+                                  constraintName="fk_central_executive_authority_department_address_id"/>
+    </changeSet>
+
+    <changeSet id="20200922161838-Drop_central_executive_authority_fk_referenced_to_address_id" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <foreignKeyConstraintExists foreignKeyTableName="central_executive_authority"
+                                        foreignKeyName="fk_central_executive_authority_address_id"/>
+        </preConditions>
+
+        <dropForeignKeyConstraint baseTableName="central_executive_authority"
+                                  constraintName="fk_central_executive_authority_address_id"/>
+    </changeSet>
+
+</databaseChangeLog>

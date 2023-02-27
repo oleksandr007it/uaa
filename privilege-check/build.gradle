@@ -1,0 +1,88 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+    }
+}
+
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'jacoco'
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'maven-publish'
+
+group = 'com.idevhub.tapas'
+version = '0.0.2'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
+
+    // Spring
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:2.2.2.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-aop:2.3.7.RELEASE'
+    implementation "org.springframework.cloud:spring-cloud-starter-security:2.2.1.RELEASE"
+    implementation "org.springframework.security.oauth:spring-security-oauth2:2.3.8.RELEASE"
+    implementation group: "io.github.jhipster", name: "jhipster-framework", version: "3.7.1"
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.0.RELEASE'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.2.RELEASE'
+}
+
+task sourceJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allJava
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+artifactory {
+    contextUrl = artifactory_context_url
+    publish {
+        repository {
+            repoKey = 'libs-release'
+            username = artifactory_user
+            password = artifactory_password
+            maven = true
+
+        }
+        defaults {
+            publications ('mavenJava')
+            publishConfigs('archives')
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" tests="7" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:42:32" hostname="iMac-Aleksandr-2.local" time="0.192">
+  <properties/>
+  <testcase name="storeOffsetTimeWithUtcConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value()" classname="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" time="0.115"/>
+  <testcase name="storeLocalDateWithUtcConfigShouldBeStoredWithoutTransformation()" classname="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" time="0.012"/>
+  <testcase name="storeOffsetDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone()" classname="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" time="0.014"/>
+  <testcase name="storeZoneDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone()" classname="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" time="0.011"/>
+  <testcase name="storeInstantWithUtcConfigShouldBeStoredOnGMTTimeZone()" classname="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" time="0.012"/>
+  <testcase name="storeLocalTimeWithUtcConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value()" classname="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" time="0.01"/>
+  <testcase name="storeLocalDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone()" classname="com.idevhub.tapas.config.timezone.HibernateTimeZoneIT" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

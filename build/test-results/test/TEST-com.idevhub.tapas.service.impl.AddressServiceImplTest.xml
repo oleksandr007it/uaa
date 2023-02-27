@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.AddressServiceImplTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:24" hostname="iMac-Aleksandr-2.local" time="0.506">
+  <properties/>
+  <testcase name="testFindAll()" classname="com.idevhub.tapas.service.impl.AddressServiceImplTest" time="0.462"/>
+  <testcase name="testFindOne()" classname="com.idevhub.tapas.service.impl.AddressServiceImplTest" time="0.042"/>
+  <system-out><![CDATA[  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:44:17.564  INFO 7952 --- [    Test worker] c.i.t.s.impl.AddressServiceImplTest      : No active profile set, falling back to default profiles: default
+2021-02-09 22:44:18.901 DEBUG 7952 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:44:18.921 DEBUG 7952 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:44:18.930 DEBUG 7952 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:44:19.927 DEBUG 7952 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 996 ms
+2021-02-09 22:44:20.010 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:44:20.011 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Hazelcast already initialized
+2021-02-09 22:44:21.800 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:44:22.935  WARN 7952 --- [    Test worker] o.s.c.n.a.ArchaiusAutoConfiguration      : Netflix ConfigurationManager has already been installed, unable to re-install
+2021-02-09 22:44:23.389  INFO 7952 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:44:23.549 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:44:23.550 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:44:23.553 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:44:23.553 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:44:24.212  INFO 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:44:24.214 DEBUG 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:44:24.215 DEBUG 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:44:24.231  INFO 7952 --- [    Test worker] c.i.t.s.impl.AddressServiceImplTest      : Started AddressServiceImplTest in 7.228 seconds (JVM running for 54.383)
+2021-02-09 22:44:24.377 DEBUG 7952 --- [    Test worker] c.i.t.service.impl.AddressServiceImpl    : Request to get all Addresses
+2021-02-09 22:44:24.475  INFO 7952 --- [    Test worker] c.h.i.p.impl.PartitionStateManager       : [192.168.255.30]:5701 [dev] [3.12.7] Initializing cluster partition table arrangement...
+2021-02-09 22:44:24.483 DEBUG 7952 --- [    Test worker] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Publishing partition state, version: 272
+2021-02-09 22:44:24.686 DEBUG 7952 --- [    Test worker] c.i.t.service.CountryDictionaryProxy     : Getting country by code = 804...
+2021-02-09 22:44:24.712 DEBUG 7952 --- [    Test worker] c.i.t.service.impl.AddressServiceImpl    : Request to get Address : 8a8081867788896b01778889bf030001
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

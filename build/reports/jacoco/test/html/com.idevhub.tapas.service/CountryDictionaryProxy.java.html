@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CountryDictionaryProxy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">CountryDictionaryProxy.java</span></div><h1>CountryDictionaryProxy.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.domain.address.Country;
+import com.idevhub.tapas.domain.address.PostalCodeParams;
+import com.idevhub.tapas.repository.PostalCodeParamsRepository;
+import com.idevhub.tapas.service.errors.NonUniqueResultException;
+import com.idevhub.tapas.service.feign.CBackDictionariesClient;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+<span class="fc" id="L16">@Slf4j</span>
+@Service
+@RequiredArgsConstructor
+public class CountryDictionaryProxy {
+
+    private final CBackDictionariesClient cBackDictionariesClient;
+    private final PostalCodeParamsRepository postalCodeParamsRepository;
+
+    @Cacheable(&quot;allCountries&quot;)
+    public List&lt;Country&gt; getAllCountries() {
+<span class="fc" id="L26">        log.debug(&quot;Getting country list...&quot;);</span>
+<span class="fc" id="L27">        return cBackDictionariesClient.getAllCountries();</span>
+    }
+
+    @Cacheable(&quot;countryByNumCode&quot;)
+    public Optional&lt;Country&gt; getCountryByNumCode(String numCode) {
+<span class="fc" id="L32">        log.debug(&quot;Getting country by code = {}...&quot;, numCode);</span>
+<span class="fc" id="L33">        List&lt;Country&gt; resultList = cBackDictionariesClient.getCountryByNumberCode(numCode);</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (resultList.isEmpty()) {</span>
+<span class="fc" id="L35">            return Optional.empty();</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        } else if (resultList.size() &gt; 1) {</span>
+<span class="nc" id="L37">            throw new NonUniqueResultException(resultList.size(), Country.class);</span>
+        } else
+<span class="fc" id="L39">            return Optional.of(resultList.iterator().next());</span>
+    }
+
+    public PostalCodeParams getCountryPostalCode(String numCode) {
+<span class="fc" id="L43">        log.debug(&quot;Getting country postal code params by code = {}...&quot;, numCode);</span>
+<span class="fc" id="L44">        return postalCodeParamsRepository.findActiveByCountryCode(numCode)</span>
+<span class="pc" id="L45">            .orElseGet(() -&gt; postalCodeParamsRepository.findActiveByCountryCode(&quot;&quot;)</span>
+<span class="nc" id="L46">                .orElseThrow(() -&gt; new EntityNotFoundException(PostalCodeParams.class)));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

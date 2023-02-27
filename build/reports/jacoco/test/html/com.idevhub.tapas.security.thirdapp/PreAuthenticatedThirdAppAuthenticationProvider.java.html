@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PreAuthenticatedThirdAppAuthenticationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security.thirdapp</a> &gt; <span class="el_source">PreAuthenticatedThirdAppAuthenticationProvider.java</span></div><h1>PreAuthenticatedThirdAppAuthenticationProvider.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security.thirdapp;
+
+import com.idevhub.tapas.security.LdapUserDetails;
+import lombok.val;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
+
+<span class="fc" id="L13">public class PreAuthenticatedThirdAppAuthenticationProvider extends PreAuthenticatedAuthenticationProvider {</span>
+<span class="fc" id="L14">    Logger logger = LoggerFactory.getLogger(PreAuthenticatedThirdAppAuthenticationProvider.class);</span>
+<span class="fc" id="L15">    private final boolean throwExceptionWhenTokenRejected = true;</span>
+
+    @Override
+    public Authentication authenticate(Authentication authentication)
+        throws AuthenticationException {
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (!supports(authentication.getClass())) {</span>
+<span class="nc" id="L21">            return null;</span>
+        }
+
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        if (logger.isDebugEnabled()) {</span>
+<span class="nc" id="L25">            logger.debug(&quot;PreAuthenticated authentication request: &quot; + authentication);</span>
+        }
+
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (authentication.getPrincipal() == null) {</span>
+<span class="fc" id="L29">            logger.debug(&quot;No pre-authenticated principal found in request.&quot;);</span>
+
+            if (throwExceptionWhenTokenRejected) {
+<span class="fc" id="L32">                throw new BadCredentialsException(</span>
+                    &quot;No pre-authenticated principal found in request.&quot;);
+            }
+            return null;
+        }
+
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (authentication.getCredentials() == null) {</span>
+<span class="fc" id="L39">            logger.debug(&quot;No pre-authenticated credentials found in request.&quot;);</span>
+
+            if (throwExceptionWhenTokenRejected) {
+<span class="fc" id="L42">                throw new BadCredentialsException(</span>
+                    &quot;No pre-authenticated credentials found in request.&quot;);
+            }
+            return null;
+        }
+
+<span class="fc" id="L48">        val principal = authentication.getPrincipal();</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if ((principal instanceof UsernamePasswordAuthenticationToken)) {</span>
+<span class="fc" id="L50">            val usernamePasswordAuthenticationToken = ((UsernamePasswordAuthenticationToken) principal);</span>
+<span class="fc" id="L51">            val details = usernamePasswordAuthenticationToken.getPrincipal();</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            if ((details instanceof LdapUserDetails)) {</span>
+<span class="fc" id="L53">                val ldapUserDetails = ((LdapUserDetails) usernamePasswordAuthenticationToken.getPrincipal());</span>
+<span class="fc" id="L54">                UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(</span>
+<span class="fc" id="L55">                    ldapUserDetails, authentication.getCredentials(), ldapUserDetails.getAuthorities());</span>
+<span class="fc" id="L56">                result.setDetails(authentication.getDetails());</span>
+<span class="fc" id="L57">                return result;</span>
+            }
+        }
+<span class="nc" id="L60">        return super.authenticate(authentication);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity NaisAtsDenormalizedObject.
+    -->
+    <changeSet id="20201015120322-Add foreign key constraint to parent" author="d.chaban">
+
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="nais_ats_denorm_object"
+                                 constraintName="fk_nais_ats_denorm_object_parent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="nais_ats_denorm_object"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.MailServiceIT" tests="11" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:26" hostname="iMac-Aleksandr-2.local" time="1.117">
+  <properties/>
+  <testcase name="testSendPasswordResetMail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.86"/>
+  <testcase name="testCreationEmail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.016"/>
+  <testcase name="testSendEmailWithException()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.015"/>
+  <testcase name="testSendHtmlEmail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.013"/>
+  <testcase name="testSendMultipartHtmlEmail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.055"/>
+  <testcase name="testUserEmailConfirmationEmail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.035"/>
+  <testcase name="testSendEmail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.011"/>
+  <testcase name="testSendMultipartEmail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.012"/>
+  <testcase name="testSendLocalizedEmailForAllSupportedLanguages()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.027"/>
+  <testcase name="testSendActivationEmail()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.02"/>
+  <testcase name="testSendEmailFromTemplate()" classname="com.idevhub.tapas.service.MailServiceIT" time="0.011"/>
+  <system-out><![CDATA[2021-02-09 22:43:26.677 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sending password reset email to 'john.doe@example.com'
+2021-02-09 22:43:27.155 DEBUG 7937 --- [cached.thread-4] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Checking partition state, version: 272
+2021-02-09 22:43:27.399 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'uaa password reset' and content=<!DOCTYPE html>
+<html lang="ua">
+    <head>
+        <title>uaa password reset</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" href="http://127.0.0.1:8080/favicon.ico" />
+    </head>
+    <body>
+        <p>Dear john</p>
+        <p>For your uaa account a password reset was requested, please click on the URL below to reset it:</p>
+        <p>
+            <a href="http://127.0.0.1:8080/account/reset/finish?key=null">http://127.0.0.1:8080/account/reset/finish?key=null</a>
+        </p>
+        <p>
+            <span>Regards,</span>
+            <br/>
+            <em>uaa Team.</em>
+        </p>
+    </body>
+</html>
+
+2021-02-09 22:43:27.508 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.535 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sending creation email to 'john.doe@example.com'
+2021-02-09 22:43:27.540 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'uaa account activation is required' and content=<!DOCTYPE html>
+<html lang="ua">
+    <head>
+        <title>uaa account activation is required</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" href="http://127.0.0.1:8080/favicon.ico" />
+    </head>
+    <body>
+        <p>Dear john</p>
+        <p>Your uaa account has been created, please click on the URL below to access it:</p>
+        <p>
+            <a href="http://127.0.0.1:8080/account/reset/finish?key=null">http://127.0.0.1:8080/account/reset/finish?key=null</a>
+        </p>
+        <p>
+            <span>Regards,</span>
+            <br/>
+            <em>uaa Team.</em>
+        </p>
+    </body>
+</html>
+
+2021-02-09 22:43:27.545 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.559 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'false'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-02-09 22:43:27.564  WARN 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Email could not be sent to user 'john.doe@example.com'
+
+org.springframework.mail.MailSendException: null
+
+2021-02-09 22:43:27.576 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-02-09 22:43:27.581 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.592 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'true' and html 'true'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-02-09 22:43:27.609 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.649 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sending emailConfirmation email of 'john.doe@example.com'
+2021-02-09 22:43:27.673 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'true' and html 'true'] to 'john.doe@example.com' with subject 'User email address confirmation' and content=<!DOCTYPE html>
+<html lang="ua">
+    <head>
+        <title>User email address confirmation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" href="http://127.0.0.1:8080/favicon.ico" />
+    </head>
+    <body>
+        <p>Dear john doe trulala!</p>
+        <p>You specified john.doe@example.com as Your email address.</p>
+
+        <p>To have full access to the Single Window system functionality it</p>
+        <p>is necessary to confirm Your email address.</p>
+        <p>Please follow the link below to perform the confirmation:</p>
+
+        <tr>
+            <td class="content-block">
+                <a class="apple-link" href="?confirmationId=123&amp;email=john.doe%40example.com">?confirmationId=123&amp;email=john.doe%40example.com</a>
+            </td>
+        </tr>
+        <p>
+            <span>Best regards,</span>
+            <br/>
+            <em>Single Window for Global Commerce</em>
+        </p>
+    </body>
+</html>
+
+2021-02-09 22:43:27.678 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.688 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'false'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-02-09 22:43:27.693 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.703 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'true' and html 'false'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-02-09 22:43:27.709 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.721 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject '?????????' and content=<html>?????????, http://127.0.0.1:8080, john</html>
+
+2021-02-09 22:43:27.726 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.737 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'test title' and content=<html>test title, http://127.0.0.1:8080, john</html>
+
+2021-02-09 22:43:27.738 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.751 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sending activation email to 'john.doe@example.com'
+2021-02-09 22:43:27.759 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'uaa account activation is required' and content=<!DOCTYPE html>
+<html lang="ua">
+    <head>
+        <title>uaa account activation is required</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" href="http://127.0.0.1:8080/favicon.ico" />
+    </head>
+    <body>
+        <p>Dear john</p>
+        <p>Your uaa account has been created, please click on the URL below to activate it:</p>
+        <p>
+            <a href="http://127.0.0.1:8080/account/activate?key=null">http://127.0.0.1:8080/account/activate?key=null</a>
+        </p>
+        <p>
+            <span>Regards,</span>
+            <br/>
+            <em>uaa Team.</em>
+        </p>
+    </body>
+</html>
+
+2021-02-09 22:43:27.765 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+2021-02-09 22:43:27.777 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'test title' and content=<html>test title, http://127.0.0.1:8080, john</html>
+
+2021-02-09 22:43:27.781 DEBUG 7937 --- [    Test worker] com.idevhub.tapas.service.MailService    : Sent email to User 'john.doe@example.com'
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+
+    <changeSet id="Adding default openId-clients" author="o.shvydanenko" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="oauth_client_details"/>
+        </preConditions>
+        <loadUpdateData tableName="oauth_client_details"
+                        primaryKey="id"
+                        separator=";"
+                        file="config/liquibase/data/oauth2_default_clients.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+</databaseChangeLog>

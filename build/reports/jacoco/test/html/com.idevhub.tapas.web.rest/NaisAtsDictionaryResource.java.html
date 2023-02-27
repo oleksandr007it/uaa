@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NaisAtsDictionaryResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">NaisAtsDictionaryResource.java</span></div><h1>NaisAtsDictionaryResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.service.NaisAtsDictionaryService;
+import com.idevhub.tapas.service.NaisAtsObjectDenormalizationService;
+import com.idevhub.tapas.service.dto.NaisAtsObjectNameDTO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
+
+<span class="fc" id="L16">@Slf4j</span>
+@Validated
+@RestController
+@RequestMapping(&quot;/api&quot;)
+@RequiredArgsConstructor
+public class NaisAtsDictionaryResource {
+
+    private final NaisAtsDictionaryService atsDictionaryService;
+    private final NaisAtsObjectDenormalizationService atsObjectDenormService;
+
+    @GetMapping(&quot;/nais/ats/localities&quot;)
+    public ResponseEntity&lt;List&lt;NaisAtsObjectNameDTO&gt;&gt; searchLocalitiesByName(@RequestParam @Size(min = 2) String searchName) {
+<span class="fc" id="L28">        log.debug(&quot;REST request to search ats localities by name like: {}&quot;, searchName);</span>
+<span class="fc" id="L29">        return ResponseEntity.ok().body(atsDictionaryService.searchActiveLocalitiesContainsName(searchName));</span>
+    }
+
+    @GetMapping(&quot;/nais/ats/localities/{id}/objects&quot;)
+    public ResponseEntity&lt;List&lt;NaisAtsObjectNameDTO&gt;&gt; searchLocalityObjectsByName(@PathVariable @NotNull Long id,
+                                                                                  @RequestParam @Size(min = 2) String searchName) {
+<span class="fc" id="L35">        log.debug(&quot;REST request to search ats locality (id = {}) objects by name like: {}&quot;, id, searchName);</span>
+<span class="fc" id="L36">        return ResponseEntity.ok().body(atsDictionaryService.searchActiveLocalityObjectsContainsName(id, searchName));</span>
+    }
+
+    @PutMapping(&quot;/nais/ats/objects/denormalize&quot;)
+    public ResponseEntity&lt;Void&gt; denormalizeAtsDictionary() {
+<span class="fc" id="L41">        log.debug(&quot;REST request to denormalize ats dictionary&quot;);</span>
+<span class="fc" id="L42">        atsObjectDenormService.denormalizeAtsObjectDictionary();</span>
+<span class="fc" id="L43">        return ResponseEntity.ok().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

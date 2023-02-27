@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BackOfficeAuthenticationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security.backoffice</a> &gt; <span class="el_source">BackOfficeAuthenticationProvider.java</span></div><h1>BackOfficeAuthenticationProvider.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security.backoffice;
+
+import com.idevhub.tapas.domain.constants.UserType;
+import com.idevhub.tapas.security.AuthoritiesConstants;
+import com.idevhub.tapas.security.BaseAuthenticationProvider;
+import com.idevhub.tapas.security.CustomUserDetails;
+import com.idevhub.tapas.security.DomainUserDetailsService;
+import com.idevhub.tapas.service.dto.UserDTOfromIdGovUa;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
+import java.util.Collection;
+
+@Component(&quot;backOfficeAuthenticationProvider&quot;)
+public class BackOfficeAuthenticationProvider extends BaseAuthenticationProvider {
+    private final static String MESSAGE_FOR_LOG = &quot;back office&quot;;
+<span class="fc" id="L23">    Logger logger = LoggerFactory.getLogger(BackOfficeAuthenticationProvider.class);</span>
+
+    public BackOfficeAuthenticationProvider(DomainUserDetailsService userDetailsService) {
+<span class="fc" id="L26">        super(userDetailsService);</span>
+<span class="fc" id="L27">    }</span>
+
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+<span class="fc" id="L32">        Assert.notNull(authentication, &quot;No authentication data provided&quot;);</span>
+<span class="fc" id="L33">        logger.info(&quot;Start authenticate &quot; + MESSAGE_FOR_LOG + &quot;provider&quot;);</span>
+
+<span class="fc" id="L35">        String userInfo = authentication.getName();</span>
+<span class="fc" id="L36">        checkUserInfo(userInfo, MESSAGE_FOR_LOG);</span>
+<span class="fc" id="L37">        UserDTOfromIdGovUa userFromIdGovUaDTO = tryToGetUserInfo(userInfo, MESSAGE_FOR_LOG);</span>
+
+<span class="fc" id="L39">        String rnokpp = userFromIdGovUaDTO.getRnokpp();</span>
+<span class="fc" id="L40">        String edrpouCode = userFromIdGovUaDTO.getEdrpouCode();</span>
+
+<span class="fc" id="L42">        CustomUserDetails userDetails = tryToGetUserDetailsByAndEdrpouCodeAndUserType(rnokpp, edrpouCode, UserType.BACK_OFFICE);</span>
+
+<span class="fc" id="L44">        Collection&lt;GrantedAuthority&gt; authorities = userDetails.getAuthorities();</span>
+
+<span class="fc" id="L46">        checkAuthorities(authorities, AuthoritiesConstants.BACK_OFFICE);</span>
+
+<span class="fc" id="L48">        UsernamePasswordAuthenticationToken authenticationWithAuthorities = tryToMakeAuthenticationTokenAndAddUserIdToDetails(userDetails, authorities, authentication);</span>
+
+
+<span class="fc" id="L51">        return authenticationWithAuthorities;</span>
+    }
+
+
+    @Override
+    public boolean supports(Class&lt;?&gt; authentication) {
+<span class="fc" id="L57">        return authentication.equals(BackOfficeAuthenticationToken.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

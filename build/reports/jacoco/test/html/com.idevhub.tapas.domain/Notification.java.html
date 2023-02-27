@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Notification.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.domain</a> &gt; <span class="el_source">Notification.java</span></div><h1>Notification.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.domain;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedDate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.Instant;
+
+/**
+ * A Notification.
+ */
+@Entity
+@Table(name = &quot;notification&quot;)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+<span class="fc" id="L17">public class Notification implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;sequenceGenerator&quot;)
+    @SequenceGenerator(name = &quot;sequenceGenerator&quot;)
+    private Long id;
+
+    @Column(name = &quot;content&quot;)
+    private String content;
+
+    @Column(name = &quot;subject&quot;)
+    private String subject;
+
+    @Column(name = &quot;address&quot;)
+    private String address;
+
+    @Column(name = &quot;type&quot;)
+    private String type;
+
+<span class="fc" id="L38">    @CreatedDate</span>
+    @Column(name = &quot;creation_date&quot;, updatable = false)
+<span class="fc" id="L40">    private Instant creationDate = Instant.now();</span>
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+    public Long getId() {
+<span class="fc" id="L44">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L48">        this.id = id;</span>
+<span class="fc" id="L49">    }</span>
+
+    public String getContent() {
+<span class="fc" id="L52">        return content;</span>
+    }
+
+    public void setContent(String content) {
+<span class="fc" id="L56">        this.content = content;</span>
+<span class="fc" id="L57">    }</span>
+
+    public Notification content(String content) {
+<span class="fc" id="L60">        this.content = content;</span>
+<span class="fc" id="L61">        return this;</span>
+    }
+
+    public String getSubject() {
+<span class="fc" id="L65">        return subject;</span>
+    }
+
+    public void setSubject(String subject) {
+<span class="fc" id="L69">        this.subject = subject;</span>
+<span class="fc" id="L70">    }</span>
+
+    public Notification subject(String subject) {
+<span class="fc" id="L73">        this.subject = subject;</span>
+<span class="fc" id="L74">        return this;</span>
+    }
+
+    public String getAddress() {
+<span class="fc" id="L78">        return address;</span>
+    }
+
+    public void setAddress(String address) {
+<span class="fc" id="L82">        this.address = address;</span>
+<span class="fc" id="L83">    }</span>
+
+    public Notification address(String address) {
+<span class="fc" id="L86">        this.address = address;</span>
+<span class="fc" id="L87">        return this;</span>
+    }
+
+    public String getType() {
+<span class="fc" id="L91">        return type;</span>
+    }
+
+    public void setType(String type) {
+<span class="fc" id="L95">        this.type = type;</span>
+<span class="fc" id="L96">    }</span>
+
+    public Notification type(String type) {
+<span class="fc" id="L99">        this.type = type;</span>
+<span class="fc" id="L100">        return this;</span>
+    }
+
+    public Instant getCreationDate() {
+<span class="fc" id="L104">        return creationDate;</span>
+    }
+
+    public void setCreationDate(Instant creationDate) {
+<span class="fc" id="L108">        this.creationDate = creationDate;</span>
+<span class="fc" id="L109">    }</span>
+
+    public Notification creationDate(Instant creationDate) {
+<span class="fc" id="L112">        this.creationDate = creationDate;</span>
+<span class="fc" id="L113">        return this;</span>
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L120">            return true;</span>
+        }
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (!(o instanceof Notification)) {</span>
+<span class="fc" id="L123">            return false;</span>
+        }
+<span class="fc bfc" id="L125" title="All 4 branches covered.">        return id != null &amp;&amp; id.equals(((Notification) o).id);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L130">        return 31;</span>
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+<span class="fc" id="L136">        return &quot;Notification{&quot; +</span>
+<span class="fc" id="L137">            &quot;id=&quot; + getId() +</span>
+<span class="fc" id="L138">            &quot;, content='&quot; + getContent() + &quot;'&quot; +</span>
+<span class="fc" id="L139">            &quot;, subject='&quot; + getSubject() + &quot;'&quot; +</span>
+<span class="fc" id="L140">            &quot;, address='&quot; + getAddress() + &quot;'&quot; +</span>
+<span class="fc" id="L141">            &quot;, type='&quot; + getType() + &quot;'&quot; +</span>
+<span class="fc" id="L142">            &quot;, creationDate='&quot; + getCreationDate() + &quot;'&quot; +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

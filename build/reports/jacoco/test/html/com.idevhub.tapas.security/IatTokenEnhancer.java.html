@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IatTokenEnhancer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security</a> &gt; <span class="el_source">IatTokenEnhancer.java</span></div><h1>IatTokenEnhancer.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security;
+
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.stereotype.Component;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * Adds the standard &quot;iat&quot; claim to tokens so we know when they have been created.
+ * This is needed for a session timeout due to inactivity (ignored in case of &quot;remember-me&quot;).
+ */
+@Component
+<span class="fc" id="L17">public class IatTokenEnhancer implements TokenEnhancer {</span>
+
+    @Override
+    public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+<span class="fc" id="L21">        addClaims((DefaultOAuth2AccessToken) accessToken);</span>
+<span class="fc" id="L22">        return accessToken;</span>
+    }
+
+    private void addClaims(DefaultOAuth2AccessToken accessToken) {
+<span class="fc" id="L26">        DefaultOAuth2AccessToken token = accessToken;</span>
+<span class="fc" id="L27">        Map&lt;String, Object&gt; additionalInformation = token.getAdditionalInformation();</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (additionalInformation.isEmpty()) {</span>
+<span class="fc" id="L29">            additionalInformation = new LinkedHashMap&lt;String, Object&gt;();</span>
+        }
+        //add &quot;iat&quot; claim with current time in secs
+        //this is used for an inactive session timeout
+<span class="fc" id="L33">        additionalInformation.put(&quot;iat&quot;, Integer.valueOf((int) (System.currentTimeMillis() / 1000L)));</span>
+<span class="fc" id="L34">        token.setAdditionalInformation(additionalInformation);</span>
+<span class="fc" id="L35">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

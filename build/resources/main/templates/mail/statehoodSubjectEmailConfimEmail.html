@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+    <head>
+        <title th:text="#{email.organization.confirm.title}">Confirm</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <p th:text="#{email.organization.confirm.greeting(${statehoodSubjectName})}">
+            Dear
+        </p>
+        <p th:text="#{email.organization.confirm.text1(${createdByFullName},${email})}">
+            You specified a new email address.
+        </p>
+
+        <p th:text="#{email.organization.confirm.text2}"></p>
+        <p th:text="#{email.organization.confirm.text3}"></p>
+        <p th:text="#{email.organization.confirm.text4}"></p>
+
+        <tr>
+            <td class="content-block">
+                <a class="apple-link" th:text="${confirmationText}"
+                      th:href="${confirmationUrl}"></a>
+            </td>
+        </tr>
+        <p>
+            <span th:text="#{email.organization.confirm.text5}">Regards, </span>
+            <br/>
+            <em th:text="#{email.organization.confirm.signature}">.</em>
+        </p>
+    </body>
+</html>

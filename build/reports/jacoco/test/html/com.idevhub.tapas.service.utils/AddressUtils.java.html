@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddressUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.utils</a> &gt; <span class="el_source">AddressUtils.java</span></div><h1>AddressUtils.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.utils;
+
+import com.idevhub.tapas.domain.address.Address;
+
+public class AddressUtils {
+
+    private AddressUtils() {
+
+    }
+
+    public static String getKoatuu(Address address) {
+        /*NaisAtsObject adminObj = address.getAdminTerritorialObject();
+
+        while (true) {
+            if (adminObj.getKoatuu().isEmpty()) {
+                if (adminObj.getParent() == null) return &quot;&quot;;
+
+                adminObj = adminObj.getParent();
+            } else {
+                return adminObj.getKoatuu();
+            }
+        }*/
+<span class="nc" id="L23">        return &quot;&quot;;   //TODO refactor</span>
+    }
+
+    // TODO refactor
+    public static String genAddress(Address address) {
+<span class="nc" id="L28">        String delimeter = &quot;, &quot;;</span>
+<span class="nc" id="L29">        String absObjectAddress = &quot;&quot;;</span>
+        /*NaisAtsObject adminObj = address.getAdminTerritorialObject();
+
+        while (true) {
+            absObjectAddress = adminObj.getType().getShortName() +
+                &quot; &quot; +
+                adminObj.getNaisAtsObjectName().getName() +
+                absObjectAddress;
+
+            if (adminObj.getParent() == null) {
+                break;
+            }
+
+            absObjectAddress = &quot;, &quot; + absObjectAddress;
+            adminObj = adminObj.getParent();
+        }*/
+
+<span class="nc" id="L46">        String targetAddress = absObjectAddress;</span>
+//            + (address.getHouseNumber().isEmpty() ? &quot;&quot; : delimeter + address.getHouseNumber())
+//            + (address.getBlock().isEmpty() ? &quot;&quot; : delimeter + address.getBlock())
+//            + (address.getAppartmentNumber() == null ? &quot;&quot; : delimeter + address.getAppartmentNumber());
+
+<span class="nc" id="L51">        return targetAddress;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

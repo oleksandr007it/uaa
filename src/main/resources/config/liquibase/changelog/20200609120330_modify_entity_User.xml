@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="Add connection of cea auth groups to User" author="eukhanov">
+        <createTable tableName="user_cea_auth_groups">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cea_auth_group_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, cea_auth_group_id" tableName="user_cea_auth_groups"/>
+
+        <addForeignKeyConstraint baseColumnNames="cea_auth_group_id"
+                                 baseTableName="user_cea_auth_groups"
+                                 constraintName="fk_cea_authority_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cea_auth_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_cea_auth_groups"
+                                 constraintName="fk_user_id_to_cea_auth_groups"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+    </changeSet>
+
+    <changeSet id="Add columns" author="eukhanov">
+        <addColumn tableName="jhi_user">
+            <column name="cea_department_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <addColumn tableName="jhi_user">
+            <column name="central_executive_authority_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="Add position_type columns" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="jhi_user"/>
+        </preConditions>
+
+        <addColumn tableName="jhi_user">
+            <column name="position_type" type="varchar">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="Add org_code columns" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="jhi_user"/>
+        </preConditions>
+
+        <addColumn tableName="jhi_user">
+            <column name="org_code" type="varchar(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

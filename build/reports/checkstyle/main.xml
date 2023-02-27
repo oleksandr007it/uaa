@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.18">
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/ApplicationWebXml.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/UaaApp.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/aop/logging/LoggingAspect.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/AuthorizedExternalUserFeignClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/AuthorizedFeignClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/AuthorizedUserFeignClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/ExternalUserFeignClientInterceptor.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/OAuth2ExternalClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/OAuth2ExternalUserClientFeignConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/OAuth2InterceptedFeignConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/OAuth2UserClientFeignConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/client/UserFeignClientInterceptor.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/ApplicationProperties.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/AsyncConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/CacheConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/CloudDatabaseConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/Constants.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/DatabaseConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/DateTimeFormatConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/ExternalOAuth2AccessProperties.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/JacksonConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/KafkaProperties.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/LiquibaseConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/LocalPrivilegeProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/LocaleConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/LoggingAspectConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/LoggingConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/OpenApiConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/RestTemplateConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/SentryConfig.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/StaticResourcesWebConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/UaaConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/UaaProperties.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/UaaWebSecurityConfiguration.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/WebConfigurer.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/audit/AuditEventConverter.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/audit/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/config/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/AbstractAuditingEntity.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/Authority.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/CEADepartment.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/CEAEmployee.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/CentralExecutiveAuthority.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/EmailConfirmation.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/Kopfg.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/Notification.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/Oaus2Client.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/OauthClientDetails.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/PersistentAuditEvent.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/Privilege.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/PrivilegeCategory.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/PrivilegeGroup.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/StatehoodSubject.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/StatehoodSubjectRepresent.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/User.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/Address.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/Country.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/NaisAtsDenormalizedObject.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/NaisAtsObject.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/NaisAtsObjectStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/NaisAtsObjectType.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/NaisAtsObjectTypeId.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/PostalCodeParams.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/enumeration/NaisAtsDenormalizedObjectStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/enumeration/NaisAtsDenormalizedObjectType.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/enumeration/PostalCodeAvailability.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/address/enumeration/PostalCodeParamsStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/constants/PropertyStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/constants/RepoConst.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/constants/UserStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/constants/UserType.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/AccountDetailsStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/ActiveStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/CEADepartmentStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/CentralExecutiveAuthorityStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/EmailConfirmationStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/EmailRejectionReason.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/PositionType.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/PrivilegeCategoryCode.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/PrivilegeCode.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/PrivilegeType.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/StatehoodSubjectRepresentStatus.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/enumeration/StatehoodSubjectRepresentType.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/domain/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/AddressRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/AuthorityRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/CEADepartmentRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/CentralExecutiveAuthorityRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/CustomAuditEventRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/EmailConfirmationRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/KopfgRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/NaisAtsDenormalizedObjectRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/NaisAtsObjectRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/NaisAtsObjectStatusRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/NaisAtsObjectTypeRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/NotificationRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/Oaus2ClientRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/OauthClientDetailsRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/PersistenceAuditEventRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/PostalCodeParamsRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/PrivilegeCategoryRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/PrivilegeGroupRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/PrivilegeRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/StatehoodSubjectRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/StatehoodSubjectRepresentRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/UserRepository.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/repository/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/AuthoritiesConstants.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/BaseAuthTokenGranter.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/BaseAuthenticationProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/CustomAccessTokenConverter.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/CustomUserDetails.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/DomainUserDetailsService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/IatTokenEnhancer.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/LdapTokenEnhancer.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/LdapUserDetails.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/PatternConstants.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/SecurityUtils.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/SpringSecurityAuditorAware.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/TokenServices.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/UserIdTokenEnhancer.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/UserNameAuthenticationProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/UserNotActivatedException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/backoffice/BackOfficeAuthenticationProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/backoffice/BackOfficeAuthenticationToken.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/backoffice/BackOfficeTokenGranter.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/ceaemployee/CeaEmploeeAuthenticationProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/ceaemployee/CeaEmploeeAuthenticationToken.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/ceaemployee/CeaEmploeeTokenGranter.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/declarant/DeclarantAuthenticationProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/declarant/DeclarantAuthenticationToken.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/declarant/DeclarantTokenGranter.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/thirdapp/PreAuthenticatedThirdAppAuthenticationProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/thirdapp/PreAuthenticatedThitdAppProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/thirdapp/ThirdAppAuthenticationProvider.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/thirdapp/ThirdAppAuthenticationToken.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/security/thirdapp/ThirdAppTokenGranter.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/AddressService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/AdminServiceRequestService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/AuditEventService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/CEADepartmentService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/CEAEmployeeService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/CentralExecutiveAuthorityService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/CountryDictionaryProxy.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/EmailConfirmationService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/EntityNotFoundException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/KopfgService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/MailService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/NaisAtsDictionaryService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/NaisAtsObjectDenormalizationService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/NotificationService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/OauthClientDetailsService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegeCategoriesService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegeForRepresentService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegeForSubjectCreationService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegeForSubjectDeleteService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegeForSubjectFindService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegeForUserService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegeGroupCheckService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/PrivilegesCheckService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/StatehoodSubjectCheckService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/StatehoodSubjectRepresentCheckService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/StatehoodSubjectRepresentLookupService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/StatehoodSubjectRepresentService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/StatehoodSubjectService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/UserService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/BackOfficeUserCriteria.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/BackOfficeUserHelper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/CEAEmployeeCriteria.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/CEAEmployeeSpecificationHelper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/DmsuUserCriteria.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/DmsuUserHelper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/NaisAtsDenormalizedObjectCriteria.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/NaisAtsDenormalizedObjectSpecificationHelper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/RepresentCriteria.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/RepresentSpecificationHelper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/StatehoodSubjectCriteria.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/StatehoodSubjectSpecificationHelper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/criteria/UserSpecificationHelper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AddressDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AddressFromEDR.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AddressParts.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AdminServiceRequestBrokerageCreateDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AdminServiceRequestBrokerageUpdateDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AdminServiceRequestFullRespDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AdminServiceRequestMainDataDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/AdminServiceRequestWarehouseDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/BackOfficeUserDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/CEADepartmentDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/CEAEmployeeContextDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/CEAEmployeeDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/CEAEmployeeFindAllDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/CeaEmployeeMainInfoDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/CentralExecutiveAuthorityDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/CreateRepresenterDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/DataToAppointRequestDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/DataToApproveRequestDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/DmsuListUserDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/EmailConfirmationDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/KopfgDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/NaisAtsObjectDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/NaisAtsObjectNameDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/NaisAtsObjectStatusDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/NaisAtsObjectTypeDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/PasswordChangeDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/PrivilegeCategoryDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/PrivilegeDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/PrivilegeGroupGeneralDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/PrivilegeGroupWithPrivilegesDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/RepresentativeInvitation.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/RequestApproveOrReissueDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/RequestSuspenseOrRevocationDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/ShortUserDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/SignForApprove.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectCreateDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectRepresentContextDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectRepresentCreateDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectRepresentDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectRepresentMainInfoDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectRepresentUpdateDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectRepresentUpdateStatusDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectRepresentWithNameDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/StatehoodSubjectSendConfirmEmailDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/SubjectDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/SubjectInfoForAdd.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/SubjectMainInfo.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/UserDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/UserDTOfromIdGovUa.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/UserFromLdapDTO.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/dto/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/AuthException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/EmailAlreadyUsedException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/EmailConfirmationException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/EntityNotFoundException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/EntityStatusException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/InappropriateParametersException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/IncorrectValueException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/InvalidPasswordException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/LocalizedException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/NonUniqueResultException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/PrivilegeGroupException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/RepresentHasNoRightsException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/RepresentIdAndAccessToSSIdException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/RepresentNotFoundException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/StatehoodSubjectAuthGroupAlreadyDeletedException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/StatehoodSubjectAuthGroupGeneralException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/StatehoodSubjectAuthGroupNotFoundException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/StatehoodSubjectAuthGroupWrongTypeException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/StatehoodSubjectAuthNotFoundException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/UserAlreadyExistException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/UserAlreadyRepresentativeException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/UserAuthenticationNeedException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/UserNotFoundException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/UserNotLoggedInException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/UserPropertyStatusException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/UserValidationException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/WrongActiveContextException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/WrongRepresentStatusException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/WrongStatehoodSubjectStatusException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/errors/WrongUserTypeException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/feign/CBackDictionariesClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/feign/IntegrationEDRClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/feign/LdapIntegrationClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/feign/RemoteCryptographyServiceClient.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/AddressServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/AdminServiceRequestServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/CEADepartmentServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/CEAEmployeeServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/CentralExecutiveAuthorityServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/CurrentRepresentService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/EmailConfirmationServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/KopfgServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/StatehoodSubjectRepresentOperationService.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/StatehoodSubjectRepresentServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/impl/StatehoodSubjectServiceImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/ldap/UserFromLdap.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/AddressMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/AdminServiceRequestMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/CEADepartmentMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/CentralExecutiveAuthorityMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/EmailConfirmationMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/EntityMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/KopfgMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/NaisAtsDenormalizedObjectMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/NaisAtsObjectMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/NaisAtsObjectStatusMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/NaisAtsObjectTypeMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/PrivilegeCategoryMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/PrivilegeGroupMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/PrivilegeMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/StatehoodSubjectMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/StatehoodSubjectRepresentMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/UserMapper.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/mapper/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/utils/AddressUtils.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/utils/CompareUtils.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/utils/CryptoUtils.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/utils/StringTransformUtils.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/ValidEdrpou.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/ValidNames.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/ValidPassportNo.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/ValidPhoneNumber.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/validators/ValidEdrpouValidator.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/validators/ValidNamesValidator.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/validators/ValidPassportNoValidator.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/service/validation/validators/ValidPhoneNumberValidator.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/AccountResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/AddressResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/AdminServicesRequestResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/AuditResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/CEAEmployeeResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/CentralExecutiveAuthorityResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/CountryDictionaryResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/EmailConfirmationResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/KopfgResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/NaisAtsDictionaryResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/NotificationResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/OauthResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/PrivilegeResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/StatehoodSubjectRepresentResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/StatehoodSubjectResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/UserResource.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/BadRequestAlertException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/EmailAlreadyUsedException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/ErrorConstants.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/ExceptionTranslator.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/FieldErrorVM.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/InvalidPasswordException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/LoginAlreadyUsedException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/UserNotFoundException.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/errors/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/vm/KeyAndPasswordVM.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/vm/ManagedUserVM.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/src/main/java/com/idevhub/tapas/web/rest/vm/package-info.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/AbstractAuditingEntity_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/Authority_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/CEADepartment_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/CentralExecutiveAuthority_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/EmailConfirmation_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/Kopfg_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/Notification_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/Oaus2Client_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/OauthClientDetails_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/PersistentAuditEvent_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/PrivilegeCategory_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/PrivilegeGroup_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/Privilege_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/StatehoodSubjectRepresent_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/StatehoodSubject_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/User_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/address/Address_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/address/NaisAtsDenormalizedObject_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/address/NaisAtsObjectStatus_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/address/NaisAtsObjectTypeId_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/address/NaisAtsObjectType_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/address/NaisAtsObject_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/domain/address/PostalCodeParams_.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/AddressMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/CEADepartmentMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/CentralExecutiveAuthorityMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/EmailConfirmationMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/KopfgMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/NaisAtsDenormalizedObjectMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/NaisAtsObjectMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/NaisAtsObjectStatusMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/NaisAtsObjectTypeMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/PrivilegeCategoryMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/PrivilegeGroupMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/PrivilegeMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/StatehoodSubjectMapperImpl.java">
+</file>
+<file name="/Users/aleksandrshvydanenko/wsidea/customs/uaa/build/generated/sources/annotationProcessor/java/main/com/idevhub/tapas/service/mapper/StatehoodSubjectRepresentMapperImpl.java">
+</file>
+</checkstyle>

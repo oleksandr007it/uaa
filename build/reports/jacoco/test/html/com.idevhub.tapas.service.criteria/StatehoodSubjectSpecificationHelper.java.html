@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatehoodSubjectSpecificationHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.criteria</a> &gt; <span class="el_source">StatehoodSubjectSpecificationHelper.java</span></div><h1>StatehoodSubjectSpecificationHelper.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.criteria;
+
+import com.idevhub.tapas.domain.address.Address_;
+import com.idevhub.tapas.domain.Kopfg_;
+import com.idevhub.tapas.domain.StatehoodSubject;
+import com.idevhub.tapas.domain.StatehoodSubject_;
+import io.github.jhipster.service.QueryService;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+@Service
+<span class="fc" id="L12">public class StatehoodSubjectSpecificationHelper extends QueryService&lt;StatehoodSubject&gt; {</span>
+    public Specification&lt;StatehoodSubject&gt; createSpecification(StatehoodSubjectCriteria c) {
+<span class="nc" id="L14">        Specification&lt;StatehoodSubject&gt; specification = Specification.where(null);</span>
+<span class="nc bnc" id="L15" title="All 2 branches missed.">        if (c != null) {</span>
+<span class="nc bnc" id="L16" title="All 2 branches missed.">            if (c.getSubjectStatus() != null)</span>
+<span class="nc" id="L17">                specification = specification.and(buildStringSpecification(c.getSubjectStatus(), StatehoodSubject_.subjectStatus));</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">            if (c.getAccountDetailsStatus() != null)</span>
+<span class="nc" id="L19">                specification = specification.and(buildSpecification(c.getAccountDetailsStatus(), StatehoodSubject_.accountDetailsStatus));</span>
+<span class="nc bnc" id="L20" title="All 2 branches missed.">            if (c.getCreatedAt() != null)</span>
+<span class="nc" id="L21">                specification = specification.and(buildSpecification(c.getCreatedAt(), StatehoodSubject_.createdAt));</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">            if (c.getUpdatedAt() != null)</span>
+<span class="nc" id="L23">                specification = specification.and(buildSpecification(c.getUpdatedAt(), StatehoodSubject_.updatedAt));</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">            if (c.getDeletedAt() != null)</span>
+<span class="nc" id="L25">                specification = specification.and(buildSpecification(c.getDeletedAt(), StatehoodSubject_.deletedAt));</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">            if (c.getSubjectCode() != null)</span>
+<span class="nc" id="L27">                specification = specification.and(buildStringSpecification(c.getSubjectCode(), StatehoodSubject_.subjectCode));</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">            if (c.getSubjectName() != null)</span>
+<span class="nc" id="L29">                specification = specification.and(buildStringSpecification(c.getSubjectName(), StatehoodSubject_.subjectName));</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">            if (c.getSubjectShortName() != null)</span>
+<span class="nc" id="L31">                specification = specification.and(buildStringSpecification(c.getSubjectShortName(), StatehoodSubject_.subjectShortName));</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">            if (c.getHeadFullName() != null)</span>
+<span class="nc" id="L33">                specification = specification.and(buildStringSpecification(c.getHeadFullName(), StatehoodSubject_.headFullName));</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (c.getTelNumber() != null)</span>
+<span class="nc" id="L35">                specification = specification.and(buildStringSpecification(c.getTelNumber(), StatehoodSubject_.telNumber));</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (c.getEmail() != null)</span>
+<span class="nc" id="L37">                specification = specification.and(buildStringSpecification(c.getEmail(), StatehoodSubject_.email));</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (c.getIsEmailApproved() != null)</span>
+<span class="nc" id="L39">                specification = specification.and(buildSpecification(c.getIsEmailApproved(), StatehoodSubject_.isEmailApproved));</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (c.getEori() != null)</span>
+<span class="nc" id="L41">                specification = specification.and(buildStringSpecification(c.getEori(), StatehoodSubject_.eori));</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">            if (c.getIsActualSameAsLegalAddress() != null)</span>
+<span class="nc" id="L43">                specification = specification.and(buildSpecification(c.getIsActualSameAsLegalAddress(), StatehoodSubject_.isActualSameAsLegalAddress));</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (c.getCreatedBy() != null)</span>
+<span class="nc" id="L45">                specification = specification.and(buildStringSpecification(c.getCreatedBy(), StatehoodSubject_.createdBy));</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (c.getUpdatedBy() != null)</span>
+<span class="nc" id="L47">                specification = specification.and(buildStringSpecification(c.getUpdatedBy(), StatehoodSubject_.updatedBy));</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">            if (c.getDeletedBy() != null)</span>
+<span class="nc" id="L49">                specification = specification.and(buildStringSpecification(c.getDeletedBy(), StatehoodSubject_.deletedBy));</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            if (c.getKopfgId() != null)</span>
+<span class="nc" id="L51">                specification = specification.and(buildReferringEntitySpecification(c.getKopfgId(), StatehoodSubject_.kopfg, Kopfg_.id));</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (c.getKopfgCode() != null)</span>
+<span class="nc" id="L53">                specification = specification.and(buildReferringEntitySpecification(c.getKopfgCode(), StatehoodSubject_.kopfg, Kopfg_.code));</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (c.getLegalAddressId() != null)</span>
+<span class="nc" id="L55">                specification = specification.and(buildReferringEntitySpecification(c.getLegalAddressId(), StatehoodSubject_.legalAddress, Address_.id));</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (c.getActualAddressId() != null)</span>
+<span class="nc" id="L57">                specification = specification.and(buildReferringEntitySpecification(c.getActualAddressId(), StatehoodSubject_.actualAddress, Address_.id));</span>
+
+        }
+<span class="nc" id="L60">        return specification;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

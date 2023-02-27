@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TokenServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security</a> &gt; <span class="el_source">TokenServices.java</span></div><h1>TokenServices.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security;
+
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.keygen.BytesKeyGenerator;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.oauth2.common.*;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
+import org.springframework.security.oauth2.common.exceptions.InvalidScopeException;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.provider.*;
+import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.Set;
+
+<span class="fc" id="L25">public class TokenServices implements AuthorizationServerTokenServices, ResourceServerTokenServices,</span>
+    ConsumerTokenServices, InitializingBean {
+
+
+    private static final String ERR_MSG_REFRESH = &quot;Invalid refresh token &quot;;
+    private static final String ERR_MSG_ACCESS = &quot;Invalid access token &quot;;
+
+<span class="fc" id="L32">    private static final BytesKeyGenerator DEFAULT_TOKEN_GENERATOR = KeyGenerators.secureRandom(20);</span>
+
+<span class="fc" id="L34">    private static final Charset US_ASCII = StandardCharsets.US_ASCII;</span>
+
+<span class="fc" id="L36">    private int refreshTokenValiditySeconds = 60 * 60 * 24 * 30; // default 30 days.</span>
+
+<span class="fc" id="L38">    private int accessTokenValiditySeconds = 60 * 60 * 12; // default 12 hours.</span>
+
+<span class="fc" id="L40">    private boolean supportRefreshToken = true;</span>
+
+<span class="fc" id="L42">    private boolean reuseRefreshToken = false;</span>
+
+    private TokenStore tokenStore;
+
+    private ClientDetailsService clientDetailsService;
+
+    private TokenEnhancer accessTokenEnhancer;
+
+    private AuthenticationManager authenticationManager;
+
+    /**
+     * Initialize these token services. If no random generator is set, one will be created.
+     */
+    public void afterPropertiesSet() throws Exception {
+<span class="fc" id="L56">        Assert.notNull(tokenStore, &quot;tokenStore must be set&quot;);</span>
+<span class="fc" id="L57">    }</span>
+
+    @Transactional
+    public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication) throws AuthenticationException {
+
+<span class="nc" id="L62">        OAuth2AccessToken existingAccessToken = tokenStore.getAccessToken(authentication);</span>
+<span class="nc" id="L63">        OAuth2RefreshToken refreshToken = null;</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (existingAccessToken != null) {</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            if (existingAccessToken.isExpired()) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                if (existingAccessToken.getRefreshToken() != null) {</span>
+<span class="nc" id="L67">                    refreshToken = existingAccessToken.getRefreshToken();</span>
+                    // The token store could remove the refresh token when the
+                    // access token is removed, but we want to
+                    // be sure...
+<span class="nc" id="L71">                    tokenStore.removeRefreshToken(refreshToken);</span>
+                }
+<span class="nc" id="L73">                tokenStore.removeAccessToken(existingAccessToken);</span>
+            } else {
+                // Re-store the access token in case the authentication has changed
+<span class="nc" id="L76">                tokenStore.storeAccessToken(existingAccessToken, authentication);</span>
+<span class="nc" id="L77">                return existingAccessToken;</span>
+            }
+        }
+
+        // Only create a new refresh token if there wasn't an existing one
+        // associated with an expired access token.
+        // Clients might be holding existing refresh tokens, so we re-use it in
+        // the case that the old access token
+        // expired.
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (refreshToken == null) {</span>
+<span class="nc" id="L87">            refreshToken = createRefreshToken(authentication);</span>
+        }
+        // But the refresh token itself might need to be re-issued if it has
+        // expired.
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        else if (refreshToken instanceof ExpiringOAuth2RefreshToken) {</span>
+<span class="nc" id="L92">            ExpiringOAuth2RefreshToken expiring = (ExpiringOAuth2RefreshToken) refreshToken;</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (System.currentTimeMillis() &gt; expiring.getExpiration().getTime()) {</span>
+<span class="nc" id="L94">                refreshToken = createRefreshToken(authentication);</span>
+            }
+        }
+
+<span class="nc" id="L98">        OAuth2AccessToken accessToken = createAccessToken(authentication, refreshToken);</span>
+<span class="nc" id="L99">        tokenStore.storeAccessToken(accessToken, authentication);</span>
+        // In case it was modified
+<span class="nc" id="L101">        refreshToken = accessToken.getRefreshToken();</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (refreshToken != null) {</span>
+<span class="nc" id="L103">            tokenStore.storeRefreshToken(refreshToken, authentication);</span>
+        }
+<span class="nc" id="L105">        return accessToken;</span>
+
+    }
+
+    @Transactional(noRollbackFor = {InvalidTokenException.class, InvalidGrantException.class})
+    public OAuth2AccessToken refreshAccessToken(String refreshTokenValue, TokenRequest tokenRequest)
+        throws AuthenticationException {
+
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (!supportRefreshToken) {</span>
+<span class="nc" id="L114">            throw new InvalidGrantException(ERR_MSG_REFRESH + refreshTokenValue);</span>
+        }
+
+<span class="fc" id="L117">        OAuth2RefreshToken refreshToken = tokenStore.readRefreshToken(refreshTokenValue);</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (refreshToken == null) {</span>
+<span class="nc" id="L119">            throw new InvalidGrantException(ERR_MSG_REFRESH + refreshTokenValue);</span>
+        }
+
+<span class="fc" id="L122">        OAuth2Authentication authentication = tokenStore.readAuthenticationForRefreshToken(refreshToken);</span>
+<span class="pc bpc" id="L123" title="1 of 4 branches missed.">        if (this.authenticationManager != null &amp;&amp; !authentication.isClientOnly()) {</span>
+            // The client has already been authenticated, but the user authentication might be old now, so give it a
+            // chance to re-authenticate.
+<span class="fc" id="L126">            Authentication userAuthentication = authentication.getUserAuthentication();</span>
+<span class="fc" id="L127">            PreAuthenticatedAuthenticationToken preAuthenticatedToken = new PreAuthenticatedAuthenticationToken(</span>
+                userAuthentication,
+                &quot;&quot;,
+<span class="fc" id="L130">                authentication.getAuthorities()</span>
+            );
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">            if (userAuthentication.getDetails() != null) {</span>
+<span class="fc" id="L133">                preAuthenticatedToken.setDetails(userAuthentication.getDetails());</span>
+            }
+<span class="fc" id="L135">            Authentication user = authenticationManager.authenticate(preAuthenticatedToken);</span>
+<span class="fc" id="L136">            Object details = authentication.getDetails();</span>
+<span class="fc" id="L137">            authentication = new OAuth2Authentication(authentication.getOAuth2Request(), user);</span>
+<span class="fc" id="L138">            authentication.setDetails(details);</span>
+        }
+<span class="fc" id="L140">        String clientId = authentication.getOAuth2Request().getClientId();</span>
+<span class="pc bpc" id="L141" title="2 of 4 branches missed.">        if (clientId == null || !clientId.equals(tokenRequest.getClientId())) {</span>
+<span class="nc" id="L142">            throw new InvalidGrantException(&quot;Wrong client for this refresh token: &quot; + refreshTokenValue);</span>
+        }
+
+        // clear out any access tokens already associated with the refresh
+        // token.
+<span class="fc" id="L147">        tokenStore.removeAccessTokenUsingRefreshToken(refreshToken);</span>
+
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">        if (isExpired(refreshToken)) {</span>
+<span class="nc" id="L150">            tokenStore.removeRefreshToken(refreshToken);</span>
+<span class="nc" id="L151">            throw new InvalidTokenException(ERR_MSG_REFRESH + &quot; (expired): &quot; + refreshToken);</span>
+        }
+
+<span class="fc" id="L154">        authentication = createRefreshedAuthentication(authentication, tokenRequest);</span>
+
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if (!reuseRefreshToken) {</span>
+<span class="fc" id="L157">            tokenStore.removeRefreshToken(refreshToken);</span>
+<span class="fc" id="L158">            refreshToken = createRefreshToken(authentication);</span>
+        }
+
+<span class="fc" id="L161">        OAuth2AccessToken accessToken = createAccessToken(authentication, refreshToken);</span>
+<span class="fc" id="L162">        tokenStore.storeAccessToken(accessToken, authentication);</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        if (!reuseRefreshToken) {</span>
+<span class="fc" id="L164">            tokenStore.storeRefreshToken(accessToken.getRefreshToken(), authentication);</span>
+        }
+<span class="fc" id="L166">        return accessToken;</span>
+    }
+
+    public OAuth2AccessToken getAccessToken(OAuth2Authentication authentication) {
+<span class="nc" id="L170">        return tokenStore.getAccessToken(authentication);</span>
+    }
+
+    /**
+     * Create a refreshed authentication.
+     *
+     * @param authentication The authentication.
+     * @param request        The scope for the refreshed token.
+     * @return The refreshed authentication.
+     * @throws InvalidScopeException If the scope requested is invalid or wider than the original scope.
+     */
+    private OAuth2Authentication createRefreshedAuthentication(OAuth2Authentication authentication, TokenRequest request) {
+<span class="fc" id="L182">        OAuth2Authentication narrowed = authentication;</span>
+<span class="fc" id="L183">        Set&lt;String&gt; scope = request.getScope();</span>
+<span class="fc" id="L184">        OAuth2Request clientAuth = authentication.getOAuth2Request().refresh(request);</span>
+<span class="pc bpc" id="L185" title="2 of 4 branches missed.">        if (scope != null &amp;&amp; !scope.isEmpty()) {</span>
+<span class="nc" id="L186">            Set&lt;String&gt; originalScope = clientAuth.getScope();</span>
+<span class="nc bnc" id="L187" title="All 4 branches missed.">            if (originalScope == null || !originalScope.containsAll(scope)) {</span>
+<span class="nc" id="L188">                throw new InvalidScopeException(&quot;Unable to narrow the scope of the client authentication to &quot; + scope</span>
+                    + &quot;.&quot;, originalScope);
+            } else {
+<span class="nc" id="L191">                clientAuth = clientAuth.narrowScope(scope);</span>
+            }
+        }
+<span class="fc" id="L194">        narrowed = new OAuth2Authentication(clientAuth, authentication.getUserAuthentication());</span>
+<span class="fc" id="L195">        return narrowed;</span>
+    }
+
+    protected boolean isExpired(OAuth2RefreshToken refreshToken) {
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        if (refreshToken instanceof ExpiringOAuth2RefreshToken) {</span>
+<span class="nc" id="L200">            ExpiringOAuth2RefreshToken expiringToken = (ExpiringOAuth2RefreshToken) refreshToken;</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">            return expiringToken.getExpiration() == null</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">                || System.currentTimeMillis() &gt; expiringToken.getExpiration().getTime();</span>
+        }
+<span class="fc" id="L204">        return false;</span>
+    }
+
+    public OAuth2AccessToken readAccessToken(String accessToken) {
+<span class="nc" id="L208">        return tokenStore.readAccessToken(accessToken);</span>
+    }
+
+    public OAuth2Authentication loadAuthentication(String accessTokenValue) throws AuthenticationException,
+        InvalidTokenException {
+<span class="fc" id="L213">        OAuth2AccessToken accessToken = tokenStore.readAccessToken(accessTokenValue);</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (accessToken == null) {</span>
+<span class="nc" id="L215">            throw new InvalidTokenException(ERR_MSG_ACCESS + accessTokenValue);</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        } else if (accessToken.isExpired()) {</span>
+<span class="nc" id="L217">            tokenStore.removeAccessToken(accessToken);</span>
+<span class="nc" id="L218">            throw new InvalidTokenException(ERR_MSG_ACCESS + &quot; expired: &quot; + accessTokenValue);</span>
+        }
+
+<span class="fc" id="L221">        OAuth2Authentication result = tokenStore.readAuthentication(accessToken);</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">        if (result == null) {</span>
+            // in case of race condition
+<span class="fc" id="L224">            throw new InvalidTokenException(ERR_MSG_ACCESS + accessTokenValue);</span>
+        }
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        if (clientDetailsService != null) {</span>
+<span class="nc" id="L227">            String clientId = result.getOAuth2Request().getClientId();</span>
+            try {
+<span class="nc" id="L229">                clientDetailsService.loadClientByClientId(clientId);</span>
+<span class="nc" id="L230">            } catch (ClientRegistrationException e) {</span>
+<span class="nc" id="L231">                throw new InvalidTokenException(&quot;Client not valid: &quot; + clientId, e);</span>
+<span class="nc" id="L232">            }</span>
+        }
+<span class="nc" id="L234">        return result;</span>
+    }
+
+    public String getClientId(String tokenValue) {
+<span class="nc" id="L238">        OAuth2Authentication authentication = tokenStore.readAuthentication(tokenValue);</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        if (authentication == null) {</span>
+<span class="nc" id="L240">            throw new InvalidTokenException(ERR_MSG_ACCESS + tokenValue);</span>
+        }
+<span class="nc" id="L242">        OAuth2Request clientAuth = authentication.getOAuth2Request();</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        if (clientAuth == null) {</span>
+<span class="nc" id="L244">            throw new InvalidTokenException(ERR_MSG_ACCESS + &quot; (no client id): &quot; + tokenValue);</span>
+        }
+<span class="nc" id="L246">        return clientAuth.getClientId();</span>
+    }
+
+    public boolean revokeToken(String tokenValue) {
+<span class="nc" id="L250">        OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (accessToken == null) {</span>
+<span class="nc" id="L252">            return false;</span>
+        }
+<span class="nc bnc" id="L254" title="All 2 branches missed.">        if (accessToken.getRefreshToken() != null) {</span>
+<span class="nc" id="L255">            tokenStore.removeRefreshToken(accessToken.getRefreshToken());</span>
+        }
+<span class="nc" id="L257">        tokenStore.removeAccessToken(accessToken);</span>
+<span class="nc" id="L258">        return true;</span>
+    }
+
+    private OAuth2RefreshToken createRefreshToken(OAuth2Authentication authentication) {
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (!isSupportRefreshToken(authentication.getOAuth2Request())) {</span>
+<span class="nc" id="L263">            return null;</span>
+        }
+<span class="fc" id="L265">        int validitySeconds = getRefreshTokenValiditySeconds(authentication.getOAuth2Request());</span>
+<span class="fc" id="L266">        String tokenValue = new String(Base64.encodeBase64URLSafe(DEFAULT_TOKEN_GENERATOR.generateKey()), US_ASCII);</span>
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">        if (validitySeconds &gt; 0) {</span>
+<span class="fc" id="L268">            return new DefaultExpiringOAuth2RefreshToken(tokenValue, new Date(System.currentTimeMillis()</span>
+                + (validitySeconds * 1000L)));
+        }
+<span class="nc" id="L271">        return new DefaultOAuth2RefreshToken(tokenValue);</span>
+    }
+
+    private OAuth2AccessToken createAccessToken(OAuth2Authentication authentication, OAuth2RefreshToken refreshToken) {
+<span class="fc" id="L275">        String tokenValue = new String(Base64.encodeBase64URLSafe(DEFAULT_TOKEN_GENERATOR.generateKey()), US_ASCII);</span>
+<span class="fc" id="L276">        DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(tokenValue);</span>
+<span class="fc" id="L277">        int validitySeconds = getAccessTokenValiditySeconds(authentication.getOAuth2Request());</span>
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if (validitySeconds &gt; 0) {</span>
+<span class="fc" id="L279">            token.setExpiration(new Date(System.currentTimeMillis() + (validitySeconds * 1000L)));</span>
+        }
+<span class="fc" id="L281">        token.setRefreshToken(refreshToken);</span>
+<span class="fc" id="L282">        token.setScope(authentication.getOAuth2Request().getScope());</span>
+
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">        return accessTokenEnhancer != null ? accessTokenEnhancer.enhance(token, authentication) : token;</span>
+    }
+
+    /**
+     * The access token validity period in seconds
+     *
+     * @param clientAuth the current authorization request
+     * @return the access token validity period in seconds
+     */
+    protected int getAccessTokenValiditySeconds(OAuth2Request clientAuth) {
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        if (clientDetailsService != null) {</span>
+<span class="nc" id="L295">            ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());</span>
+<span class="nc" id="L296">            Integer validity = client.getAccessTokenValiditySeconds();</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">            if (validity != null) {</span>
+<span class="nc" id="L298">                return validity;</span>
+            }
+        }
+<span class="fc" id="L301">        return accessTokenValiditySeconds;</span>
+    }
+
+    /**
+     * The refresh token validity period in seconds
+     *
+     * @param clientAuth the current authorization request
+     * @return the refresh token validity period in seconds
+     */
+    protected int getRefreshTokenValiditySeconds(OAuth2Request clientAuth) {
+<span class="pc bpc" id="L311" title="1 of 2 branches missed.">        if (clientDetailsService != null) {</span>
+<span class="nc" id="L312">            ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());</span>
+<span class="nc" id="L313">            Integer validity = client.getRefreshTokenValiditySeconds();</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">            if (validity != null) {</span>
+<span class="nc" id="L315">                return validity;</span>
+            }
+        }
+<span class="fc" id="L318">        return refreshTokenValiditySeconds;</span>
+    }
+
+    /**
+     * Is a refresh token supported for this client (or the global setting if
+     * {@link #setClientDetailsService(ClientDetailsService) clientDetailsService} is not set.
+     *
+     * @param clientAuth the current authorization request
+     * @return boolean to indicate if refresh token is supported
+     */
+    protected boolean isSupportRefreshToken(OAuth2Request clientAuth) {
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if (clientDetailsService != null) {</span>
+<span class="nc" id="L330">            ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());</span>
+<span class="nc" id="L331">            return client.getAuthorizedGrantTypes().contains(&quot;refresh_token&quot;);</span>
+        }
+<span class="fc" id="L333">        return this.supportRefreshToken;</span>
+    }
+
+    /**
+     * An access token enhancer that will be applied to a new token before it is saved in the token store.
+     *
+     * @param accessTokenEnhancer the access token enhancer to set
+     */
+    public void setTokenEnhancer(TokenEnhancer accessTokenEnhancer) {
+<span class="fc" id="L342">        this.accessTokenEnhancer = accessTokenEnhancer;</span>
+<span class="fc" id="L343">    }</span>
+
+    /**
+     * The validity (in seconds) of the refresh token. If less than or equal to zero then the tokens will be
+     * non-expiring.
+     *
+     * @param refreshTokenValiditySeconds The validity (in seconds) of the refresh token.
+     */
+    public void setRefreshTokenValiditySeconds(int refreshTokenValiditySeconds) {
+<span class="nc" id="L352">        this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;</span>
+<span class="nc" id="L353">    }</span>
+
+    /**
+     * The default validity (in seconds) of the access token. Zero or negative for non-expiring tokens. If a client
+     * details service is set the validity period will be read from the client, defaulting to this value if not defined
+     * by the client.
+     *
+     * @param accessTokenValiditySeconds The validity (in seconds) of the access token.
+     */
+    public void setAccessTokenValiditySeconds(int accessTokenValiditySeconds) {
+<span class="nc" id="L363">        this.accessTokenValiditySeconds = accessTokenValiditySeconds;</span>
+<span class="nc" id="L364">    }</span>
+
+    /**
+     * Whether to support the refresh token.
+     *
+     * @param supportRefreshToken Whether to support the refresh token.
+     */
+    public void setSupportRefreshToken(boolean supportRefreshToken) {
+<span class="fc" id="L372">        this.supportRefreshToken = supportRefreshToken;</span>
+<span class="fc" id="L373">    }</span>
+
+    /**
+     * Whether to reuse refresh tokens (until expired).
+     *
+     * @param reuseRefreshToken Whether to reuse refresh tokens (until expired).
+     */
+    public void setReuseRefreshToken(boolean reuseRefreshToken) {
+<span class="fc" id="L381">        this.reuseRefreshToken = reuseRefreshToken;</span>
+<span class="fc" id="L382">    }</span>
+
+    /**
+     * The persistence strategy for token storage.
+     *
+     * @param tokenStore the store for access and refresh tokens.
+     */
+    public void setTokenStore(TokenStore tokenStore) {
+<span class="fc" id="L390">        this.tokenStore = tokenStore;</span>
+<span class="fc" id="L391">    }</span>
+
+    /**
+     * An authentication manager that will be used (if provided) to check the user authentication when a token is
+     * refreshed.
+     *
+     * @param authenticationManager the authenticationManager to set
+     */
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+<span class="fc" id="L400">        this.authenticationManager = authenticationManager;</span>
+<span class="fc" id="L401">    }</span>
+
+    /**
+     * The client details service to use for looking up clients (if necessary). Optional if the access token expiry is
+     * set globally via {@link #setAccessTokenValiditySeconds(int)}.
+     *
+     * @param clientDetailsService the client details service
+     */
+    public void setClientDetailsService(ClientDetailsService clientDetailsService) {
+<span class="fc" id="L410">        this.clientDetailsService = clientDetailsService;</span>
+<span class="fc" id="L411">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

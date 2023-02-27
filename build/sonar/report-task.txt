@@ -1,0 +1,6 @@
+projectKey=com.idevhub.tapas.uaa
+serverUrl=https://sonar.customs.net.ua
+serverVersion=8.3.1.34397
+dashboardUrl=https://sonar.customs.net.ua/dashboard?id=com.idevhub.tapas.uaa
+ceTaskId=AXeIivpKTwecUrNqtSbn
+ceTaskUrl=https://sonar.customs.net.ua/api/ce/task?id=AXeIivpKTwecUrNqtSbn

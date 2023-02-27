@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.config.StaticResourcesWebConfigurerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:33" hostname="iMac-Aleksandr-2.local" time="3.273">
+  <properties/>
+  <testcase name="shouldInitializeResourceHandlerWithCacheControlAndLocations()" classname="com.idevhub.tapas.config.StaticResourcesWebConfigurerTest" time="2.885"/>
+  <testcase name="shoudCreateCacheControlBasedOnJhipsterDefaultProperties()" classname="com.idevhub.tapas.config.StaticResourcesWebConfigurerTest" time="0.344"/>
+  <testcase name="shoudCreateCacheControlWithSpecificConfigurationInProperties()" classname="com.idevhub.tapas.config.StaticResourcesWebConfigurerTest" time="0.01"/>
+  <testcase name="shouldAppendResourceHandlerAndInitiliazeIt()" classname="com.idevhub.tapas.config.StaticResourcesWebConfigurerTest" time="0.026"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+<head>
+    <title th:text="#{email.applications.approve.subject}">Confirm</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<p th:text="#{email.applications.greeting(${subjectFullName})}">
+    Шановний представник
+</p>
+<p th:text="#{email.applications.approve.text1(${title})}">
+    Вами була подана заява
+</p>
+
+<p th:text="#{email.applications.approve.text2(${type})}">
+    За результатами розгляду Вашої заяви до Реєстру митних брокерів внесено запис про {0} дозволу на провадження митної брокерської діяльності.
+</p>
+<p th:text="#{email.applications.approve.text3}">
+    Відповідно до частини першої статті 405 Митного кодексу України надаємо витяг з Реєстру митних брокерів:
+</p>
+
+
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+       style='border-collapse:collapse;border:none;mso-yfti-tbllook:1184;mso-padding-alt:
+ 0cm 5.4pt 0cm 5.4pt;mso-border-insideh:none;mso-border-insidev:none'>
+
+    <tr>
+        <td width=411 valign=top style='width:246.4pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p>Повне найменування юридичної особи або прізвище, ім’я та по батькові громадянина-підприємця</p>
+        </td>
+        <td width=411 valign=top style='width:246.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p th:text="${subjectFullNameFromRegister}"> Повне найменування суб'єкта господарювання</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td width=411 valign=top style='width:246.4pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p>Ідентифікаційний код юридичної особи або реєстраційний номер облікової картки платника податків та інших обов’язкових платежів</p>
+        </td>
+        <td width=411 valign=top style='width:246.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p th:text="${edrpouFromRegister}">Ідентифікаційний код</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td width=411 valign=top style='width:246.4pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p>Місцезнаходження юридичної особи або місце проживання громадянина-підприємця</p>
+        </td>
+        <td width=411 valign=top style='width:246.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p th:text="${legalAddressFromRegister}">Місцезнаходження юридичної особи</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td width=411 valign=top style='width:246.4pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p>Номер і дата запису в реєстрі  митних брокерів</p>
+        </td>
+        <td width=411 valign=top style='width:246.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+            <p th:text="${brokerRegNumber}">reg Number</p>
+            <p th:text="${recordingToRegisterDate}">Date</p>
+        </td>
+    </tr>
+
+</table>
+
+<p>
+    <span th:text="#{email.applications.approve.text4}">З найкращими побажаннями </span>
+    <br/>
+
+</p>
+
+</body>
+</html>

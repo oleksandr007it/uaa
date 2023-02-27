@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.ceaemployee.CeaEmploeeAuthenticationProviderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:39" hostname="iMac-Aleksandr-2.local" time="0.263">
+  <properties/>
+  <testcase name="testAuthenticate()" classname="com.idevhub.tapas.security.ceaemployee.CeaEmploeeAuthenticationProviderTest" time="0.236"/>
+  <testcase name="testSupports()" classname="com.idevhub.tapas.security.ceaemployee.CeaEmploeeAuthenticationProviderTest" time="0.002"/>
+  <testcase name="testAuthenticate_ThrowsAuthenticationException()" classname="com.idevhub.tapas.security.ceaemployee.CeaEmploeeAuthenticationProviderTest" time="0.023"/>
+  <system-out><![CDATA[2021-02-09 22:43:39.705  INFO   --- [    Test worker] i.t.s.c.CeaEmploeeAuthenticationProvider : Start authenticate ceaprovider
+2021-02-09 22:43:39.706  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:39.810  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start authenticate checkAuthorities
+2021-02-09 22:43:39.823  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : test Authentication success. Authorities: []
+2021-02-09 22:43:39.832  INFO   --- [    Test worker] i.t.s.c.CeaEmploeeAuthenticationProvider : Start authenticate ceaprovider
+2021-02-09 22:43:39.832  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:39.836  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start authenticate checkAuthorities
+2021-02-09 22:43:39.843 ERROR   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Can not have Authority ROLE_CEA_EMPLOYEE for Authorization
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

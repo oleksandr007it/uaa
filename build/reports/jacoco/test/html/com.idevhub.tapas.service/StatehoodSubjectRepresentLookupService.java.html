@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatehoodSubjectRepresentLookupService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">StatehoodSubjectRepresentLookupService.java</span></div><h1>StatehoodSubjectRepresentLookupService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.domain.StatehoodSubjectRepresent;
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentStatus;
+import com.idevhub.tapas.repository.StatehoodSubjectRepresentRepository;
+import com.idevhub.tapas.service.errors.WrongRepresentStatusException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+
+import static com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentStatus.ACTIVE;
+
+@Service
+@RequiredArgsConstructor
+<span class="fc" id="L18">@Slf4j</span>
+public class StatehoodSubjectRepresentLookupService {
+
+    private final StatehoodSubjectRepresentRepository representRepository;
+
+    public StatehoodSubjectRepresent tryToGetActiveRepresent(Long userId) {
+<span class="fc" id="L24">        log.debug(&quot;Try to get and check represent for userId={}&quot;, userId);</span>
+
+<span class="fc" id="L26">        var represent = representRepository.findByDeclarant_IdAndCurrentContextTrue(userId)</span>
+<span class="pc" id="L27">            .orElseThrow(() -&gt; new EntityNotFoundException(StatehoodSubjectRepresent.class));</span>
+
+<span class="fc" id="L29">        checkStatus(represent, ACTIVE);</span>
+
+<span class="fc" id="L31">        return represent;</span>
+    }
+
+    public StatehoodSubjectRepresent tryToGetActiveRepresent(Long userId, Long subjectId) {
+<span class="fc" id="L35">        log.debug(&quot;Try to get and check represent for userId={} and subjectId={}&quot;, userId, subjectId);</span>
+
+<span class="fc" id="L37">        var represent = representRepository.findByDeclarant_IdAndStatehoodSubject_Id(userId, subjectId)</span>
+<span class="pc" id="L38">            .orElseThrow(() -&gt; new EntityNotFoundException(StatehoodSubjectRepresent.class));</span>
+
+<span class="fc" id="L40">        checkStatus(represent, ACTIVE);</span>
+
+<span class="fc" id="L42">        return represent;</span>
+    }
+
+    private void checkStatus(StatehoodSubjectRepresent represent, StatehoodSubjectRepresentStatus... statuses) {
+<span class="fc" id="L46">        var hasValidStatus = ArrayUtils.contains(statuses, represent.getSubjectRepresentStatus());</span>
+
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (!hasValidStatus) {</span>
+<span class="nc" id="L49">            log.error(&quot;The status of represent is wrong. It must be in: &quot; + Arrays.toString(statuses));</span>
+<span class="nc" id="L50">            throw new WrongRepresentStatusException(&quot;error.represent.wrong.status&quot;);</span>
+        }
+<span class="fc" id="L52">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

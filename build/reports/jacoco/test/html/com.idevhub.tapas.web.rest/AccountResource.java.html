@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">AccountResource.java</span></div><h1>AccountResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.domain.constants.PropertyStatus;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.security.SecurityUtils;
+import com.idevhub.tapas.service.MailService;
+import com.idevhub.tapas.service.UserService;
+import com.idevhub.tapas.service.dto.UserDTO;
+import com.idevhub.tapas.service.mapper.UserMapper;
+import com.idevhub.tapas.web.rest.errors.EmailAlreadyUsedException;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
+
+/**
+ * REST controller for managing the current user's account.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+@RequiredArgsConstructor
+public class AccountResource {
+
+    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final UserMapper userMapper;
+    @Value(&quot;${jhipster.clientApp.name}&quot;)
+    private String applicationName;
+
+
+    /**
+     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
+     *
+     * @param request the HTTP request.
+     * @return the login if the user is authenticated.
+     */
+    @GetMapping(&quot;/authenticate&quot;)
+    public String isAuthenticated(HttpServletRequest request) {
+<span class="fc" id="L50">        log.debug(&quot;REST request to check if the current user is authenticated&quot;);</span>
+<span class="fc" id="L51">        return request.getRemoteUser();</span>
+    }
+
+    /**
+     * {@code GET  /account} : get the current user.
+     *
+     * @return the current user.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     */
+    @GetMapping(&quot;/account&quot;)
+    public UserDTO getAccount() {
+<span class="fc" id="L62">        return userService.getUserWithAuthorities()</span>
+<span class="fc" id="L63">            .map(userMapper::userToUserDTO)</span>
+<span class="fc" id="L64">            .orElseThrow(() -&gt; new AccountResourceException(&quot;User could not be found&quot;));</span>
+    }
+
+    @PutMapping(&quot;/account/change-language/{langKey}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; setLanguageCurenntUser(@PathVariable String langKey) {
+<span class="nc bnc" id="L70" title="All 6 branches missed.">        if ((!langKey.equals(&quot;ua&quot;)) &amp;&amp; (!langKey.equals(&quot;en&quot;)) &amp;&amp; (!langKey.equals(&quot;uk&quot;))) {</span>
+<span class="nc" id="L71">            throw new AccountResourceException(&quot;Language not available&quot;);</span>
+        }
+<span class="nc" id="L73">        userService.updateLangKey(langKey);</span>
+<span class="nc" id="L74">        return ResponseEntity</span>
+<span class="nc" id="L75">            .ok()</span>
+<span class="nc" id="L76">            .headers(HeaderUtil.createAlert(applicationName, &quot;profile.notify.updated&quot;, &quot;&quot;))</span>
+<span class="nc" id="L77">            .build();</span>
+    }
+
+    /**
+     * {@code POST  /account} : update the current user information.
+     *
+     * @param userDTO the current user information.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
+     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the user login wasn't found.
+     */
+    @PostMapping(&quot;/account&quot;)
+    public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
+<span class="pc" id="L89">        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -&gt; new AccountResourceException(&quot;Current user login not found&quot;));</span>
+<span class="fc" id="L90">        Optional&lt;User&gt; existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());</span>
+<span class="pc bpc" id="L91" title="1 of 4 branches missed.">        if (existingUser.isPresent() &amp;&amp; (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {</span>
+<span class="fc" id="L92">            throw new EmailAlreadyUsedException();</span>
+        }
+<span class="fc" id="L94">        Optional&lt;User&gt; user = userRepository.findOneByLogin(userLogin);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (!user.isPresent()) {</span>
+<span class="nc" id="L96">            throw new AccountResourceException(&quot;User could not be found&quot;);</span>
+        }
+<span class="fc" id="L98">        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),</span>
+<span class="fc" id="L99">            userDTO.getLangKey());</span>
+
+
+<span class="fc" id="L102">    }</span>
+
+    @PostMapping(&quot;/account/declarant&quot;)
+    public ResponseEntity&lt;UserDTO&gt; saveDecrantAccount(@Valid @RequestBody UserDTO userDTO) {
+<span class="nc" id="L106">        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -&gt; new AccountResourceException(&quot;Current user login not found&quot;));</span>
+<span class="nc" id="L107">        Optional&lt;User&gt; existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());</span>
+<span class="nc bnc" id="L108" title="All 4 branches missed.">        if (existingUser.isPresent() &amp;&amp; (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {</span>
+<span class="nc" id="L109">            throw new EmailAlreadyUsedException();</span>
+        }
+<span class="nc" id="L111">        Optional&lt;User&gt; user = userRepository.findOneByLogin(userLogin);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (!user.isPresent()) {</span>
+<span class="nc" id="L113">            throw new AccountResourceException(&quot;User could not be found&quot;);</span>
+        } else {
+<span class="nc" id="L115">            User userFromRepo = user.get();</span>
+<span class="nc" id="L116">            String emailFromRepo = userFromRepo.getEmail();</span>
+<span class="nc" id="L117">            String emailFromDTO = userDTO.getEmail();</span>
+<span class="nc bnc" id="L118" title="All 4 branches missed.">            if (emailFromRepo != null &amp;&amp; !emailFromRepo.equals(emailFromDTO)) {</span>
+<span class="nc" id="L119">                userDTO.setEmailApprove(false);</span>
+<span class="nc" id="L120">                userDTO.setPropertyStatus(PropertyStatus.NOT_COMPLETED);</span>
+            }
+        }
+<span class="nc" id="L123">        Optional&lt;UserDTO&gt; updatedUser = userService.updateDeclaratntAccount(userDTO);</span>
+<span class="nc" id="L124">        return ResponseUtil.wrapOrNotFound(updatedUser,</span>
+<span class="nc" id="L125">            HeaderUtil.createAlert(applicationName, &quot;profile.notify.updated&quot;, userDTO.getLogin()));</span>
+    }
+
+    private static class AccountResourceException extends RuntimeException {
+        private AccountResourceException(String message) {
+<span class="fc" id="L130">            super(message);</span>
+<span class="fc" id="L131">        }</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DeclarantAuthenticationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security.declarant</a> &gt; <span class="el_source">DeclarantAuthenticationProvider.java</span></div><h1>DeclarantAuthenticationProvider.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security.declarant;
+
+import com.idevhub.tapas.config.Constants;
+import com.idevhub.tapas.domain.Authority;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.domain.constants.PropertyStatus;
+import com.idevhub.tapas.domain.constants.UserStatus;
+import com.idevhub.tapas.domain.constants.UserType;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.security.AuthoritiesConstants;
+import com.idevhub.tapas.security.BaseAuthenticationProvider;
+import com.idevhub.tapas.security.CustomUserDetails;
+import com.idevhub.tapas.security.DomainUserDetailsService;
+import com.idevhub.tapas.service.dto.UserDTOfromIdGovUa;
+import io.github.jhipster.security.RandomUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
+import java.util.Collection;
+
+@Component(&quot;declarantAuthenticationProvider&quot;)
+public class DeclarantAuthenticationProvider extends BaseAuthenticationProvider {
+    private final static String MESSAGE_FOR_LOG = &quot;declaran&quot;;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+<span class="fc" id="L35">    Logger logger = LoggerFactory.getLogger(DeclarantAuthenticationProvider.class);</span>
+
+
+    public DeclarantAuthenticationProvider(UserRepository userRepository, DomainUserDetailsService userDetailsService) {
+<span class="fc" id="L39">        super(userDetailsService);</span>
+<span class="fc" id="L40">        this.userRepository = userRepository;</span>
+<span class="fc" id="L41">        this.passwordEncoder = new BCryptPasswordEncoder();</span>
+<span class="fc" id="L42">    }</span>
+
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+<span class="fc" id="L47">        Assert.notNull(authentication, &quot;No authentication data provided&quot;);</span>
+<span class="fc" id="L48">        logger.info(&quot;Start authenticate &quot; + MESSAGE_FOR_LOG + &quot;provider&quot;);</span>
+<span class="fc" id="L49">        String userInfo = authentication.getName();</span>
+<span class="fc" id="L50">        checkUserInfo(userInfo, MESSAGE_FOR_LOG);</span>
+<span class="fc" id="L51">        UserDTOfromIdGovUa userFromIdGovUaDTO = tryToGetUserInfo(userInfo, MESSAGE_FOR_LOG);</span>
+<span class="fc" id="L52">        String rnokpp = userFromIdGovUaDTO.getRnokpp();</span>
+
+<span class="fc" id="L54">        User userFromrepo = userRepository.findOneByRnokppAndUserType(rnokpp, UserType.DECLARANT).orElse(null);</span>
+
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (userFromrepo == null) {</span>
+<span class="fc" id="L57">            userFromrepo = new User();</span>
+<span class="fc" id="L58">            userFromrepo.setLogin(RandomUtil.generateResetKey());</span>
+<span class="fc" id="L59">            userFromrepo.setRnokpp(userFromIdGovUaDTO.getRnokpp());</span>
+<span class="fc" id="L60">            userFromrepo.setEdrpouCode(userFromIdGovUaDTO.getEdrpouCode());</span>
+<span class="fc" id="L61">            userFromrepo.setFirstName(userFromIdGovUaDTO.getFirstName());</span>
+<span class="fc" id="L62">            userFromrepo.setLastName(userFromIdGovUaDTO.getLastName());</span>
+<span class="fc" id="L63">            userFromrepo.setMiddleName(userFromIdGovUaDTO.getMiddleName());</span>
+<span class="fc" id="L64">            userFromrepo.setFullName(userFromIdGovUaDTO.getFullName());</span>
+<span class="fc" id="L65">            userFromrepo.setOrgUnit(userFromIdGovUaDTO.getOrgUnit());</span>
+<span class="fc" id="L66">            userFromrepo.setOrg(userFromIdGovUaDTO.getOrg());</span>
+<span class="fc" id="L67">            userFromrepo.setPosition(userFromIdGovUaDTO.getPosition());</span>
+<span class="fc" id="L68">            userFromrepo.setLangKey(Constants.DEFAULT_LANGUAGE); // default language</span>
+<span class="fc" id="L69">            userFromrepo.setStatus(UserStatus.ACTIVE);</span>
+<span class="fc" id="L70">            userFromrepo.setPropertyStatus(PropertyStatus.NOT_COMPLETED);</span>
+<span class="fc" id="L71">            String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());</span>
+<span class="fc" id="L72">            userFromrepo.setPassword(encryptedPassword);</span>
+<span class="fc" id="L73">            userFromrepo.setActivated(true);</span>
+<span class="fc" id="L74">            userFromrepo.setUserType(UserType.DECLARANT);</span>
+<span class="fc" id="L75">            Authority authority = new Authority();</span>
+<span class="fc" id="L76">            authority.setName(AuthoritiesConstants.DECLARANT);</span>
+<span class="fc" id="L77">            userFromrepo.getAuthorities().add(authority);</span>
+<span class="fc" id="L78">            userRepository.saveAndFlush(userFromrepo);</span>
+
+        }
+
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (!userFromrepo.isActivated()) {</span>
+<span class="nc" id="L83">            logger.error(&quot;User Declarant is not activated&quot;);</span>
+<span class="nc" id="L84">            throw new BadCredentialsException(&quot;User Declarant is not activated&quot;);</span>
+        }
+
+
+<span class="fc" id="L88">        CustomUserDetails userDetails = tryToGetUserDetailsByRnokppAndUserType(rnokpp, UserType.DECLARANT);</span>
+<span class="fc" id="L89">        Collection&lt;GrantedAuthority&gt; authorities = userDetails.getAuthorities();</span>
+
+<span class="fc" id="L91">        checkAuthorities(authorities, AuthoritiesConstants.DECLARANT);</span>
+
+<span class="fc" id="L93">        UsernamePasswordAuthenticationToken authenticationWithAuthorities = tryToMakeAuthenticationTokenAndAddUserIdToDetails(userDetails, authorities, authentication);</span>
+
+
+<span class="fc" id="L96">        return authenticationWithAuthorities;</span>
+    }
+
+
+    @Override
+    public boolean supports(Class&lt;?&gt; authentication) {
+<span class="fc" id="L102">        return authentication.equals(DeclarantAuthenticationToken.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

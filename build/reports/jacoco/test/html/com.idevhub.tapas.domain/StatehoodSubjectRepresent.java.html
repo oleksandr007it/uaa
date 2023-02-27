@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatehoodSubjectRepresent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.domain</a> &gt; <span class="el_source">StatehoodSubjectRepresent.java</span></div><h1>StatehoodSubjectRepresent.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentStatus;
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentType;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+
+/**
+ * A StatehoodSubjectRepresent.
+ */
+@Entity
+@Table(name = &quot;statehood_subject_represent&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Data
+@EqualsAndHashCode(of = &quot;id&quot;)
+@Accessors(chain = true)
+@ToString(of={&quot;id&quot;, &quot;declarant&quot;, &quot;currentContext&quot;})
+public class StatehoodSubjectRepresent  {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;sequenceGenerator&quot;)
+    @SequenceGenerator(name = &quot;sequenceGenerator&quot;)
+    private Long id;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;subject_represent_status&quot;, nullable = false)
+    private StatehoodSubjectRepresentStatus subjectRepresentStatus;
+
+    @CreatedDate
+    private Instant createdAt;
+
+    @LastModifiedDate
+    private Instant updatedAt;
+
+    private Instant deletedAt;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;subject_represent_type&quot;, nullable = false)
+    private StatehoodSubjectRepresentType subjectRepresentType;
+
+    @CreatedBy
+    @JsonIgnore
+    private String createdBy;
+
+    @LastModifiedBy
+    @JsonIgnore
+    private String updatedBy;
+
+    @JsonIgnore
+    private String deletedBy;
+
+    @JsonIgnore
+    @Column(name = &quot;approve_sign&quot;)
+    private String approveSignBase64;
+
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnore
+    private StatehoodSubject statehoodSubject;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @JsonIgnore
+    private User declarant;
+
+    @NotNull
+    @Column(name = &quot;is_current_context&quot;, nullable = false)
+    private boolean currentContext;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = &quot;_privilege_group_to_represent&quot;,
+        joinColumns = {@JoinColumn(name = &quot;represent_id&quot;, referencedColumnName = &quot;id&quot;)},
+        inverseJoinColumns = {@JoinColumn(name = &quot;group_code&quot;, referencedColumnName = &quot;code&quot;)})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;PrivilegeGroup&gt; privilegeGroups = new HashSet&lt;&gt;();
+
+    public Set&lt;String&gt; loadAndGetPrivilegeCodes() {
+<span class="fc" id="L106">        privilegeGroups.size();</span>
+
+<span class="fc" id="L108">        return privilegeGroups.stream()</span>
+<span class="fc" id="L109">            .map(PrivilegeGroup::loadAndGetPrivilegeCodes)</span>
+<span class="fc" id="L110">            .flatMap(Collection::stream)</span>
+<span class="fc" id="L111">            .collect(toSet());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

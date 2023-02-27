@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:34" hostname="iMac-Aleksandr-2.local" time="0.276">
+  <properties/>
+  <testcase name="testFindOne()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.025"/>
+  <testcase name="testChangeContextTo()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.006"/>
+  <testcase name="testGetCurrentContextMainDTO2()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.007"/>
+  <testcase name="testGetAllActiveByDeclarantId()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.006"/>
+  <testcase name="testFindAllRepresentersBySubjectId()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.03"/>
+  <testcase name="testCreate2()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.15"/>
+  <testcase name="testGetCurrentContextMainDTO()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.006"/>
+  <testcase name="testGetCurrentRepresentDto()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.007"/>
+  <testcase name="testRemoveRepresent()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.007"/>
+  <testcase name="testGetAllActiveByCurrentDeclarant()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.006"/>
+  <testcase name="testHasAccessByIds()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImplTest" time="0.005"/>
+  <system-out><![CDATA[  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:44:27.964  INFO 7952 --- [    Test worker] StatehoodSubjectRepresentServiceImplTest : No active profile set, falling back to default profiles: default
+2021-02-09 22:44:29.116 DEBUG 7952 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:44:29.134 DEBUG 7952 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:44:29.141 DEBUG 7952 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:44:30.022 DEBUG 7952 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 881 ms
+2021-02-09 22:44:30.104 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:44:30.104 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Hazelcast already initialized
+2021-02-09 22:44:31.844 DEBUG 7952 --- [cached.thread-4] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Checking partition state, version: 272
+2021-02-09 22:44:31.872 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:44:33.031  WARN 7952 --- [    Test worker] o.s.c.n.a.ArchaiusAutoConfiguration      : Netflix ConfigurationManager has already been installed, unable to re-install
+2021-02-09 22:44:33.473  INFO 7952 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:44:33.646 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:44:33.646 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:44:33.649 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:44:33.649 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:44:34.433  INFO 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:44:34.436 DEBUG 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:44:34.436 DEBUG 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:44:34.453  INFO 7952 --- [    Test worker] StatehoodSubjectRepresentServiceImplTest : Started StatehoodSubjectRepresentServiceImplTest in 6.987 seconds (JVM running for 64.605)
+2021-02-09 22:44:34.883 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Request to get StatehoodSubjectRepresent : 0
+2021-02-09 22:44:35.050 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Request to save StatehoodSubjectRepresent : StatehoodSubjectRepresentCreateDTO(rnokpp=rnokpp, firstName=firstName, lastName=lastName, middleName=middleName, privilegeGroupsIds=[value])
+2021-02-09 22:44:35.051 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Trying to check fullName to representative possibility
+2021-02-09 22:44:35.052 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : fullName can be a representative of null.
+2021-02-09 22:44:35.088 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Sending representative invitation. Candidate - fullName. Subject - null. Invited by - fullName
+2021-02-09 22:44:35.090 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Invitation send.
+2021-02-09 22:44:35.109 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Trying to get current StatehoodSubjectRepresent.
+2021-02-09 22:44:35.117 DEBUG 7952 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : REST request to delete Represent where declarantId: 0 and subjectId: 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

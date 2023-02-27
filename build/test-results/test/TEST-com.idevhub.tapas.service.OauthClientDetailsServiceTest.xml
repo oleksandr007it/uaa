@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.OauthClientDetailsServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:35" hostname="iMac-Aleksandr-2.local" time="0.074">
+  <properties/>
+  <testcase name="testFindAll()" classname="com.idevhub.tapas.service.OauthClientDetailsServiceTest" time="0.04"/>
+  <testcase name="testSave()" classname="com.idevhub.tapas.service.OauthClientDetailsServiceTest" time="0.033"/>
+  <system-out><![CDATA[2021-02-09 22:44:35.842 DEBUG 7952 --- [    Test worker] c.i.t.service.OauthClientDetailsService  : Request to get all OauthClientDetails
+2021-02-09 22:44:35.859 DEBUG 7952 --- [    Test worker] c.i.t.service.OauthClientDetailsService  : Request to save OauthClientDetails : OauthClientDetails{id=1, clientId='client_id', resourceIds='resource_ids', clientSecret='client_secret', scope='scope', authorizedGrantTypes='auth_grant_type', webServerRedirectUri='http://link.com', authorities='authorities', accessTokenValidity='1', refreshTokenValidity='2', additionalInformation='additional_info', autoapprove='auto_approve', clientUrl='http://client.com'}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

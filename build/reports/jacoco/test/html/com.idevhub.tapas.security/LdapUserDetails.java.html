@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LdapUserDetails.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security</a> &gt; <span class="el_source">LdapUserDetails.java</span></div><h1>LdapUserDetails.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security;
+
+
+import com.idevhub.tapas.service.dto.UserDTOfromIdGovUa;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+public class LdapUserDetails implements UserDetails {
+    private static final long serialVersionUID = 77006303808759963L;
+    private final String username;
+    private final UserDTOfromIdGovUa user;
+    private final boolean accountNonExpired;
+    private final boolean accountNonLocked;
+    private final boolean credentialsNonExpired;
+    private final boolean enabled;
+    private final String ldapMemberOf; //�������������� �������� �� LDAP, �� �������� ������������������ ��������������������.
+    private final String organization; //���������� ������'�������� ���������������������������� ���� ���������� ���������������������� ��������������������.
+    private final String customsBodyCode; //������ �������������� ������������ �� ���������� ������������������ ������������ ������������ ��������������.
+    private final String employeeIdCardNumber; //���������� �������������������� ���������������������� ���������������������� �� ������������������ ������������ ������������ ��������������.
+    private final String ldapUserDirectoryId;  //�������������������������� ����'�������� �� ������������ ������������������ (��������������, ������������������), �� ���������� �������������������� ��������������������.
+
+    private String nonce;
+<span class="fc" id="L28">    private final int MAX_MEMBER_OF_SIZE = 7168;</span>
+
+    public LdapUserDetails(String username, String ldapMemberOf, UserDTOfromIdGovUa user, String organization, String customsBodyCode, String employeeIdCardNumber, String ldapUserDirectoryId) {
+<span class="fc" id="L31">        this(username, user, true, true, true, true, ldapMemberOf, organization,</span>
+            customsBodyCode, employeeIdCardNumber, ldapUserDirectoryId);
+<span class="fc" id="L33">    }</span>
+
+
+    public LdapUserDetails(String username, UserDTOfromIdGovUa user, boolean enabled,
+                           boolean accountNonExpired, boolean credentialsNonExpired,
+                           boolean accountNonLocked, String ldapMemberOf, String organization, String customsBodyCode,
+<span class="fc" id="L39">                           String employeeIdCardNumber, String ldapUserDirectoryId) {</span>
+<span class="fc" id="L40">        this.user = user;</span>
+<span class="fc" id="L41">        this.organization = organization;</span>
+<span class="fc" id="L42">        this.customsBodyCode = customsBodyCode;</span>
+<span class="fc" id="L43">        this.employeeIdCardNumber = employeeIdCardNumber;</span>
+<span class="fc" id="L44">        this.ldapUserDirectoryId = ldapUserDirectoryId;</span>
+
+
+<span class="pc bpc" id="L47" title="2 of 4 branches missed.">        if (((username == null) || &quot;&quot;.equals(username))) {</span>
+<span class="nc" id="L48">            throw new IllegalArgumentException(</span>
+                &quot;Cannot pass null or empty values to constructor&quot;);
+        }
+
+
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (ldapMemberOf.getBytes().length &lt; MAX_MEMBER_OF_SIZE) {</span>
+<span class="fc" id="L54">            this.ldapMemberOf = ldapMemberOf;</span>
+        } else {
+<span class="nc" id="L56">            this.ldapMemberOf = &quot;truncate&quot;;</span>
+        }
+
+<span class="fc" id="L59">        this.username = username;</span>
+<span class="fc" id="L60">        this.enabled = enabled;</span>
+<span class="fc" id="L61">        this.accountNonExpired = accountNonExpired;</span>
+<span class="fc" id="L62">        this.credentialsNonExpired = credentialsNonExpired;</span>
+<span class="fc" id="L63">        this.accountNonLocked = accountNonLocked;</span>
+
+<span class="fc" id="L65">    }</span>
+
+    public String getOrganization() {
+<span class="fc" id="L68">        return organization;</span>
+    }
+
+    public String getCustomsBodyCode() {
+<span class="fc" id="L72">        return customsBodyCode;</span>
+    }
+
+    public String getEmployeeIdCardNumber() {
+<span class="fc" id="L76">        return employeeIdCardNumber;</span>
+    }
+
+    public String getLdapUserDirectoryId() {
+<span class="fc" id="L80">        return ldapUserDirectoryId;</span>
+    }
+
+    public String getLdapMemberOf() {
+<span class="fc" id="L84">        return ldapMemberOf;</span>
+    }
+
+    public UserDTOfromIdGovUa getUser() {
+<span class="fc" id="L88">        return user;</span>
+    }
+
+    public String getNonce() {
+<span class="fc" id="L92">        return nonce;</span>
+    }
+
+    public void setNonce(String nonce) {
+<span class="fc" id="L96">        this.nonce = nonce;</span>
+<span class="fc" id="L97">    }</span>
+
+    @Override
+    public Collection&lt;? extends GrantedAuthority&gt; getAuthorities() {
+<span class="fc" id="L101">        List&lt;GrantedAuthority&gt; authorities = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L102">        GrantedAuthority authority = new SimpleGrantedAuthority(AuthoritiesConstants.THIRD_APP);</span>
+<span class="fc" id="L103">        authorities.add(authority);</span>
+<span class="fc" id="L104">        return authorities;</span>
+    }
+
+    @Override
+    public String getPassword() {
+<span class="fc" id="L109">        return &quot;password&quot;;</span>
+    }
+
+
+    public String getUsername() {
+<span class="fc" id="L114">        return username;</span>
+    }
+
+    public boolean isEnabled() {
+<span class="fc" id="L118">        return enabled;</span>
+    }
+
+    public boolean isAccountNonExpired() {
+<span class="fc" id="L122">        return accountNonExpired;</span>
+    }
+
+    public boolean isAccountNonLocked() {
+<span class="fc" id="L126">        return accountNonLocked;</span>
+    }
+
+    public boolean isCredentialsNonExpired() {
+<span class="nc" id="L130">        return credentialsNonExpired;</span>
+    }
+
+
+    /**
+     * Returns {@code true} if the supplied object is a {@code User} instance with the
+     * same {@code username} value.
+     * &lt;p&gt;
+     * In other words, the objects are equal if they have the same username, representing
+     * the same principal.
+     */
+    @Override
+    public boolean equals(Object rhs) {
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if (rhs instanceof org.springframework.security.core.userdetails.User) {</span>
+<span class="nc" id="L144">            return username.equals(((LdapUserDetails) rhs).username);</span>
+        }
+<span class="fc" id="L146">        return false;</span>
+    }
+
+    /**
+     * Returns the hashcode of the {@code username}.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L154">        return username.hashCode();</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L159">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L160">        sb.append(super.toString()).append(&quot;: &quot;);</span>
+<span class="fc" id="L161">        sb.append(&quot;Username: &quot;).append(this.username).append(&quot;; &quot;);</span>
+<span class="fc" id="L162">        sb.append(&quot;Password: [PROTECTED]; &quot;);</span>
+<span class="fc" id="L163">        sb.append(&quot;Enabled: &quot;).append(this.enabled).append(&quot;; &quot;);</span>
+<span class="fc" id="L164">        sb.append(&quot;AccountNonExpired: &quot;).append(this.accountNonExpired).append(&quot;; &quot;);</span>
+<span class="fc" id="L165">        sb.append(&quot;credentialsNonExpired: &quot;).append(this.credentialsNonExpired)</span>
+<span class="fc" id="L166">            .append(&quot;; &quot;);</span>
+<span class="fc" id="L167">        sb.append(&quot;AccountNonLocked: &quot;).append(this.accountNonLocked).append(&quot;; &quot;);</span>
+<span class="fc" id="L168">        sb.append(&quot;Not granted any authorities&quot;);</span>
+
+
+<span class="fc" id="L171">        return sb.toString();</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

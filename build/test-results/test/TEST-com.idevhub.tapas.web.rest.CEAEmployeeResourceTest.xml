@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:12" hostname="iMac-Aleksandr-2.local" time="0.104">
+  <properties/>
+  <testcase name="testGetCeaEmployeeCurrentContext()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.031"/>
+  <testcase name="testUpdateCeaEmployee()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.006"/>
+  <testcase name="testFindAll()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.007"/>
+  <testcase name="testGetCeaDepartmentHead()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.006"/>
+  <testcase name="testGetCeaEmployee()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.005"/>
+  <testcase name="testGetAllCeaEmployeeHasAuth()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.02"/>
+  <testcase name="testCreateCeaEmployee()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.006"/>
+  <testcase name="testGetCeaUser()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.005"/>
+  <testcase name="testGetCeaEmployeeById()" classname="com.idevhub.tapas.web.rest.CEAEmployeeResourceTest" time="0.006"/>
+  <system-out><![CDATA[  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:43:46.787  INFO 7952 --- [    Test worker] c.i.t.web.rest.CEAEmployeeResourceTest   : No active profile set, falling back to default profiles: default
+2021-02-09 22:43:51.908 DEBUG 7952 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:43:51.959 DEBUG 7952 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:43:51.979 DEBUG 7952 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:43:59.516 DEBUG 7952 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 7537 ms
+2021-02-09 22:43:59.527  WARN 7952 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Warning, Liquibase took more than 5 seconds to start up!
+2021-02-09 22:43:59.740 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:43:59.763  WARN 7952 --- [    Test worker] c.h.instance.HazelcastInstanceFactory    : Hazelcast is starting in a Java modular environment (Java 9 and newer) but without proper access to required Java packages. Use additional Java arguments to provide Hazelcast access to Java internal API. The internal API access is used to get the best performance results. Arguments to be used:
+ --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
+2021-02-09 22:43:59.837  WARN 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : No discovery service is set up, Hazelcast cannot create a cluster.
+2021-02-09 22:43:59.945  INFO 7952 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Prefer IPv4 stack is true, prefer IPv6 addresses is false
+2021-02-09 22:43:59.965 DEBUG 7952 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Trying to bind inet socket address: 0.0.0.0/0.0.0.0:5701
+2021-02-09 22:43:59.967 DEBUG 7952 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Bind successful to inet socket address: /0:0:0:0:0:0:0:0:5701
+2021-02-09 22:43:59.970  INFO 7952 --- [    Test worker] com.hazelcast.instance.AddressPicker     : [LOCAL] [dev] [3.12.7] Picked [192.168.255.30]:5701, using socket ServerSocket[addr=/0:0:0:0:0:0:0:0,localport=5701], bind any local is true
+2021-02-09 22:44:00.005  INFO 7952 --- [    Test worker] com.hazelcast.system                     : [192.168.255.30]:5701 [dev] [3.12.7] Hazelcast 3.12.7 (20200430 - bf4b643) starting at [192.168.255.30]:5701
+2021-02-09 22:44:00.005  INFO 7952 --- [    Test worker] com.hazelcast.system                     : [192.168.255.30]:5701 [dev] [3.12.7] Copyright (c) 2008-2020, Hazelcast, Inc. All Rights Reserved.
+2021-02-09 22:44:00.005 DEBUG 7952 --- [    Test worker] com.hazelcast.system                     : [192.168.255.30]:5701 [dev] [3.12.7] Configured Hazelcast Serialization version: 1
+2021-02-09 22:44:00.507  INFO 7952 --- [    Test worker] c.h.s.i.o.impl.BackpressureRegulator     : [192.168.255.30]:5701 [dev] [3.12.7] Backpressure is disabled
+2021-02-09 22:44:00.536 DEBUG 7952 --- [    Test worker] h.s.i.o.i.InboundResponseHandlerSupplier : [192.168.255.30]:5701 [dev] [3.12.7] Running with 2 response threads
+2021-02-09 22:44:01.874  INFO 7952 --- [    Test worker] c.h.s.i.o.impl.OperationExecutorImpl     : [192.168.255.30]:5701 [dev] [3.12.7] Starting 4 partition threads and 3 generic threads (1 dedicated for priority tasks)
+2021-02-09 22:44:01.875  INFO 7952 --- [    Test worker] c.h.internal.diagnostics.Diagnostics     : [192.168.255.30]:5701 [dev] [3.12.7] Diagnostics disabled. To enable add -Dhazelcast.diagnostics.enabled=true to the JVM arguments.
+2021-02-09 22:44:01.883  INFO 7952 --- [    Test worker] com.hazelcast.core.LifecycleService      : [192.168.255.30]:5701 [dev] [3.12.7] [192.168.255.30]:5701 is STARTING
+2021-02-09 22:44:01.884 DEBUG 7952 --- [    Test worker] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Adding Member [192.168.255.30]:5701 - d19c20d0-74fb-4272-867b-7c7bc68bb5de this
+2021-02-09 22:44:01.887 DEBUG 7952 --- [    Test worker] c.h.i.networking.nio.NioNetworking       : [192.168.255.30]:5701 [dev] [3.12.7] TcpIpConnectionManager configured with Non Blocking IO-threading model: 3 input threads and 3 output threads
+2021-02-09 22:44:01.887 DEBUG 7952 --- [    Test worker] c.h.i.networking.nio.NioNetworking       : [192.168.255.30]:5701 [dev] [3.12.7] IO threads selector mode is SELECT
+2021-02-09 22:44:01.903  WARN 7952 --- [    Test worker] com.hazelcast.instance.Node              : [192.168.255.30]:5701 [dev] [3.12.7] No join method is enabled! Starting standalone.
+2021-02-09 22:44:01.904 DEBUG 7952 --- [    Test worker] c.h.internal.cluster.ClusterService      : [192.168.255.30]:5701 [dev] [3.12.7] Setting master address to [192.168.255.30]:5701
+2021-02-09 22:44:01.904 DEBUG 7952 --- [    Test worker] c.h.i.cluster.impl.MembershipManager     : [192.168.255.30]:5701 [dev] [3.12.7] Local member list join version is set to 1
+2021-02-09 22:44:01.951  INFO 7952 --- [    Test worker] com.hazelcast.core.LifecycleService      : [192.168.255.30]:5701 [dev] [3.12.7] [192.168.255.30]:5701 is STARTED
+2021-02-09 22:44:02.094 DEBUG 7952 --- [cached.thread-2] s.n.www.protocol.http.HttpURLConnection  : sun.net.www.MessageHeader@31502a255 pairs: {GET /ping?version=3.12.7&m=d19c20d0-74fb-4272-867b-7c7bc68bb5de&p=maven&c=839d72f3-a9be-49ef-a2c9-fb65f6576df6&crsz=A&cssz=A&cuptm=40&nuptm=32097&jvmn=Java+HotSpot%28TM%29+64-Bit+Server+VM&jvmv=11.0.9&jetv=&ccpp=0&cdn=0&cjv=0&cnjs=0&cpy=0&cgo=0&osn=Mac+OS+X&osa=x86_64&osv=10.13.6&mclicense=MC_NOT_CONFIGURED&mcver=MC_NOT_CONFIGURED HTTP/1.1: null}{User-Agent: Mozilla/5.0}{Host: phonehome.hazelcast.com}{Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2}{Connection: keep-alive}
+2021-02-09 22:44:02.221 DEBUG 7952 --- [cached.thread-2] s.n.www.protocol.http.HttpURLConnection  : sun.net.www.MessageHeader@32a783e25 pairs: {null: HTTP/1.1 200 OK}{Server: Apache-Coyote/1.1}{Content-Type: text/plain;charset=UTF-8}{Transfer-Encoding: chunked}{Date: Tue, 09 Feb 2021 20:44:01 GMT}
+2021-02-09 22:44:03.205  WARN 7952 --- [    Test worker] org.hibernate.id.UUIDHexGenerator        : HHH000409: Using org.hibernate.id.UUIDHexGenerator which does not generate IETF RFC 4122 compliant UUID values; consider using org.hibernate.id.UUIDGenerator instead
+2021-02-09 22:44:06.249 DEBUG 7952 --- [    Test worker] i.m.c.u.i.logging.InternalLoggerFactory  : Using SLF4J as the default logging framework
+2021-02-09 22:44:06.504  WARN 7952 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2021-02-09 22:44:06.504  INFO 7952 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2021-02-09 22:44:06.515 DEBUG 7952 --- [    Test worker] c.n.hystrix.strategy.HystrixPlugins      : Created HystrixDynamicProperties. Using class : com.netflix.hystrix.strategy.properties.archaius.HystrixDynamicPropertiesArchaius
+2021-02-09 22:44:06.536  INFO 7952 --- [    Test worker] c.netflix.config.DynamicPropertyFactory  : DynamicPropertyFactory is initialized with configuration sources: com.netflix.config.ConcurrentCompositeConfiguration@a6ce13c
+2021-02-09 22:44:07.959 DEBUG 7952 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:44:10.136  WARN 7952 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2021-02-09 22:44:10.137  INFO 7952 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2021-02-09 22:44:10.900  INFO 7952 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:44:11.167 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:44:11.168 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:44:11.171 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:44:11.171 DEBUG 7952 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:44:12.684  INFO 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:44:12.693 DEBUG 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:44:12.694 DEBUG 7952 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:44:12.726  INFO 7952 --- [    Test worker] c.i.t.web.rest.CEAEmployeeResourceTest   : Started CEAEmployeeResourceTest in 29.114 seconds (JVM running for 42.877)
+2021-02-09 22:44:12.929 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : Request to get current CEAEmployee context
+2021-02-09 22:44:12.944 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : REST request to update employee of cea with code=edrpouCode
+2021-02-09 22:44:12.953 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : Request to find all CEAEmployees
+2021-02-09 22:44:12.960 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : Request to get head of cea department with id=0
+2021-02-09 22:44:12.967 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : Request to get employee by user id=0 and cea code=ceaCode
+2021-02-09 22:44:12.988 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : Request to get active cea employees that has privilegeCode=V1_1_1
+2021-02-09 22:44:12.994 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : REST request to create employee for cea with code=edrpouCode
+2021-02-09 22:44:13.002 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : REST request to get logged in Cea User info
+2021-02-09 22:44:13.009 DEBUG 7952 --- [    Test worker] c.i.tapas.web.rest.CEAEmployeeResource   : REST request to get employee by id=0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

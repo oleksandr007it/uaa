@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailConfirmation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.domain</a> &gt; <span class="el_source">EmailConfirmation.java</span></div><h1>EmailConfirmation.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.idevhub.tapas.domain.enumeration.EmailConfirmationStatus;
+import com.idevhub.tapas.domain.enumeration.EmailRejectionReason;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Objects;
+
+/**
+ * A EmailConfirmation.
+ */
+@Entity
+@Table(name = &quot;email_confirmation&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+<span class="fc" id="L22">public class EmailConfirmation implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;sequenceGenerator&quot;)
+    @SequenceGenerator(name = &quot;sequenceGenerator&quot;)
+    private Long id;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;confirmation_status&quot;, nullable = false)
+    private EmailConfirmationStatus confirmationStatus;
+
+    @NotNull
+    @Column(name = &quot;created_at&quot;, nullable = false)
+    private Instant createdAt;
+
+    @NotNull
+    @Column(name = &quot;valid_until&quot;, nullable = false)
+    private Instant validUntil;
+
+    @NotNull
+    @Size(min = 5, max = 254)
+    @Column(name = &quot;email&quot;, length = 254, nullable = false)
+    private String email;
+
+    @NotNull
+    @Column(name = &quot;html_template_name&quot;, nullable = false)
+    private String htmlTemplateName;
+
+    @NotNull
+    @Column(name = &quot;lang_key&quot;, nullable = false)
+    private String langKey;
+
+    @Column(name = &quot;rejected_at&quot;)
+    private Instant rejectedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;reject_description&quot;)
+    private EmailRejectionReason rejectDescription;
+
+    @Column(name = &quot;approved_at&quot;)
+    private Instant approvedAt;
+
+    @Column(name = &quot;ip_address&quot;)
+    private String ipAddress;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(&quot;&quot;)
+    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(&quot;&quot;)
+    private User declarant;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(&quot;&quot;)
+    private StatehoodSubject statehoodSubject;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="fc" id="L85">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L89">        this.id = id;</span>
+<span class="fc" id="L90">    }</span>
+
+    public EmailConfirmationStatus getConfirmationStatus() {
+<span class="fc" id="L93">        return confirmationStatus;</span>
+    }
+
+    public void setConfirmationStatus(EmailConfirmationStatus confirmationStatus) {
+<span class="fc" id="L97">        this.confirmationStatus = confirmationStatus;</span>
+<span class="fc" id="L98">    }</span>
+
+    public EmailConfirmation confirmationStatus(EmailConfirmationStatus confirmationStatus) {
+<span class="nc" id="L101">        this.confirmationStatus = confirmationStatus;</span>
+<span class="nc" id="L102">        return this;</span>
+    }
+
+    public Instant getCreatedAt() {
+<span class="nc" id="L106">        return createdAt;</span>
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+<span class="fc" id="L110">        this.createdAt = createdAt;</span>
+<span class="fc" id="L111">    }</span>
+
+    public EmailConfirmation createdAt(Instant createdAt) {
+<span class="nc" id="L114">        this.createdAt = createdAt;</span>
+<span class="nc" id="L115">        return this;</span>
+    }
+
+    public Instant getValidUntil() {
+<span class="fc" id="L119">        return validUntil;</span>
+    }
+
+    public void setValidUntil(Instant validUntil) {
+<span class="fc" id="L123">        this.validUntil = validUntil;</span>
+<span class="fc" id="L124">    }</span>
+
+    public EmailConfirmation validUntil(Instant validUntil) {
+<span class="nc" id="L127">        this.validUntil = validUntil;</span>
+<span class="nc" id="L128">        return this;</span>
+    }
+
+    public String getEmail() {
+<span class="fc" id="L132">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="fc" id="L136">        this.email = email;</span>
+<span class="fc" id="L137">    }</span>
+
+    public EmailConfirmation email(String email) {
+<span class="nc" id="L140">        this.email = email;</span>
+<span class="nc" id="L141">        return this;</span>
+    }
+
+    public String getHtmlTemplateName() {
+<span class="nc" id="L145">        return htmlTemplateName;</span>
+    }
+
+    public void setHtmlTemplateName(String htmlTemplateName) {
+<span class="fc" id="L149">        this.htmlTemplateName = htmlTemplateName;</span>
+<span class="fc" id="L150">    }</span>
+
+    public EmailConfirmation htmlTemplateName(String htmlTemplateName) {
+<span class="nc" id="L153">        this.htmlTemplateName = htmlTemplateName;</span>
+<span class="nc" id="L154">        return this;</span>
+    }
+
+    public String getLangKey() {
+<span class="nc" id="L158">        return langKey;</span>
+    }
+
+    public void setLangKey(String langKey) {
+<span class="fc" id="L162">        this.langKey = langKey;</span>
+<span class="fc" id="L163">    }</span>
+
+    public EmailConfirmation langKey(String langKey) {
+<span class="nc" id="L166">        this.langKey = langKey;</span>
+<span class="nc" id="L167">        return this;</span>
+    }
+
+    public Instant getRejectedAt() {
+<span class="nc" id="L171">        return rejectedAt;</span>
+    }
+
+    public void setRejectedAt(Instant rejectedAt) {
+<span class="fc" id="L175">        this.rejectedAt = rejectedAt;</span>
+<span class="fc" id="L176">    }</span>
+
+    public EmailConfirmation rejectedAt(Instant rejectedAt) {
+<span class="nc" id="L179">        this.rejectedAt = rejectedAt;</span>
+<span class="nc" id="L180">        return this;</span>
+    }
+
+    public EmailRejectionReason getRejectDescription() {
+<span class="nc" id="L184">        return rejectDescription;</span>
+    }
+
+    public void setRejectDescription(EmailRejectionReason rejectDescription) {
+<span class="fc" id="L188">        this.rejectDescription = rejectDescription;</span>
+<span class="fc" id="L189">    }</span>
+
+    public EmailConfirmation rejectDescription(EmailRejectionReason rejectDescription) {
+<span class="nc" id="L192">        this.rejectDescription = rejectDescription;</span>
+<span class="nc" id="L193">        return this;</span>
+    }
+
+    public Instant getApprovedAt() {
+<span class="nc" id="L197">        return approvedAt;</span>
+    }
+
+    public void setApprovedAt(Instant approvedAt) {
+<span class="fc" id="L201">        this.approvedAt = approvedAt;</span>
+<span class="fc" id="L202">    }</span>
+
+    public EmailConfirmation approvedAt(Instant approvedAt) {
+<span class="nc" id="L205">        this.approvedAt = approvedAt;</span>
+<span class="nc" id="L206">        return this;</span>
+    }
+
+    public String getIpAddress() {
+<span class="nc" id="L210">        return ipAddress;</span>
+    }
+
+    public void setIpAddress(String ipAddress) {
+<span class="fc" id="L214">        this.ipAddress = ipAddress;</span>
+<span class="fc" id="L215">    }</span>
+
+    public EmailConfirmation ipAddress(String ipAddress) {
+<span class="nc" id="L218">        this.ipAddress = ipAddress;</span>
+<span class="nc" id="L219">        return this;</span>
+    }
+
+    public User getCreatedBy() {
+<span class="nc" id="L223">        return createdBy;</span>
+    }
+
+    public void setCreatedBy(User user) {
+<span class="nc" id="L227">        this.createdBy = user;</span>
+<span class="nc" id="L228">    }</span>
+
+    public EmailConfirmation createdBy(User user) {
+<span class="nc" id="L231">        this.createdBy = user;</span>
+<span class="nc" id="L232">        return this;</span>
+    }
+
+    public User getDeclarant() {
+<span class="fc" id="L236">        return declarant;</span>
+    }
+
+    public void setDeclarant(User user) {
+<span class="fc" id="L240">        this.declarant = user;</span>
+<span class="fc" id="L241">    }</span>
+
+    public EmailConfirmation declarant(User user) {
+<span class="nc" id="L244">        this.declarant = user;</span>
+<span class="nc" id="L245">        return this;</span>
+    }
+
+    public StatehoodSubject getStatehoodSubject() {
+<span class="fc" id="L249">        return statehoodSubject;</span>
+    }
+
+    public void setStatehoodSubject(StatehoodSubject statehoodSubject) {
+<span class="fc" id="L253">        this.statehoodSubject = statehoodSubject;</span>
+<span class="fc" id="L254">    }</span>
+
+    public EmailConfirmation statehoodSubject(StatehoodSubject statehoodSubject) {
+<span class="nc" id="L257">        this.statehoodSubject = statehoodSubject;</span>
+<span class="nc" id="L258">        return this;</span>
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">        if (this == o) {</span>
+<span class="fc" id="L265">            return true;</span>
+        }
+<span class="nc bnc" id="L267" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L268">            return false;</span>
+        }
+<span class="nc" id="L270">        EmailConfirmation emailConfirmation = (EmailConfirmation) o;</span>
+<span class="nc bnc" id="L271" title="All 4 branches missed.">        if (emailConfirmation.getId() == null || getId() == null) {</span>
+<span class="nc" id="L272">            return false;</span>
+        }
+<span class="nc" id="L274">        return Objects.equals(getId(), emailConfirmation.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L279">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L284">        return &quot;EmailConfirmation{&quot; +</span>
+<span class="nc" id="L285">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L286">            &quot;, confirmationStatus='&quot; + getConfirmationStatus() + &quot;'&quot; +</span>
+<span class="nc" id="L287">            &quot;, createdAt='&quot; + getCreatedAt() + &quot;'&quot; +</span>
+<span class="nc" id="L288">            &quot;, validUntil='&quot; + getValidUntil() + &quot;'&quot; +</span>
+<span class="nc" id="L289">            &quot;, email='&quot; + getEmail() + &quot;'&quot; +</span>
+<span class="nc" id="L290">            &quot;, htmlTemplateName='&quot; + getHtmlTemplateName() + &quot;'&quot; +</span>
+<span class="nc" id="L291">            &quot;, langKey='&quot; + getLangKey() + &quot;'&quot; +</span>
+<span class="nc" id="L292">            &quot;, rejectedAt='&quot; + getRejectedAt() + &quot;'&quot; +</span>
+<span class="nc" id="L293">            &quot;, rejectDescription='&quot; + getRejectDescription() + &quot;'&quot; +</span>
+<span class="nc" id="L294">            &quot;, approvedAt='&quot; + getApprovedAt() + &quot;'&quot; +</span>
+<span class="nc" id="L295">            &quot;, ipAddress='&quot; + getIpAddress() + &quot;'&quot; +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

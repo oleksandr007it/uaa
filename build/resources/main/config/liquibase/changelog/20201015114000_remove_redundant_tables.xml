@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+
+    <changeSet id="20201015114000_remove_redundant_tables-1" author="e.ukhanov">
+        <dropTable  cascadeConstraints="true"
+                    tableName="cea_auth_category"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="cea_auth_group_cea_auth"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="cea_auth"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="cea_auth_group"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="statehood_subject_auth_category"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="subject_auth_group_subject_auth"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="statehood_subject_auth"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="statehood_subject_auth_group"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="subject_auth_group_represent"/>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="user_cea_auth_groups"/>
+    </changeSet>
+
+    <changeSet id="20210126101152-Remove redundant nais_ats_object_name table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="nais_ats_object_name"/>
+        </preConditions>
+
+        <dropTable  cascadeConstraints="true"
+                    tableName="nais_ats_object_name"/>
+    </changeSet>
+</databaseChangeLog>

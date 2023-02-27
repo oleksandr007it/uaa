@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.CountryDictionaryResourceIT" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:42:59" hostname="iMac-Aleksandr-2.local" time="0.255">
+  <properties/>
+  <testcase name="getCountryByNumberCode()" classname="com.idevhub.tapas.web.rest.CountryDictionaryResourceIT" time="0.066"/>
+  <testcase name="getCountryPostalCodeParams()" classname="com.idevhub.tapas.web.rest.CountryDictionaryResourceIT" time="0.099"/>
+  <testcase name="getCountries()" classname="com.idevhub.tapas.web.rest.CountryDictionaryResourceIT" time="0.086"/>
+  <system-out><![CDATA[  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:42:50.045  INFO 7937 --- [    Test worker] c.i.t.w.r.CountryDictionaryResourceIT    : No active profile set, falling back to default profiles: default
+2021-02-09 22:42:52.065 DEBUG 7937 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:42:52.092 DEBUG 7937 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:42:52.101 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:42:53.178 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 1076 ms
+2021-02-09 22:42:53.273 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:42:53.273 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Hazelcast already initialized
+2021-02-09 22:42:55.471 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:42:57.054  WARN 7937 --- [    Test worker] o.s.c.n.a.ArchaiusAutoConfiguration      : Netflix ConfigurationManager has already been installed, unable to re-install
+2021-02-09 22:42:57.156 DEBUG 7937 --- [cached.thread-2] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Checking partition state, version: 272
+2021-02-09 22:42:57.664  INFO 7937 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:42:57.905 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:42:57.905 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:42:57.909 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:42:57.909 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:42:59.043  INFO 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:42:59.046 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:42:59.046 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:42:59.069  INFO 7937 --- [    Test worker] c.i.t.w.r.CountryDictionaryResourceIT    : Started CountryDictionaryResourceIT in 10.14 seconds (JVM running for 78.798)
+2021-02-09 22:42:59.107 DEBUG 7937 --- [    Test worker] c.i.t.w.rest.CountryDictionaryResource   : REST request to get country by number code = {}
+2021-02-09 22:42:59.123 DEBUG 7937 --- [    Test worker] c.i.t.service.CountryDictionaryProxy     : Getting country by code = {}...
+2021-02-09 22:42:59.143 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['numberCode']
+2021-02-09 22:42:59.144 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['nameUk']
+2021-02-09 22:42:59.144 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['nameEn']
+2021-02-09 22:42:59.209 DEBUG 7937 --- [    Test worker] c.i.t.w.rest.CountryDictionaryResource   : REST request to get country (code = 804) postal code parameters
+2021-02-09 22:42:59.211 DEBUG 7937 --- [    Test worker] c.i.t.service.CountryDictionaryProxy     : Getting country postal code params by code = 804...
+2021-02-09 22:42:59.244 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['countryCode']
+2021-02-09 22:42:59.245 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['availability']
+2021-02-09 22:42:59.245 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['minLength']
+2021-02-09 22:42:59.246 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['maxLength']
+2021-02-09 22:42:59.246 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['format']
+2021-02-09 22:42:59.255 DEBUG 7937 --- [    Test worker] c.i.t.w.rest.CountryDictionaryResource   : REST request to get country list
+2021-02-09 22:42:59.267 DEBUG 7937 --- [    Test worker] c.i.t.service.CountryDictionaryProxy     : Getting country list...
+2021-02-09 22:42:59.286 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $
+2021-02-09 22:42:59.287 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['numberCode']
+2021-02-09 22:42:59.288 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['nameUk']
+2021-02-09 22:42:59.327 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $[*]['nameEn']
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

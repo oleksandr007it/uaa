@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.thirdapp.ThirdAppTokenGranterTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:41" hostname="iMac-Aleksandr-2.local" time="0.017">
+  <properties/>
+  <testcase name="getOAuth2AuthenticationEX()" classname="com.idevhub.tapas.security.thirdapp.ThirdAppTokenGranterTest" time="0.008"/>
+  <testcase name="getOAuth2Authentication()" classname="com.idevhub.tapas.security.thirdapp.ThirdAppTokenGranterTest" time="0.003"/>
+  <testcase name="getOAuth2AuthenticationEX2()" classname="com.idevhub.tapas.security.thirdapp.ThirdAppTokenGranterTest" time="0.003"/>
+  <testcase name="getOAuth2AuthenticationEX3()" classname="com.idevhub.tapas.security.thirdapp.ThirdAppTokenGranterTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

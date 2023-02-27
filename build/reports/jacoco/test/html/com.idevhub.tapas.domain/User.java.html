@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.domain</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.idevhub.tapas.domain.address.Address;
+import com.idevhub.tapas.domain.constants.PropertyStatus;
+import com.idevhub.tapas.domain.constants.UserStatus;
+import com.idevhub.tapas.domain.enumeration.PositionType;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+
+/**
+ * A user.
+ */
+@Entity
+@Table(name = &quot;jhi_user&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Data
+@Accessors(chain = true)
+@ToString(of = {&quot;id&quot;, &quot;login&quot;})
+@EqualsAndHashCode(callSuper=false,of = {&quot;id&quot;, &quot;login&quot;,&quot;rnokpp&quot;,&quot;edrpouCode&quot;,&quot;userType&quot;})
+public class User extends AbstractAuditingEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+<span class="fc" id="L47">    private static final Logger log = LoggerFactory.getLogger(User.class);</span>
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;sequenceGenerator&quot;)
+    @SequenceGenerator(name = &quot;sequenceGenerator&quot;)
+    private Long id;
+
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(length = 50, unique = true, nullable = false)
+    private String login;
+
+    @JsonIgnore
+    @NotNull
+    @Size(min = 60, max = 60)
+    @Column(name = &quot;password_hash&quot;, length = 60, nullable = false)
+    private String password;
+
+    @Size(max = 50)
+    @Column(name = &quot;first_name&quot;, length = 50)
+    private String firstName;
+
+    @Size(max = 50)
+    @Column(name = &quot;last_name&quot;, length = 50)
+    private String lastName;
+
+    @Email
+    @Size(min = 5, max = 254)
+    @Column(length = 254, unique = true)
+    private String email;
+
+
+    @Column(name = &quot;user_type&quot;)
+    private String userType;
+
+    @Column(name = &quot;middle_name&quot;)
+    private String middleName;
+
+    @Column(name = &quot;full_name&quot;)
+    private String fullName;
+
+    @Column(name = &quot;status&quot;)
+    private String status = UserStatus.ACTIVE;
+
+    @Column(name = &quot;rnokpp&quot;)
+    private String rnokpp;
+
+    @Column(name = &quot;edrpou_code&quot;)
+    private String edrpouCode;
+
+    @Column(name = &quot;org&quot;)
+    private String org;
+
+    @Column(name = &quot;org_unit&quot;)
+    private String orgUnit;
+
+    @Column(name = &quot;position&quot;)
+    private String position;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;position_type&quot;)
+    private PositionType positionType;
+
+    @Column(name = &quot;property_status&quot;)
+    private String propertyStatus = PropertyStatus.NOT_COMPLETED;
+
+    @Column(name = &quot;phone_number&quot;)
+    private String phoneNumber;
+
+    @Column(name = &quot;pasport_sn&quot;)
+    private String pasportSn;
+
+    @Column(name = &quot;pasport_issued_by&quot;)
+    private String pasportIssuedBy;
+
+    @Column(name = &quot;pasport_date&quot;)
+    private Instant pasportDate;
+
+    @Column(name = &quot;email_approve&quot;)
+    private Boolean emailApprove = false;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean activated = false;
+
+    @Size(min = 2, max = 10)
+    @Column(name = &quot;lang_key&quot;, length = 10)
+    private String langKey;
+
+    @Size(max = 20)
+    @Column(name = &quot;activation_key&quot;, length = 20)
+    @JsonIgnore
+    private String activationKey;
+
+    @Size(max = 20)
+    @Column(name = &quot;reset_key&quot;, length = 20)
+
+    @JsonIgnore
+    private String resetKey;
+
+    @Column(name = &quot;reset_date&quot;)
+    private Instant resetDate = null;
+
+    @CreatedBy
+    @Column(name = &quot;deleted_by&quot;)
+    @JsonIgnore
+    private String deletedBy;
+
+    @CreatedDate
+    @Column(name = &quot;deleted_date&quot;)
+    @JsonIgnore
+    private Instant deletedDate;
+
+    @ManyToOne(optional = false)
+    @JsonIgnoreProperties(&quot;&quot;)
+    private Address legalAddress;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = &quot;jhi_user_authority&quot;,
+        joinColumns = {@JoinColumn(name = &quot;user_id&quot;, referencedColumnName = &quot;id&quot;)},
+        inverseJoinColumns = {@JoinColumn(name = &quot;authority_name&quot;, referencedColumnName = &quot;name&quot;)})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 20)
+    private Set&lt;Authority&gt; authorities = new HashSet&lt;&gt;();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = &quot;_privilege_group_to_user&quot;,
+        joinColumns = {@JoinColumn(name = &quot;user_id&quot;, referencedColumnName = &quot;id&quot;)},
+        inverseJoinColumns = {@JoinColumn(name = &quot;group_code&quot;, referencedColumnName = &quot;code&quot;)})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;PrivilegeGroup&gt; privilegeGroups = new HashSet&lt;&gt;();
+
+    @ManyToOne(optional = false)
+    @JsonIgnoreProperties(&quot;&quot;)
+    private CEADepartment ceaDepartment;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = &quot;central_executive_authority_id&quot;)
+    @JsonIgnoreProperties(&quot;&quot;)
+    private CentralExecutiveAuthority centralExecutiveAuthority;
+
+    public Set&lt;String&gt; loadAndGetPrivilegeCodes() {
+<span class="fc" id="L194">        log.debug(&quot;Lazy loading. User {} has {} privilege groups&quot;, id, privilegeGroups.size());</span>
+
+<span class="fc" id="L196">        return privilegeGroups.stream()</span>
+<span class="fc" id="L197">            .map(PrivilegeGroup::loadAndGetPrivilegeCodes)</span>
+<span class="fc" id="L198">            .flatMap(Collection::stream)</span>
+<span class="fc" id="L199">            .collect(toSet());</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <!-- ////////////////////////////////// -->
+    <!-- CORE TABLES -->
+    <!-- ////////////////////////////////// -->
+    <changeSet id="20201213143600_Refactor_Privileges__Add_Core_Tables" author="a.sidko">
+
+
+        <!--Privilege Category table-->
+        <createTable tableName="_privilege_category">
+            <column name="code" type="varchar">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="is_global" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="full_name_ukr" type="varchar(128)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="full_name_eng" type="varchar(128)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="customs_house" type="varchar(256)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="central_executive_authority_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="privilege_category_type" type="varchar(64)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="central_executive_authority_id"
+                                 baseTableName="_privilege_category"
+                                 constraintName="fk___privilege_category_central_executive_authority_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="central_executive_authority"
+                                 onDelete="SET NULL"
+                                 onUpdate="CASCADE"/>
+
+        <!--Privilege table-->
+        <createTable tableName="_privilege">
+            <column name="code" type="varchar">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="category_code" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="full_name_ukr" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="full_name_eng" type="varchar(128)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="privilege_type" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="category_code"
+                                 baseTableName="_privilege"
+                                 constraintName="fk___privilege__category_code"
+                                 referencedColumnNames="code"
+                                 referencedTableName="_privilege_category"/>
+
+
+        <!--Privilege Group table-->
+        <createTable tableName="_privilege_group">
+            <column name="code" type="varchar">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="status" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_global" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="full_name_ukr" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="full_name_eng" type="varchar(128)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="name_in_directory_service" type="varchar(128)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="privilege_group_type" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="statehood_subject_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="central_executive_authority_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="created_by" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_by" type="varchar">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="deleted_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="deleted_by" type="varchar">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="central_executive_authority_id"
+                                 baseTableName="_privilege_group"
+                                 constraintName="fk____privilege_group__central_executive_authority_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="central_executive_authority"
+                                 onDelete="SET NULL"
+                                 onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseColumnNames="statehood_subject_id"
+                                 baseTableName="_privilege_group"
+                                 constraintName="fk____privilege_group__statehood_subject_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="statehood_subject"
+                                 onDelete="SET NULL"
+                                 onUpdate="CASCADE"/>
+
+    </changeSet>
+
+
+    <!-- ////////////////////////////////// -->
+    <!-- LINK TABLES -->
+    <!-- ////////////////////////////////// -->
+    <changeSet id="20201213143600_Refactor_Privileges__Add_Link_Tables" author="a.sidko">
+
+        <!-- Privilege to Privilege Group link table-->
+        <createTable tableName="_privilege_group_to_privilege">
+            <column name="group_code" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="privilege_code" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="group_code,privilege_code" tableName="_privilege_group_to_privilege"/>
+        <addForeignKeyConstraint baseColumnNames="group_code"
+                                 baseTableName="_privilege_group_to_privilege"
+                                 constraintName="fk___privilege_group_to_privilege__privilege_group_code"
+                                 referencedColumnNames="code"
+                                 referencedTableName="_privilege_group"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseColumnNames="privilege_code"
+                                 baseTableName="_privilege_group_to_privilege"
+                                 constraintName="fk___privilege_group_to_privilege__privilege_code"
+                                 referencedColumnNames="code"
+                                 referencedTableName="_privilege"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!-- Privilege Group to User-->
+        <createTable tableName="_privilege_group_to_user">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_code" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="user_id,group_code" tableName="_privilege_group_to_user"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="_privilege_group_to_user"
+                                 constraintName="fk___privilege_group_to_user__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseColumnNames="group_code"
+                                 baseTableName="_privilege_group_to_user"
+                                 constraintName="fk___privilege_group_to_user__group_code"
+                                 referencedColumnNames="code"
+                                 referencedTableName="_privilege_group"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <!-- Privilege Group to Represent (Statehood Subject Represent) table-->
+        <createTable tableName="_privilege_group_to_represent">
+            <column name="represent_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_code" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="represent_id,group_code" tableName="_privilege_group_to_represent"/>
+        <addForeignKeyConstraint baseColumnNames="represent_id"
+                                 baseTableName="_privilege_group_to_represent"
+                                 constraintName="fk___privilege_groups_to_represent__represent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="statehood_subject_represent"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseColumnNames="group_code"
+                                 baseTableName="_privilege_group_to_represent"
+                                 constraintName="fk___privilege_group_to_represent__group_code"
+                                 referencedColumnNames="code"
+                                 referencedTableName="_privilege_group"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+    </changeSet>
+
+</databaseChangeLog>

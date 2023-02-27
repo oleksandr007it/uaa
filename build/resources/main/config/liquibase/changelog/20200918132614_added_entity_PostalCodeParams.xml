@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+    Added the entity PostalCodeParams.
+    -->
+
+    <changeSet id="20200918132614-1" author="d.chaban">
+        <createTable tableName="postal_code_params">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="varchar(3)"/>
+            <column name="availability" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="min_length" type="integer"/>
+            <column name="max_length" type="integer"/>
+            <column name="format" type="varchar(1024)"/>
+            <column name="prefix" type="varchar(63)"/>
+            <column name="const_value" type="varchar(64)"/>
+            <column name="prompt_ua" type="varchar(1024)"/>
+            <column name="prompt_en" type="varchar(1024)"/>
+            <column name="info_url_ua" type="varchar(1024)"/>
+            <column name="info_url_en" type="varchar(1024)"/>
+            <column name="created_by" type="varchar(50)"/>
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+            <column name="deleted_by" type="varchar(50)"/>
+            <column name="deleted_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20200918132614-2" author="d.chaban" runOnChange="true">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="postal_code_params"/>
+        </preConditions>
+
+        <loadUpdateData
+            file="config/liquibase/data/postal_code_params.csv"
+            tableName="postal_code_params"
+            primaryKey="id"
+            separator=";"/>
+    </changeSet>
+
+</databaseChangeLog>

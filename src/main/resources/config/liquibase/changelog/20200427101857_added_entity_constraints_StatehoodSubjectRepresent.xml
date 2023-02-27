@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity StatehoodSubjectRepresent.
+    -->
+    <changeSet id="20200427101857-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="statehood_subject_id"
+                                 baseTableName="statehood_subject_represent"
+                                 constraintName="fk_statehood_subject_represent_statehood_subject_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="statehood_subject"/>
+
+        <addForeignKeyConstraint baseColumnNames="declarant_id"
+                                 baseTableName="statehood_subject_represent"
+                                 constraintName="fk_statehood_subject_represent_declarant_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+    </changeSet>
+
+    <changeSet id="20200427101857-4" author="e.ukhanov">
+
+        <addForeignKeyConstraint baseColumnNames="represent_id"
+                                 baseTableName="subject_auth_group_represent"
+                                 constraintName="fk_subject_auth_group_represent_to_represent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="statehood_subject_represent"/>
+
+        <addForeignKeyConstraint baseColumnNames="statehood_subject_auth_group_id"
+                                 baseTableName="subject_auth_group_represent"
+                                 constraintName="fk_subject_auth_group_represent_to_subject_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="statehood_subject_auth_group"/>
+
+    </changeSet>
+
+    <changeSet id="MOB-1211" author="e.ukhanov" dbms="postgresql">
+        <createIndex tableName="statehood_subject_represent" indexName="u_active_context" unique="true">
+            <column name="declarant_id" type="bigint"/>
+        </createIndex>
+        <modifySql>
+            <append value="where is_current_context"/>
+        </modifySql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MailService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">MailService.java</span></div><h1>MailService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.config.UaaProperties;
+import com.idevhub.tapas.domain.EmailConfirmation;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.service.dto.RepresentativeInvitation;
+import io.github.jhipster.config.JHipsterProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import static org.apache.commons.lang3.ArrayUtils.toArray;
+
+/**
+ * Service for sending emails.
+ * &lt;p&gt;
+ * We use the {@link Async} annotation to send emails asynchronously.
+ */
+@Service
+public class MailService {
+
+    private static final String USER = &quot;user&quot;;
+    private static final String BASE_URL = &quot;baseUrl&quot;;
+<span class="fc" id="L40">    private final Logger log = LoggerFactory.getLogger(MailService.class);</span>
+    private final JHipsterProperties jHipsterProperties;
+
+    private final JavaMailSender javaMailSender;
+
+    private final MessageSource messageSource;
+
+    private final SpringTemplateEngine templateEngine;
+
+    private final UaaProperties uaaProperties;
+
+    public MailService(JHipsterProperties jHipsterProperties,
+                       JavaMailSender javaMailSender,
+                       MessageSource messageSource,
+                       SpringTemplateEngine templateEngine,
+<span class="fc" id="L55">                       UaaProperties uaaProperties) {</span>
+
+<span class="fc" id="L57">        this.jHipsterProperties = jHipsterProperties;</span>
+<span class="fc" id="L58">        this.javaMailSender = javaMailSender;</span>
+<span class="fc" id="L59">        this.messageSource = messageSource;</span>
+<span class="fc" id="L60">        this.templateEngine = templateEngine;</span>
+<span class="fc" id="L61">        this.uaaProperties = uaaProperties;</span>
+<span class="fc" id="L62">    }</span>
+
+    @Async
+    public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
+<span class="fc" id="L66">        log.debug(&quot;Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}&quot;,</span>
+<span class="fc" id="L67">            isMultipart, isHtml, to, subject, content);</span>
+
+        // Prepare message using a Spring helper
+<span class="fc" id="L70">        MimeMessage mimeMessage = javaMailSender.createMimeMessage();</span>
+        try {
+<span class="fc" id="L72">            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());</span>
+<span class="fc" id="L73">            message.setTo(to);</span>
+<span class="fc" id="L74">            message.setFrom(jHipsterProperties.getMail().getFrom());</span>
+<span class="fc" id="L75">            message.setSubject(subject);</span>
+<span class="fc" id="L76">            message.setText(content, isHtml);</span>
+<span class="fc" id="L77">            javaMailSender.send(mimeMessage);</span>
+<span class="fc" id="L78">            log.debug(&quot;Sent email to User '{}'&quot;, to);</span>
+<span class="fc" id="L79">        } catch (MailException | MessagingException e) {</span>
+<span class="fc" id="L80">            log.warn(&quot;Email could not be sent to user '{}'&quot;, to, e);</span>
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">    }</span>
+
+    @Async
+    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (user.getEmail() == null) {</span>
+<span class="nc" id="L87">            log.debug(&quot;Email doesn't exist for user '{}'&quot;, user.getLogin());</span>
+<span class="nc" id="L88">            return;</span>
+        }
+<span class="fc" id="L90">        Locale locale = Locale.forLanguageTag(user.getLangKey());</span>
+<span class="fc" id="L91">        Context context = new Context(locale);</span>
+<span class="fc" id="L92">        context.setVariable(USER, user);</span>
+<span class="fc" id="L93">        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());</span>
+<span class="fc" id="L94">        String content = templateEngine.process(templateName, context);</span>
+<span class="fc" id="L95">        String subject = messageSource.getMessage(titleKey, null, locale);</span>
+<span class="fc" id="L96">        sendEmail(user.getEmail(), subject, content, false, true);</span>
+<span class="fc" id="L97">    }</span>
+
+    @Async
+    public void sendEmailFromTemplate(String email,
+                                      Map&lt;String, Object&gt; additionalVariables,
+                                      String templateName,
+                                      String titleKey,
+                                      String langKey) {
+<span class="fc" id="L105">        Locale locale = Locale.forLanguageTag(langKey);</span>
+<span class="fc" id="L106">        Context context = new Context(locale);</span>
+<span class="fc" id="L107">        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());</span>
+<span class="fc" id="L108">        context.setVariables(additionalVariables);</span>
+<span class="fc" id="L109">        String content = templateEngine.process(&quot;mail/&quot; + templateName, context);</span>
+<span class="fc" id="L110">        String subject = messageSource.getMessage(titleKey, toArray(additionalVariables.get(&quot;code&quot;)), locale);</span>
+<span class="fc" id="L111">        sendEmail(email, subject, content, true, true);</span>
+<span class="fc" id="L112">    }</span>
+
+    @Async
+    public void sendActivationEmail(User user) {
+<span class="fc" id="L116">        log.debug(&quot;Sending activation email to '{}'&quot;, user.getEmail());</span>
+<span class="fc" id="L117">        sendEmailFromTemplate(user, &quot;mail/activationEmail&quot;, &quot;email.activation.title&quot;);</span>
+<span class="fc" id="L118">    }</span>
+
+    @Async
+    public void sendCreationEmail(User user) {
+<span class="fc" id="L122">        log.debug(&quot;Sending creation email to '{}'&quot;, user.getEmail());</span>
+<span class="fc" id="L123">        sendEmailFromTemplate(user, &quot;mail/creationEmail&quot;, &quot;email.activation.title&quot;);</span>
+<span class="fc" id="L124">    }</span>
+
+    @Async
+    public void sendPasswordResetMail(User user) {
+<span class="fc" id="L128">        log.debug(&quot;Sending password reset email to '{}'&quot;, user.getEmail());</span>
+<span class="fc" id="L129">        sendEmailFromTemplate(user, &quot;mail/passwordResetEmail&quot;, &quot;email.reset.title&quot;);</span>
+<span class="fc" id="L130">    }</span>
+
+    @Async
+    public void sendUserEmailConfirmationEmail(Long confirmationId, User user, String htmlTemplateName) {
+<span class="fc" id="L134">        log.debug(&quot;Sending emailConfirmation email of '{}'&quot;, user.getEmail());</span>
+
+<span class="fc" id="L136">        String confirmationUrl = uaaProperties.getMail().getConfirmationUrl() +</span>
+            &quot;?confirmationId=&quot; + confirmationId +
+<span class="fc" id="L138">            &quot;&amp;email=&quot; + getUrlEncodedEmail(user.getEmail());</span>
+<span class="fc" id="L139">        HashMap&lt;String, Object&gt; additionalVariables = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L140">        additionalVariables.put(&quot;user&quot;, user);</span>
+<span class="fc" id="L141">        additionalVariables.put(&quot;confirmationText&quot;, confirmationUrl);</span>
+<span class="fc" id="L142">        additionalVariables.put(&quot;confirmationUrl&quot;, confirmationUrl);</span>
+
+
+<span class="fc" id="L145">        sendEmailFromTemplate(user.getEmail(),</span>
+            additionalVariables,
+            htmlTemplateName,
+            &quot;email.user.confirm.title&quot;,
+<span class="fc" id="L149">            user.getLangKey());</span>
+<span class="fc" id="L150">    }</span>
+
+    @Async
+    public void sendStatehoodSubjectEmailConfirmationEmail(EmailConfirmation confirmation, String htmlTemplateName, String subjectName) {
+<span class="nc" id="L154">        log.debug(&quot;Sending emailConfirmation email of '{}'&quot;, confirmation.getEmail());</span>
+
+<span class="nc" id="L156">        String confirmationUrl = uaaProperties.getMail().getConfirmationUrl() +</span>
+<span class="nc" id="L157">            &quot;?confirmationId=&quot; + confirmation.getId() +</span>
+<span class="nc" id="L158">            &quot;&amp;email=&quot; + getUrlEncodedEmail(confirmation.getEmail());</span>
+
+<span class="nc" id="L160">        HashMap&lt;String, Object&gt; additionalVariables = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L161">        additionalVariables.put(&quot;statehoodSubjectName&quot;, subjectName);</span>
+<span class="nc" id="L162">        additionalVariables.put(&quot;createdByFullName&quot;, confirmation.getCreatedBy().getFullName());</span>
+<span class="nc" id="L163">        additionalVariables.put(&quot;email&quot;, confirmation.getEmail());</span>
+<span class="nc" id="L164">        additionalVariables.put(&quot;confirmationText&quot;, confirmationUrl);</span>
+<span class="nc" id="L165">        additionalVariables.put(&quot;confirmationUrl&quot;, confirmationUrl);</span>
+
+
+<span class="nc" id="L168">        sendEmailFromTemplate(confirmation.getEmail(),</span>
+            additionalVariables,
+            htmlTemplateName,
+            &quot;email.organization.confirm.title&quot;,
+<span class="nc" id="L172">            confirmation.getLangKey());</span>
+<span class="nc" id="L173">    }</span>
+
+    @Async
+    public void sendStatehoodSubjectRepresentInvitationEmail(RepresentativeInvitation invitation, String htmlTemplateName) {
+
+<span class="nc" id="L178">        log.debug(&quot;Sending invitation to become a legal entity's representative of {} to {}, email: {}&quot;, invitation.getSubjectShortName(), invitation.getUserToInviteFullName(), invitation.getUserToInviteEmail());</span>
+
+<span class="nc" id="L180">        HashMap&lt;String, Object&gt; additionalVariables = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L181">        additionalVariables.put(&quot;userToInviteFullName&quot;, invitation.getUserToInviteFullName());</span>
+<span class="nc" id="L182">        additionalVariables.put(&quot;invitedByFullName&quot;, invitation.getInvitedByFullName());</span>
+<span class="nc" id="L183">        additionalVariables.put(&quot;subjectCode&quot;, invitation.getSubjectCode());</span>
+<span class="nc" id="L184">        additionalVariables.put(&quot;subjectShortName&quot;, invitation.getSubjectShortName());</span>
+<span class="nc" id="L185">        additionalVariables.put(&quot;cabinetUrl&quot;, jHipsterProperties.getMail().getBaseUrl());</span>
+
+<span class="nc" id="L187">        sendEmailFromTemplate(invitation.getUserToInviteEmail(),</span>
+            additionalVariables,
+            htmlTemplateName,
+            &quot;email.representative.invitation.title&quot;,
+<span class="nc" id="L191">            invitation.getLangKey());</span>
+<span class="nc" id="L192">    }</span>
+
+    private String getUrlEncodedEmail(String email) {
+        try {
+<span class="fc" id="L196">            String urlEncodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8.toString());</span>
+<span class="fc" id="L197">            return urlEncodedEmail;</span>
+<span class="nc" id="L198">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L199">            throw new RuntimeException(e.getCause());</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

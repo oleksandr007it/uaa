@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.EmailConfirmationServiceImplTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:26" hostname="iMac-Aleksandr-2.local" time="0.808">
+  <properties/>
+  <testcase name="testFindOne()" classname="com.idevhub.tapas.service.impl.EmailConfirmationServiceImplTest" time="0.77"/>
+  <testcase name="testSave1()" classname="com.idevhub.tapas.service.impl.EmailConfirmationServiceImplTest" time="0.006"/>
+  <testcase name="testConfirmEmail()" classname="com.idevhub.tapas.service.impl.EmailConfirmationServiceImplTest" time="0.017"/>
+  <testcase name="testSave()" classname="com.idevhub.tapas.service.impl.EmailConfirmationServiceImplTest" time="0.005"/>
+  <testcase name="testFindAllActive()" classname="com.idevhub.tapas.service.impl.EmailConfirmationServiceImplTest" time="0.004"/>
+  <testcase name="testDelete()" classname="com.idevhub.tapas.service.impl.EmailConfirmationServiceImplTest" time="0.002"/>
+  <system-out><![CDATA[2021-02-09 22:44:27.253 DEBUG 7952 --- [    Test worker] c.i.t.s.i.EmailConfirmationServiceImpl   : Request to get EmailConfirmation : 0
+2021-02-09 22:44:27.265 DEBUG 7952 --- [    Test worker] c.i.t.s.i.EmailConfirmationServiceImpl   : Request to save EmailConfirmation using User entity with id: 0
+2021-02-09 22:44:27.281 DEBUG 7952 --- [    Test worker] c.i.t.s.i.EmailConfirmationServiceImpl   : Trying to confirm email:abc@gmail.comwith confirmation id: 0
+2021-02-09 22:44:27.283 DEBUG 7952 --- [    Test worker] c.i.t.s.i.EmailConfirmationServiceImpl   : Modified and saved EmailConfirmation with id: 0
+2021-02-09 22:44:27.286 DEBUG 7952 --- [    Test worker] c.i.t.s.i.EmailConfirmationServiceImpl   : Request to save EmailConfirmation : EmailConfirmationDTO{id=0, confirmationStatus='ACTIVE', createdAt='1970-01-01T00:00:00Z', validUntil='2021-02-19T20:44:27.285840Z', email='abc@gmail.com', htmlTemplateName='htmlTemplateName', langKey='en', rejectedAt='1970-01-01T00:00:00Z', rejectDescription='EMAIL_NOT_VALID', approvedAt='1970-01-01T00:00:00Z', ipAddress='192.168.31.1', createdBy=null, declarant=0, statehoodSubject=null}
+2021-02-09 22:44:27.291 DEBUG 7952 --- [    Test worker] c.i.t.s.i.EmailConfirmationServiceImpl   : Request to get all EmailConfirmations
+2021-02-09 22:44:27.295 DEBUG 7952 --- [    Test worker] c.i.t.s.i.EmailConfirmationServiceImpl   : Request to delete EmailConfirmation : 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

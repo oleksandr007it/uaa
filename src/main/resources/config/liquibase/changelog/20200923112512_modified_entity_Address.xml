@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!--
+        Modify the entity Address.
+    -->
+
+    <changeSet id="20200923112512-Modify_address_table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="address"/>
+        </preConditions>
+
+        <dropAllForeignKeyConstraints baseTableName="address"/>
+
+        <modifyDataType tableName="address"
+                        columnName="id"
+                        newDataType="varchar(32)"/>
+
+        <dropNotNullConstraint tableName="address"
+                               columnName="jhi_index"/>
+        <renameColumn tableName="address"
+                      oldColumnName="jhi_index"
+                      newColumnName="postal_code"/>
+        <modifyDataType tableName="address"
+                        columnName="postal_code"
+                        newDataType="varchar(64)"/>
+
+        <renameColumn tableName="address"
+                      oldColumnName="admin_territorial_object_id"
+                      newColumnName="ats_object_id"/>
+
+        <renameColumn tableName="address"
+                      oldColumnName="jhi_block"
+                      newColumnName="pavilion_number"/>
+
+        <renameColumn tableName="address"
+                      oldColumnName="appartment_number"
+                      newColumnName="apartment_number"/>
+        <modifyDataType tableName="address"
+                        columnName="apartment_number"
+                        newDataType="varchar(10)"/>
+
+        <dropColumn tableName="address"
+                    columnName="full_address"/>
+
+        <addColumn tableName="address">
+            <column name="country_code" type="varchar(3)"/>
+            <column name="region" type="varchar(128)"/>
+            <column name="regional_district" type="varchar(128)"/>
+            <column name="locality" type="varchar(128)"/>
+            <column name="street" type="varchar(128)"/>
+        </addColumn>
+
+        <addNotNullConstraint tableName="address"
+                              columnName="country_code"
+                              defaultNullValue="804"/>
+
+    </changeSet>
+
+    <changeSet id="20210126101812-Modify address object names column type length" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="address"/>
+            <columnExists tableName="address" columnName="region"/>
+            <columnExists tableName="address" columnName="regional_district"/>
+            <columnExists tableName="address" columnName="locality"/>
+            <columnExists tableName="address" columnName="street"/>
+        </preConditions>
+
+        <modifyDataType tableName="address"
+                        columnName="region"
+                        newDataType="varchar(256)"/>
+
+        <modifyDataType tableName="address"
+                        columnName="regional_district"
+                        newDataType="varchar(256)"/>
+
+        <modifyDataType tableName="address"
+                        columnName="locality"
+                        newDataType="varchar(256)"/>
+
+        <modifyDataType tableName="address"
+                        columnName="street"
+                        newDataType="varchar(256)"/>
+    </changeSet>
+
+</databaseChangeLog>

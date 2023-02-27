@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UaaConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.config</a> &gt; <span class="el_source">UaaConfiguration.java</span></div><h1>UaaConfiguration.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.config;
+
+import com.idevhub.tapas.security.AuthoritiesConstants;
+import com.idevhub.tapas.security.CustomAccessTokenConverter;
+import com.idevhub.tapas.security.TokenServices;
+import com.idevhub.tapas.security.backoffice.BackOfficeTokenGranter;
+import com.idevhub.tapas.security.ceaemployee.CeaEmploeeTokenGranter;
+import com.idevhub.tapas.security.declarant.DeclarantTokenGranter;
+import com.idevhub.tapas.security.thirdapp.PreAuthenticatedThirdAppAuthenticationProvider;
+import com.idevhub.tapas.security.thirdapp.ThirdAppTokenGranter;
+import io.github.jhipster.config.JHipsterProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.web.filter.CorsFilter;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import java.security.KeyPair;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+@SuppressWarnings(&quot;unused&quot;)
+@Configuration
+@EnableAuthorizationServer
+@RequiredArgsConstructor
+public class UaaConfiguration extends AuthorizationServerConfigurerAdapter implements ApplicationContextAware {
+    /**
+     * Access tokens will not expire any earlier than this.
+     */
+    private static final int MIN_ACCESS_TOKEN_VALIDITY_SECS = 60;
+    private final CustomAccessTokenConverter customAccessTokenConverter;
+    private final JHipsterProperties jHipsterProperties;
+    private final UaaProperties uaaProperties;
+    private final DataSource dataSource;
+    private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
+    private ApplicationContext applicationContext;
+    @Autowired
+    @Qualifier(&quot;authenticationManagerBean&quot;)
+    private AuthenticationManager authenticationManager;
+
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+<span class="fc" id="L87">        this.applicationContext = applicationContext;</span>
+<span class="fc" id="L88">    }</span>
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+<span class="fc" id="L92">        int accessTokenValidity = uaaProperties.getWebClientConfiguration().getAccessTokenValidityInSeconds();</span>
+<span class="fc" id="L93">        accessTokenValidity = Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALIDITY_SECS);</span>
+<span class="fc" id="L94">        int refreshTokenValidity = uaaProperties.getWebClientConfiguration().getRefreshTokenValidityInSecondsForRememberMe();</span>
+<span class="fc" id="L95">        refreshTokenValidity = Math.max(refreshTokenValidity, accessTokenValidity);</span>
+        /*
+        For a better client design, this should be done by a ClientDetailsService (similar to UserDetailsService).
+         */
+
+<span class="fc" id="L100">        clients.jdbc(dataSource);</span>
+
+<span class="fc" id="L102">    }</span>
+
+    @Bean
+    protected AuthorizationCodeServices authorizationCodeServices() {
+<span class="fc" id="L106">        return new JdbcAuthorizationCodeServices(dataSource);</span>
+    }
+
+    @Bean
+    public ApprovalStore approvalStore() {
+<span class="fc" id="L111">        return new JdbcApprovalStore(dataSource);</span>
+    }
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        //pick up all  TokenEnhancers incl. those defined in the application
+        //this avoids changes to this class if an application wants to add its own to the chain
+
+<span class="fc" id="L119">        TokenGranter defaultTokenGranter = endpoints.getTokenGranter();</span>
+
+<span class="fc" id="L121">        List&lt;TokenGranter&gt; tokenGranters = new ArrayList&lt;TokenGranter&gt;();</span>
+<span class="fc" id="L122">        tokenGranters.add(defaultTokenGranter);</span>
+<span class="fc" id="L123">        tokenGranters.add(new CeaEmploeeTokenGranter(authenticationManager, endpoints.getTokenServices(), endpoints.getClientDetailsService()));</span>
+<span class="fc" id="L124">        tokenGranters.add(new DeclarantTokenGranter(authenticationManager, endpoints.getTokenServices(), endpoints.getClientDetailsService()));</span>
+<span class="fc" id="L125">        tokenGranters.add(new BackOfficeTokenGranter(authenticationManager, endpoints.getTokenServices(), endpoints.getClientDetailsService()));</span>
+<span class="fc" id="L126">        tokenGranters.add(new ThirdAppTokenGranter(authenticationManager, endpoints.getTokenServices(), endpoints.getClientDetailsService()));</span>
+<span class="fc" id="L127">        TokenGranter tokenGranter = new CompositeTokenGranter(tokenGranters);</span>
+
+
+<span class="fc" id="L130">        Collection&lt;TokenEnhancer&gt; tokenEnhancers = applicationContext.getBeansOfType(TokenEnhancer.class).values();</span>
+<span class="fc" id="L131">        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();</span>
+<span class="fc" id="L132">        tokenEnhancerChain.setTokenEnhancers(new ArrayList&lt;&gt;(tokenEnhancers));</span>
+<span class="fc" id="L133">        endpoints</span>
+<span class="fc" id="L134">            .authorizationCodeServices(authorizationCodeServices())</span>
+<span class="fc" id="L135">            .approvalStore(approvalStore())</span>
+<span class="fc" id="L136">            .authenticationManager(authenticationManager)</span>
+<span class="fc" id="L137">            .tokenStore(tokenStore())</span>
+<span class="fc" id="L138">            .tokenEnhancer(tokenEnhancerChain)</span>
+<span class="fc" id="L139">            .tokenGranter(tokenGranter)</span>
+<span class="fc" id="L140">            .userDetailsService(userDetailsService)</span>
+<span class="fc" id="L141">            .tokenServices(tokenServices(tokenEnhancerChain, endpoints.getClientDetailsService()))</span>
+<span class="fc" id="L142">            .reuseRefreshTokens(false);             //don't reuse or we will run into session inactivity timeouts</span>
+<span class="fc" id="L143">    }</span>
+
+    @Bean
+    @Primary
+    public AuthorizationServerTokenServices tokenServices(TokenEnhancerChain tokenEnhancerChain, ClientDetailsService clientDetailsService) {
+<span class="fc" id="L148">        TokenServices defaultTokenServices = new TokenServices();</span>
+<span class="fc" id="L149">        defaultTokenServices.setReuseRefreshToken(false);</span>
+<span class="fc" id="L150">        defaultTokenServices.setTokenStore(tokenStore());</span>
+<span class="fc" id="L151">        defaultTokenServices.setSupportRefreshToken(true);</span>
+<span class="fc" id="L152">        defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);</span>
+<span class="fc" id="L153">        defaultTokenServices.setClientDetailsService(clientDetailsService);</span>
+<span class="fc" id="L154">        addUserDetailsService(defaultTokenServices, userDetailsService);</span>
+<span class="fc" id="L155">        return defaultTokenServices;</span>
+    }
+
+    private void addUserDetailsService(TokenServices tokenServices, UserDetailsService userDetailsService) {
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        if (userDetailsService != null) {</span>
+<span class="fc" id="L160">            PreAuthenticatedThirdAppAuthenticationProvider provider = new PreAuthenticatedThirdAppAuthenticationProvider();</span>
+<span class="fc" id="L161">            provider.setPreAuthenticatedUserDetailsService(new UserDetailsByNameServiceWrapper&lt;PreAuthenticatedAuthenticationToken&gt;(</span>
+                userDetailsService));
+<span class="fc" id="L163">            tokenServices</span>
+<span class="fc" id="L164">                .setAuthenticationManager(new ProviderManager(Arrays.asList(provider)));</span>
+        }
+<span class="fc" id="L166">    }</span>
+
+    @Bean
+    public TokenStore tokenStore() {
+<span class="fc" id="L170">        JdbcTokenStore jdbcTokenStore = new JdbcTokenStore(dataSource);</span>
+<span class="fc" id="L171">        return jdbcTokenStore;</span>
+    }
+
+    /**
+     * This bean generates an token enhancer, which manages the exchange between JWT access tokens and Authentication
+     * in both directions.
+     *
+     * @return an access token converter configured with the authorization server's public/private keys.
+     */
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+<span class="fc" id="L182">        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();</span>
+<span class="fc" id="L183">        converter.setAccessTokenConverter(customAccessTokenConverter);</span>
+<span class="fc" id="L184">        KeyPair keyPair = new KeyStoreKeyFactory(</span>
+<span class="fc" id="L185">            new ClassPathResource(uaaProperties.getKeyStore().getName()), uaaProperties.getKeyStore().getPassword().toCharArray())</span>
+<span class="fc" id="L186">            .getKeyPair(uaaProperties.getKeyStore().getAlias());</span>
+<span class="fc" id="L187">        converter.setKeyPair(keyPair);</span>
+<span class="fc" id="L188">        return converter;</span>
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+<span class="fc" id="L193">        oauthServer.tokenKeyAccess(&quot;permitAll()&quot;).checkTokenAccess(</span>
+            &quot;isAuthenticated()&quot;);
+<span class="fc" id="L195">    }</span>
+
+    @EnableResourceServer
+    @RequiredArgsConstructor
+    public static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
+        private final TokenStore tokenStore;
+
+        private final JHipsterProperties jHipsterProperties;
+
+        private final CorsFilter corsFilter;
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+<span class="fc" id="L209">            http</span>
+<span class="fc" id="L210">                .exceptionHandling()</span>
+<span class="pc" id="L211">                .authenticationEntryPoint((request, response, authException) -&gt; response.sendError(HttpServletResponse.SC_UNAUTHORIZED))</span>
+<span class="fc" id="L212">                .and()</span>
+<span class="fc" id="L213">                .csrf()</span>
+<span class="fc" id="L214">                .disable()</span>
+<span class="fc" id="L215">                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="fc" id="L216">                .headers()</span>
+<span class="fc" id="L217">                .frameOptions()</span>
+<span class="fc" id="L218">                .disable()</span>
+<span class="fc" id="L219">                .and()</span>
+<span class="fc" id="L220">                .sessionManagement()</span>
+<span class="fc" id="L221">                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)</span>
+<span class="fc" id="L222">                .and()</span>
+<span class="fc" id="L223">                .authorizeRequests()</span>
+<span class="fc" id="L224">                .antMatchers(&quot;/api/register&quot;).permitAll()</span>
+<span class="fc" id="L225">                .antMatchers(&quot;/api/activate&quot;).permitAll()</span>
+<span class="fc" id="L226">                .antMatchers(&quot;/api/authenticate&quot;).permitAll()</span>
+<span class="fc" id="L227">                .antMatchers(&quot;/api/account/reset-password/init&quot;).permitAll()</span>
+<span class="fc" id="L228">                .antMatchers(&quot;/api/account/reset-password/finish&quot;).permitAll()</span>
+<span class="fc" id="L229">                .antMatchers(&quot;/api/email-confirmations/confirm&quot;).permitAll()</span>
+<span class="fc" id="L230">                .antMatchers(&quot;/api/statehood-subjects/confirm-email&quot;).permitAll()</span>
+<span class="fc" id="L231">                .antMatchers(&quot;/api/users/confirm-email&quot;).permitAll()</span>
+<span class="fc" id="L232">                .antMatchers(&quot;/api/**&quot;).authenticated()</span>
+<span class="fc" id="L233">                .antMatchers(&quot;/management/health&quot;).permitAll()</span>
+<span class="fc" id="L234">                .antMatchers(&quot;/management/**&quot;).hasAuthority(AuthoritiesConstants.ADMIN)</span>
+<span class="fc" id="L235">                .antMatchers(&quot;/v2/api-docs/**&quot;).permitAll()</span>
+<span class="fc" id="L236">                .antMatchers(&quot;/swagger-resources/configuration/ui&quot;).permitAll()</span>
+<span class="fc" id="L237">                .antMatchers(&quot;/swagger-ui/index.html&quot;).hasAuthority(AuthoritiesConstants.ADMIN);</span>
+<span class="fc" id="L238">        }</span>
+
+        @Override
+        public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+<span class="fc" id="L242">            resources.resourceId(&quot;jhipster-uaa&quot;).tokenStore(tokenStore);</span>
+<span class="fc" id="L243">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

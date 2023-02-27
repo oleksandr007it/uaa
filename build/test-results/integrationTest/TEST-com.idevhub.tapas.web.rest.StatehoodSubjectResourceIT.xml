@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" tests="11" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:23" hostname="iMac-Aleksandr-2.local" time="1.595">
+  <properties/>
+  <testcase name="createStatehoodSubjectAndAddRepreseterEdrpou2()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.602"/>
+  <testcase name="testGetActiveSubjectsByCodeOrPassportExeptions2()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.067"/>
+  <testcase name="testGetActiveSubjectsByCodeOrPassportExeptions()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.069"/>
+  <testcase name="createStatehoodSubjectAndAddRepreseterRnokpoExeption()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.076"/>
+  <testcase name="createStatehoodSubjectAndAddRepreseterFromEdr()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.079"/>
+  <testcase name="testGetActiveSubjectsByCodeOrPassportFromRepo()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.113"/>
+  <testcase name="updateStatehoodSubject()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.215"/>
+  <testcase name="testGetActiveSubjectsByCodeOrPassportFromEdr()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.065"/>
+  <testcase name="createStatehoodSubjectAndAddRepreseterDifferentName()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.109"/>
+  <testcase name="createStatehoodSubjectAndAddRepreseter()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.098"/>
+  <testcase name="createStatehoodSubjectAndAddRepreseterEdrpouExeption()" classname="com.idevhub.tapas.web.rest.StatehoodSubjectResourceIT" time="0.074"/>
+  <system-out><![CDATA[  __    __       ___           ___
+ |  |  |  |     /   \         /   \
+ |  |  |  |    /  ^  \       /  ^  \
+ |  |  |  |   /  /_\  \     /  /_\  \
+ |  `--'  |  /  _____  \   /  _____  \
+  \______/  /__/     \__\ /__/     \__\
+
+:: IDEV-HUB ?  :: Running Spring Boot 2.3.7.RELEASE ::
+
+2021-02-09 22:43:15.331  INFO 7937 --- [    Test worker] c.i.t.w.rest.StatehoodSubjectResourceIT  : No active profile set, falling back to default profiles: default
+2021-02-09 22:43:16.575 DEBUG 7937 --- [    Test worker] c.i.tapas.config.AsyncConfiguration      : Creating Async Task Executor
+2021-02-09 22:43:16.593 DEBUG 7937 --- [    Test worker] c.i.tapas.config.LiquibaseConfiguration  : Configuring Liquibase
+2021-02-09 22:43:16.600 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase synchronously
+2021-02-09 22:43:17.568 DEBUG 7937 --- [    Test worker] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 967 ms
+2021-02-09 22:43:17.655 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Configuring Hazelcast
+2021-02-09 22:43:17.655 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Hazelcast already initialized
+2021-02-09 22:43:19.481 DEBUG 7937 --- [    Test worker] c.i.tapas.config.CacheConfiguration      : Starting HazelcastCacheManager
+2021-02-09 22:43:20.782  WARN 7937 --- [    Test worker] o.s.c.n.a.ArchaiusAutoConfiguration      : Netflix ConfigurationManager has already been installed, unable to re-install
+2021-02-09 22:43:21.250  INFO 7937 --- [    Test worker] HipsterLoggingMetricsExportConfiguration : Initializing Metrics Log reporting
+2021-02-09 22:43:21.519 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:43:21.519 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:43:21.521 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Trying to configure client from Kubernetes config...
+2021-02-09 22:43:21.521 DEBUG 7937 --- [    Test worker] io.fabric8.kubernetes.client.Config      : Found for Kubernetes config at: [/Users/aleksandrshvydanenko/.kube/config].
+2021-02-09 22:43:22.237  INFO 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filtering metrics logs from all appenders except the LOGSTASH appender
+2021-02-09 22:43:22.239 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the CONSOLE appender
+2021-02-09 22:43:22.239 DEBUG 7937 --- [    Test worker] i.g.j.config.logging.LoggingUtils        : Filter metrics logs from the FILE appender
+2021-02-09 22:43:22.261  INFO 7937 --- [    Test worker] c.i.t.w.rest.StatehoodSubjectResourceIT  : Started StatehoodSubjectResourceIT in 7.416 seconds (JVM running for 101.991)
+2021-02-09 22:43:24.292 ERROR 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Active statehoodSubject with code: 123451  NOT FOUND!!!
+2021-02-09 22:43:24.365 ERROR 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : StatehoodSubject validation Error not found  active StatehoodSubject from  EDR
+2021-02-09 22:43:24.365 ERROR 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Active statehoodSubject with code: 123451  NOT FOUND!!!
+2021-02-09 22:43:24.442 ERROR 7937 --- [    Test worker] c.i.tapas.service.utils.CompareUtils     : Request Code  not Equals Edrpou or Rnokpp   from  sign
+2021-02-09 22:43:24.599 DEBUG 7937 --- [    Test worker] c.i.t.web.rest.StatehoodSubjectResource  : REST request to get all StatehoodSubjects
+2021-02-09 22:43:24.637 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['subjectCode']
+2021-02-09 22:43:24.637 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['subjectName']
+2021-02-09 22:43:24.638 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['isInternal']
+2021-02-09 22:43:24.638 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['rawDataBase64']
+2021-02-09 22:43:24.753 DEBUG 7937 --- [    Test worker] c.i.t.s.i.StatehoodSubjectServiceImpl    : Request to update StatehoodSubject : StatehoodSubjectDTO{id=1406, subjectStatus='ACTIVE', accountDetailsStatus='NOT_FULL', createdAt='2021-02-09T20:43:24.750694Z', updatedAt='2021-02-09T20:43:24.750697Z', deletedAt='2021-02-09T20:43:24.750699Z', subjectCode='', subjectName='', subjectShortName='', headFullName='', telNumber='', email='mail@mail.ua', isEmailApproved='false', eori='ririri', isActualSameAsLegalAddress='false', createdBy=admin, updatedBy=admin, deletedBy=admin, kopfg=1354, kopfg='3', legalAddress=AddressDTO(id=8a808186778887bf01778888d4c8000f, countryCode=null, countryNameUk=null, countryNameEn=null, isCountryMissingOnDict=true, postalCode=null, region=null, regionalDistrict=null, locality=null, localityStatus=null, street=null, streetStatus=null, isStreetMissingOnDict=true, houseNumber=null, pavilionNumber=null, apartmentNumber=null, atsObjectId=null, koatuuCode=null, fullAddress=null), actualAddress=AddressDTO(id=8a808186778887bf01778888d4c8000f, countryCode=null, countryNameUk=null, countryNameEn=null, isCountryMissingOnDict=true, postalCode=null, region=null, regionalDistrict=null, locality=null, localityStatus=null, street=null, streetStatus=null, isStreetMissingOnDict=true, houseNumber=null, pavilionNumber=null, apartmentNumber=null, atsObjectId=null, koatuuCode=null, fullAddress=null)}
+2021-02-09 22:43:24.856 DEBUG 7937 --- [    Test worker] c.i.t.service.CountryDictionaryProxy     : Getting country by code = 804...
+2021-02-09 22:43:24.922 DEBUG 7937 --- [    Test worker] c.i.t.web.rest.StatehoodSubjectResource  : REST request to get all StatehoodSubjects
+2021-02-09 22:43:24.927 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['subjectCode']
+2021-02-09 22:43:24.927 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['subjectName']
+2021-02-09 22:43:24.927 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['isInternal']
+2021-02-09 22:43:24.928 DEBUG 7937 --- [    Test worker] c.j.jsonpath.internal.path.CompiledPath  : Evaluating path: $['rawDataBase64']
+2021-02-09 22:43:25.213 ERROR 7937 --- [    Test worker] c.i.tapas.service.utils.CompareUtils     : Request Code  not Equals Edrpou or Rnokpp   from  sign
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KopfgResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">KopfgResource.java</span></div><h1>KopfgResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.service.KopfgService;
+import com.idevhub.tapas.service.dto.KopfgDTO;
+import com.idevhub.tapas.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * REST controller for managing Kopfg.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class KopfgResource {
+
+    private static final String ENTITY_NAME = &quot;kopfg&quot;;
+<span class="fc" id="L29">    private final Logger log = LoggerFactory.getLogger(KopfgResource.class);</span>
+    private final KopfgService kopfgService;
+    @Value(&quot;${jhipster.clientApp.name}&quot;)
+    private String APPLICATION_NAME;
+
+<span class="fc" id="L34">    public KopfgResource(KopfgService kopfgService) {</span>
+<span class="fc" id="L35">        this.kopfgService = kopfgService;</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * POST  /kopfgs : Create a new kopfg.
+     *
+     * @param kopfgDTO the kopfgDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new kopfgDTO, or with status 400 (Bad Request) if the kopfg has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/kopfgs&quot;)
+    @Timed
+    public ResponseEntity&lt;KopfgDTO&gt; createKopfg(@Valid @RequestBody KopfgDTO kopfgDTO) throws URISyntaxException {
+<span class="fc" id="L48">        log.debug(&quot;REST request to save Kopfg : {}&quot;, kopfgDTO);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (kopfgDTO.getId() != null) {</span>
+<span class="nc" id="L50">            throw new BadRequestAlertException(&quot;A new kopfg cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="fc" id="L52">        KopfgDTO result = kopfgService.save(kopfgDTO);</span>
+<span class="fc" id="L53">        return ResponseEntity.created(new URI(&quot;/api/kopfgs/&quot; + result.getId()))</span>
+<span class="fc" id="L54">            .headers(HeaderUtil.createEntityCreationAlert(APPLICATION_NAME, false, ENTITY_NAME, result.getId().toString()))</span>
+<span class="fc" id="L55">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /kopfgs : Updates an existing Kopfg.
+     *
+     * @param kopfgDTO the kopfgDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated kopfgDTO,
+     * or with status 400 (Bad Request) if the kopfgDTO is not valid,
+     * or with status 500 (Internal Server Error) if the kopfgDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/kopfgs&quot;)
+    @Timed
+    public ResponseEntity&lt;KopfgDTO&gt; updateKopfg(@Valid @RequestBody KopfgDTO kopfgDTO) throws URISyntaxException {
+<span class="fc" id="L70">        log.debug(&quot;REST request to update Kopfg : {}&quot;, kopfgDTO);</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (kopfgDTO.getId() == null) {</span>
+<span class="nc" id="L72">            throw new BadRequestAlertException(&quot;Invalid id&quot;, ENTITY_NAME, &quot;idnull&quot;);</span>
+        }
+<span class="fc" id="L74">        KopfgDTO result = kopfgService.save(kopfgDTO);</span>
+<span class="fc" id="L75">        return ResponseEntity.ok()</span>
+<span class="fc" id="L76">            .headers(HeaderUtil.createEntityUpdateAlert(APPLICATION_NAME, false, ENTITY_NAME, kopfgDTO.getId().toString()))</span>
+<span class="fc" id="L77">            .body(result);</span>
+    }
+
+    /**
+     * GET  /kopfgs : get all the KopfgS.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of kopfgS in body
+     */
+    @GetMapping(&quot;/kopfgs&quot;)
+    @Timed
+    public List&lt;KopfgDTO&gt; getAllKopfgS() {
+<span class="fc" id="L88">        log.debug(&quot;REST request to get all KopfgS&quot;);</span>
+<span class="fc" id="L89">        return kopfgService.findAll();</span>
+    }
+
+    /**
+     * GET  /kopfgs/:id : get the &quot;id&quot; kopfg.
+     *
+     * @param id the id of the kopfgDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the kopfgDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/kopfgs/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;KopfgDTO&gt; getKopfg(@PathVariable Long id) {
+<span class="fc" id="L101">        log.debug(&quot;REST request to get kopfg : {}&quot;, id);</span>
+<span class="fc" id="L102">        Optional&lt;KopfgDTO&gt; kopfgDTO = kopfgService.findOne(id);</span>
+<span class="fc" id="L103">        return ResponseUtil.wrapOrNotFound(kopfgDTO);</span>
+    }
+
+    /**
+     * DELETE  /kopfgs/:id : delete the &quot;id&quot; kopfg.
+     *
+     * @param id the id of the kopfgDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/kopfgs/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteKopfg(@PathVariable Long id) {
+<span class="fc" id="L115">        log.debug(&quot;REST request to delete kopfg : {}&quot;, id);</span>
+<span class="fc" id="L116">        kopfgService.delete(id);</span>
+<span class="fc" id="L117">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(APPLICATION_NAME, false, ENTITY_NAME, id.toString())).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.TokenServicesTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:41" hostname="iMac-Aleksandr-2.local" time="0.047">
+  <properties/>
+  <testcase name="testRefreshAccessTokenWithoutReauthentication()" classname="com.idevhub.tapas.security.TokenServicesTest" time="0.033"/>
+  <testcase name="testAccidentalNullAuthentication()" classname="com.idevhub.tapas.security.TokenServicesTest" time="0.005"/>
+  <testcase name="testRefreshAccessTokenWithReauthentication()" classname="com.idevhub.tapas.security.TokenServicesTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

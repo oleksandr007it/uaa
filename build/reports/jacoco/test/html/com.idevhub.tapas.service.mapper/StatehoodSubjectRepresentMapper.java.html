@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatehoodSubjectRepresentMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.mapper</a> &gt; <span class="el_source">StatehoodSubjectRepresentMapper.java</span></div><h1>StatehoodSubjectRepresentMapper.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.mapper;
+
+import com.idevhub.tapas.domain.StatehoodSubjectRepresent;
+import com.idevhub.tapas.service.dto.StatehoodSubjectRepresentDTO;
+import com.idevhub.tapas.service.dto.StatehoodSubjectRepresentMainInfoDTO;
+import com.idevhub.tapas.service.dto.StatehoodSubjectRepresentWithNameDTO;
+import org.mapstruct.IterableMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
+
+import java.util.List;
+
+/**
+ * Mapper for the entity StatehoodSubjectRepresent and its DTO StatehoodSubjectRepresentDTO.
+ */
+
+@Mapper(componentModel = &quot;spring&quot;, unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {UserMapper.class, StatehoodSubjectMapper.class})
+public interface StatehoodSubjectRepresentMapper extends EntityMapper&lt;StatehoodSubjectRepresentDTO, StatehoodSubjectRepresent&gt; {
+
+    @Mapping(source = &quot;createdBy&quot;, target = &quot;createdBy&quot;)
+    @Mapping(source = &quot;updatedBy&quot;, target = &quot;updatedBy&quot;)
+    @Mapping(source = &quot;deletedBy&quot;, target = &quot;deletedBy&quot;)
+    @Mapping(source = &quot;currentContext&quot;, target = &quot;isCurrentContext&quot;)
+    @Mapping(source = &quot;statehoodSubject.id&quot;, target = &quot;statehoodSubjectId&quot;)
+    @Mapping(source = &quot;declarant.id&quot;, target = &quot;declarantId&quot;)
+    @Mapping(source = &quot;declarant.login&quot;, target = &quot;declarantLogin&quot;)
+    StatehoodSubjectRepresentDTO toDto(StatehoodSubjectRepresent statehoodSubjectRepresent);
+
+    @Mapping(source = &quot;statehoodSubject.id&quot;, target = &quot;statehoodSubjectId&quot;)
+    @Mapping(source = &quot;statehoodSubject.subjectName&quot;, target = &quot;statehoodSubjectFullName&quot;)
+    @Mapping(source = &quot;statehoodSubject.subjectCode&quot;, target = &quot;statehoodSubjectEdrpou&quot;)
+    @Mapping(source = &quot;declarant.id&quot;, target = &quot;declarantId&quot;)
+    @Mapping(source = &quot;declarant.firstName&quot;, target = &quot;declarantFirstName&quot;)
+    @Mapping(source = &quot;declarant.lastName&quot;, target = &quot;declarantLastName&quot;)
+    @Mapping(source = &quot;declarant.middleName&quot;, target = &quot;declarantMiddleName&quot;)
+    @Mapping(source = &quot;declarant.fullName&quot;, target = &quot;declarantFullName&quot;)
+    @Mapping(source = &quot;statehoodSubject.accountDetailsStatus&quot;, target = &quot;accountDetailsStatus&quot;)
+    @Mapping(source = &quot;statehoodSubject.subjectStatus&quot;, target = &quot;subjectStatus&quot;)
+    @Mapping(source = &quot;subjectRepresentType&quot;, target = &quot;subjectRepresentType&quot;)
+    StatehoodSubjectRepresentMainInfoDTO toMainInfoDto(StatehoodSubjectRepresent statehoodSubjectRepresent);
+
+    @IterableMapping(qualifiedByName = &quot;toMainInfoDto&quot;)
+    List&lt;StatehoodSubjectRepresentMainInfoDTO&gt; toMainInfoDto(List&lt;StatehoodSubjectRepresent&gt; statehoodSubjectRepresent);
+
+    @Mapping(source = &quot;declarant.firstName&quot;, target = &quot;firstName&quot;)
+    @Mapping(source = &quot;declarant.lastName&quot;, target = &quot;lastName&quot;)
+    @Mapping(source = &quot;declarant.middleName&quot;, target = &quot;middleName&quot;)
+    @Mapping(source = &quot;statehoodSubject.id&quot;, target = &quot;statehoodSubjectId&quot;)
+    @Mapping(source = &quot;declarant.id&quot;, target = &quot;declarantId&quot;)
+    StatehoodSubjectRepresentWithNameDTO toDtoWithName(StatehoodSubjectRepresent represent);
+
+    @Mapping(source = &quot;createdBy&quot;, target = &quot;createdBy&quot;)
+    @Mapping(source = &quot;updatedBy&quot;, target = &quot;updatedBy&quot;)
+    @Mapping(source = &quot;deletedBy&quot;, target = &quot;deletedBy&quot;)
+    @Mapping(source = &quot;statehoodSubjectId&quot;, target = &quot;statehoodSubject&quot;)
+    @Mapping(source = &quot;declarantId&quot;, target = &quot;declarant&quot;)
+    StatehoodSubjectRepresent toEntity(StatehoodSubjectRepresentDTO statehoodSubjectRepresentDTO);
+
+    default StatehoodSubjectRepresent fromId(Long id) {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L62">            return null;</span>
+        }
+<span class="nc" id="L64">        StatehoodSubjectRepresent statehoodSubjectRepresent = new StatehoodSubjectRepresent();</span>
+<span class="nc" id="L65">        statehoodSubjectRepresent.setId(id);</span>
+<span class="nc" id="L66">        return statehoodSubjectRepresent;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

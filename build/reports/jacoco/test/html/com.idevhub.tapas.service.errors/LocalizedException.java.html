@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LocalizedException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.errors</a> &gt; <span class="el_source">LocalizedException.java</span></div><h1>LocalizedException.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.errors;
+
+import com.idevhub.tapas.config.Constants;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.thymeleaf.util.ArrayUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
+public class LocalizedException extends RuntimeException {
+
+    private final String messagePath;
+    private String[] params;
+
+    public LocalizedException(LocalizedException ex) {
+<span class="nc" id="L18">        super(ex.messagePath);</span>
+<span class="nc" id="L19">        this.messagePath = ex.messagePath;</span>
+<span class="nc" id="L20">        this.params = ex.params;</span>
+<span class="nc" id="L21">    }</span>
+
+    public LocalizedException(String messagePath) {
+<span class="fc" id="L24">        super(messagePath);</span>
+<span class="fc" id="L25">        this.messagePath = messagePath;</span>
+<span class="fc" id="L26">    }</span>
+
+    public LocalizedException(String messagePath, String... params) {
+<span class="nc" id="L29">        super(messagePath);</span>
+<span class="nc" id="L30">        this.messagePath = messagePath;</span>
+<span class="nc" id="L31">        this.params = params;</span>
+<span class="nc" id="L32">    }</span>
+
+    public LocalizedException(String messagePath, Throwable cause) {
+<span class="nc" id="L35">        super(messagePath, cause);</span>
+<span class="nc" id="L36">        this.messagePath = messagePath;</span>
+<span class="nc" id="L37">    }</span>
+
+    public LocalizedException(String messagePath, Throwable cause, String... params) {
+<span class="nc" id="L40">        super(messagePath, cause);</span>
+<span class="nc" id="L41">        this.messagePath = messagePath;</span>
+<span class="nc" id="L42">        this.params = params;</span>
+<span class="nc" id="L43">    }</span>
+
+    public static String getLocalizedString(String messagePath, String... params) {
+<span class="nc" id="L46">        ResourceBundle localizedErrorMessages =</span>
+<span class="nc" id="L47">            ResourceBundle.getBundle(</span>
+                Constants.I18N_BUNDLE_RESOURCES_PATH,
+<span class="nc" id="L49">                LocaleContextHolder.getLocale()</span>
+            );
+
+        Object[] parameters;
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (null == params)</span>
+<span class="nc" id="L54">            parameters = new Object[]{};</span>
+        else
+<span class="nc" id="L56">            parameters = ArrayUtils.toArray(params);</span>
+
+<span class="nc" id="L58">        String localMessageFormatString = localizedErrorMessages.getString(messagePath);</span>
+        String localMessageFormatStringUTF8;
+<span class="nc" id="L60">        localMessageFormatStringUTF8 = new String(localMessageFormatString.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);</span>
+
+<span class="nc" id="L62">        return MessageFormat.format(localMessageFormatStringUTF8, parameters);</span>
+    }
+
+    public String getLocalizedMessage() {
+<span class="nc" id="L66">        return getLocalizedString(this.messagePath, params);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L71">        return getLocalizedMessage();</span>
+    }
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

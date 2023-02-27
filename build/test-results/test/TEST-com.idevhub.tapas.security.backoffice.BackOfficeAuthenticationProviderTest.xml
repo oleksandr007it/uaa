@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.backoffice.BackOfficeAuthenticationProviderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:41" hostname="iMac-Aleksandr-2.local" time="0.018">
+  <properties/>
+  <testcase name="testAuthenticate()" classname="com.idevhub.tapas.security.backoffice.BackOfficeAuthenticationProviderTest" time="0.007"/>
+  <testcase name="testSupports()" classname="com.idevhub.tapas.security.backoffice.BackOfficeAuthenticationProviderTest" time="0.001"/>
+  <testcase name="testAuthenticate_ThrowsAuthenticationException()" classname="com.idevhub.tapas.security.backoffice.BackOfficeAuthenticationProviderTest" time="0.009"/>
+  <system-out><![CDATA[2021-02-09 22:43:41.399  INFO   --- [    Test worker] i.t.s.b.BackOfficeAuthenticationProvider : Start authenticate back officeprovider
+2021-02-09 22:43:41.400  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:41.403  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start authenticate checkAuthorities
+2021-02-09 22:43:41.404  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : test Authentication success. Authorities: []
+2021-02-09 22:43:41.410  INFO   --- [    Test worker] i.t.s.b.BackOfficeAuthenticationProvider : Start authenticate back officeprovider
+2021-02-09 22:43:41.411  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:41.414  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start authenticate checkAuthorities
+2021-02-09 22:43:41.415 ERROR   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Can not have Authority ROLE_BACK_OFFICE for Authorization
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

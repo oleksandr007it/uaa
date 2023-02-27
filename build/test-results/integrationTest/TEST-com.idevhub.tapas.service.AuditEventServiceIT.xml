@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.AuditEventServiceIT" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:27" hostname="iMac-Aleksandr-2.local" time="0.04">
+  <properties/>
+  <testcase name="verifyOldAuditEventsAreDeleted()" classname="com.idevhub.tapas.service.AuditEventServiceIT" time="0.04"/>
+  <system-out><![CDATA[2021-02-09 22:43:27.830 DEBUG 7937 --- [    Test worker] c.i.tapas.service.AuditEventService      : Deleting audit data PersistentAuditEvent{principal='test-user-old', auditEventDate=2021-01-09T20:43:27.804632Z, auditEventType='test-type'}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

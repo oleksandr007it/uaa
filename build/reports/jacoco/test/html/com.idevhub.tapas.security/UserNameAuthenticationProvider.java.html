@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserNameAuthenticationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security</a> &gt; <span class="el_source">UserNameAuthenticationProvider.java</span></div><h1>UserNameAuthenticationProvider.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security;
+
+
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+
+
+@Component(&quot;userNameAuthenticationProvider&quot;)
+public class UserNameAuthenticationProvider implements AuthenticationProvider {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
+<span class="fc" id="L31">    Logger logger = LoggerFactory.getLogger(UserNameAuthenticationProvider.class);</span>
+
+    public UserNameAuthenticationProvider(UserRepository userRepository,
+<span class="fc" id="L34">                                          UserDetailsService userDetailsService) {</span>
+<span class="fc" id="L35">        this.userRepository = userRepository;</span>
+<span class="fc" id="L36">        this.passwordEncoder = new BCryptPasswordEncoder();</span>
+<span class="fc" id="L37">        this.userDetailsService = userDetailsService;</span>
+<span class="fc" id="L38">    }</span>
+
+
+    @Override
+    public Authentication authenticate(Authentication authentication)
+        throws AuthenticationException {
+<span class="fc" id="L44">        Assert.notNull(authentication, &quot;No authentication data provided&quot;);</span>
+<span class="fc" id="L45">        String login = authentication.getName();</span>
+<span class="fc" id="L46">        String password = (String) authentication.getCredentials();</span>
+<span class="pc bpc" id="L47" title="4 of 8 branches missed.">        if (login == null || &quot;&quot;.equals(login) || password == null || &quot;&quot;.equals(password)) {</span>
+<span class="nc" id="L48">            throw new BadCredentialsException(&quot;Login and password must not be empty&quot;);</span>
+        }
+<span class="fc" id="L50">        User user = userRepository.findOneWithAuthoritiesByLogin(login).orElse(null);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (user == null) {</span>
+<span class="fc" id="L52">            logger.warn(&quot;User {} not found in DB&quot;, login);</span>
+<span class="fc" id="L53">            throw new BadCredentialsException(&quot;User  not found in DB&quot;);</span>
+        }
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (!user.isActivated()) {</span>
+<span class="fc" id="L56">            throw new BadCredentialsException(&quot;User is not activated&quot;);</span>
+        }
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (!passwordEncoder.matches(password, user.getPassword())) {</span>
+<span class="fc" id="L59">            throw new BadCredentialsException(&quot;Wrong login or password&quot;);</span>
+        }
+
+<span class="fc" id="L62">        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService</span>
+<span class="fc" id="L63">            .loadUserByUsername(login);</span>
+
+<span class="fc" id="L65">        Collection&lt;GrantedAuthority&gt; authorities = userDetails.getAuthorities();</span>
+
+<span class="fc" id="L67">        UsernamePasswordAuthenticationToken authenticationWithAuthorities =</span>
+<span class="fc" id="L68">            new UsernamePasswordAuthenticationToken(userDetails, authentication.getCredentials(),</span>
+                authorities);
+<span class="fc" id="L70">        addUserIdToDetails(authenticationWithAuthorities, userDetails);</span>
+<span class="fc" id="L71">        logger.info(&quot;Authentication success. Authorities: &quot; + Arrays</span>
+<span class="fc" id="L72">            .toString(authentication.getAuthorities().toArray()));</span>
+<span class="fc" id="L73">        return authenticationWithAuthorities;</span>
+    }
+
+    private void addUserIdToDetails(
+        UsernamePasswordAuthenticationToken authenticationWithAuthorities,
+        CustomUserDetails userDetails) {
+<span class="fc" id="L79">        LinkedHashMap details = new LinkedHashMap();</span>
+<span class="fc" id="L80">        details.put(&quot;userId&quot;, userDetails.getUsetId());</span>
+<span class="fc" id="L81">        authenticationWithAuthorities.setDetails(details);</span>
+<span class="fc" id="L82">    }</span>
+
+
+    @Override
+    public boolean supports(Class&lt;?&gt; authentication) {
+<span class="fc" id="L87">        return authentication.equals(UsernamePasswordAuthenticationToken.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

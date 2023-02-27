@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.config.WebConfigurerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:36" hostname="iMac-Aleksandr-2.local" time="2.976">
+  <properties/>
+  <testcase name="testCorsFilterOnOtherPath()" classname="com.idevhub.tapas.config.WebConfigurerTest" time="2.837"/>
+  <testcase name="testCorsFilterDeactivated()" classname="com.idevhub.tapas.config.WebConfigurerTest" time="0.041"/>
+  <testcase name="testStartUpProdServletContext()" classname="com.idevhub.tapas.config.WebConfigurerTest" time="0.004"/>
+  <testcase name="testCorsFilterOnApiPath()" classname="com.idevhub.tapas.config.WebConfigurerTest" time="0.044"/>
+  <testcase name="testStartUpDevServletContext()" classname="com.idevhub.tapas.config.WebConfigurerTest" time="0.004"/>
+  <testcase name="testCorsFilterDeactivated2()" classname="com.idevhub.tapas.config.WebConfigurerTest" time="0.041"/>
+  <system-out><![CDATA[2021-02-09 22:43:37.438 DEBUG   --- [    Test worker] org.jboss.logging                        : Logging Provider: org.jboss.logging.Log4j2LoggerProvider
+2021-02-09 22:43:39.489  INFO   --- [    Test worker] com.idevhub.tapas.config.WebConfigurer   : Web application configuration, using profiles: prod
+2021-02-09 22:43:39.489  INFO   --- [    Test worker] com.idevhub.tapas.config.WebConfigurer   : Web application fully configured
+2021-02-09 22:43:39.539  INFO   --- [    Test worker] com.idevhub.tapas.config.WebConfigurer   : Web application configuration, using profiles: dev
+2021-02-09 22:43:39.540  INFO   --- [    Test worker] com.idevhub.tapas.config.WebConfigurer   : Web application fully configured
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

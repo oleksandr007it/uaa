@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+<head>
+    <title th:text="#{email.representative.invitation.title}">Invite representative</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<p th:text="#{email.representative.invitation.greeting(${userToInviteFullName})}">
+    Шановний(а)
+</p>
+<p th:text="#{email.representative.invitation.text1(${invitedByFullName})}">
+    запрошує Вас стати представником суб’єкта господарювання:
+</p>
+<table border=1 cellspacing=0 cellpadding=4 width=580>
+    <tr>
+        <td width=50>
+            <p th:text="#{email.representative.invitation.subject.code}">Код*</p>
+        </td>
+        <td>
+            <p th:text="${subjectCode}">Код</p>
+        </td>
+    </tr>
+    <tr>
+        <td width=50>
+            <p th:text="#{email.representative.invitation.subject.name}">Назва</p>
+        </td>
+        <td>
+            <p th:text="${subjectShortName}">Назва</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p th:text="#{email.representative.invitation.subject.code.notice}">
+                * - Код суб'єкта господарювання у Єдиному державному реєстрі підприємств та організацій України
+            </p>
+        </td>
+    </tr>
+</table>
+<p th:text="#{email.representative.invitation.instruction}" style="font-weight: bold; text-decoration: underline">
+    Аби прийняти запрошення і підтвердити своє представництво, виконайте такі кроки:
+</p>
+<ol>
+    <li>
+        <span th:text="#{email.representative.invitation.instruction.step1}">
+            Увійдіть до системи “Єдине вікно для міжнародної торгівлі” за посиланням:
+        </span>
+        <br/>
+        <span th:text="${cabinetUrl}">url</span>
+    </li>
+    <li th:text="#{email.representative.invitation.instruction.step2}">
+        За допомогою системного меню, перейдіть до списку суб’єктів господарювання.
+    </li>
+    <li th:text="#{email.representative.invitation.instruction.step3}">
+        Знайдіть та оберіть суб’єкт господарювання, що вказаний вище.
+    </li>
+    <li>
+        <span th:text="#{email.representative.invitation.instruction.step4}">
+            Виконайте дію “Підтвердити своє представництво”.
+        </span>
+        <br/>
+        <span th:text="#{email.representative.invitation.instruction.step4.notice1}" style="color: red">
+            Для виконання цієї дії може бути використаний лише ключ кваліфікованого
+        </span>
+        <br/>
+        <span th:text="#{email.representative.invitation.instruction.step4.notice2}" style="color: red">
+            електронного підпису (КЕП) представника цього суб'єкта господарювання.
+        </span>
+    </li>
+</ol>
+<p>
+    <span th:text="#{email.representative.invitation.instruction.reject1}">
+        Щоб відхилити запрошення, виконайте перші три кроки, що вказані вище, а на останньому
+    </span>
+    <br/>
+    <span th:text="#{email.representative.invitation.instruction.reject2}">
+        кроці, замість дії “Підтвердити своє представництво”, виконайте дію “Припинити своє
+    </span>
+    <br/>
+    <span th:text="#{email.representative.invitation.instruction.reject3}">представництво”.</span>
+</p>
+<p>
+    <span th:text="#{email.representative.invitation.text2}">З повагою, </span>
+    <br/>
+    <span th:text="#{email.representative.invitation.signature}">.</span>
+</p>
+
+</body>
+</html>

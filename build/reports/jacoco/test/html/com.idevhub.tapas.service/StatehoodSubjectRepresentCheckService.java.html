@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatehoodSubjectRepresentCheckService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">StatehoodSubjectRepresentCheckService.java</span></div><h1>StatehoodSubjectRepresentCheckService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentStatus;
+import com.idevhub.tapas.repository.StatehoodSubjectRepresentRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.validation.ValidationException;
+
+@Service
+@RequiredArgsConstructor
+<span class="fc" id="L13">@Slf4j</span>
+public class StatehoodSubjectRepresentCheckService {
+
+    private final StatehoodSubjectRepresentRepository representRepository;
+
+    /**
+     * �������������� ������������������, ���� ������������������ �� �������������������������� �������������������������� ������������������ ������'�������� ����������������������������
+     * &lt;br&gt;SET #3, checks #2
+     *
+     * @see &lt;a href=&quot;https://confluence.customs.net.ua/pages/viewpage.action?pageId=6357353&quot;&gt;Base checks&lt;/a&gt;
+     */
+    public void checkDeclarantIsActiveAndHaveSubject(Long declarantId, Long subjectId) {
+<span class="fc" id="L25">        var represent = representRepository.findByDeclarant_IdAndStatehoodSubject_Id(declarantId, subjectId)</span>
+<span class="fc" id="L26">            .orElseThrow((() -&gt; {</span>
+<span class="nc" id="L27">                log.error(&quot;There is no current represent with declarantId={} and subjectId={}&quot;, declarantId, subjectId);</span>
+<span class="nc" id="L28">                return new ValidationException(&quot;error.subjectRepresent.wrongStatus&quot;);</span>
+            }));
+
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (represent.getSubjectRepresentStatus() != StatehoodSubjectRepresentStatus.ACTIVE) {</span>
+<span class="nc" id="L32">            log.error(&quot;Current represent with id={} has status={} but not ACTIVE status&quot;, represent.getId(), represent.getSubjectRepresentStatus());</span>
+<span class="nc" id="L33">            throw new ValidationException(&quot;error.subjectRepresent.wrongStatus&quot;);</span>
+        }
+<span class="fc" id="L35">    }</span>
+
+    public void checkNoRepresentHasGroup(String groupCode) {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (representRepository.findAllForGroup(groupCode).size() &gt; 0)</span>
+<span class="fc" id="L39">            throw new ValidationException(&quot;error.privilegeGroup.remainsLinkedWithSubject&quot;);</span>
+<span class="fc" id="L40">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,16 @@
+code;status;is_global;full_name_ukr;full_name_eng;name_in_directory_service;privilege_group_type;statehood_subject_id;central_executive_authority_id;created_date;last_modified_date;created_by;last_modified_by
+GR_V1_LEGAL_ENTITY;ACTIVE;true;Повний доступ;Full Access;;LEGAL_ENTITY;null;null;2020-12-12;2020-12-12;system;system
+GR_V1_DMSU;ACTIVE;true;Повний доступ;Full Access;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V2_DMSU;ACTIVE;true;Брокери перегляд;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V3_DMSU;ACTIVE;true;Брокери, санкції;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V4_DMSU;ACTIVE;true;Реєстрація заяв, МС;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V5_DMSU;ACTIVE;true;Відповідальна особа за розгляд заяв, МС;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V6_DMSU;ACTIVE;true;Керівник відповідальний за розгляд заяв МС;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V7_DMSU;ACTIVE;true;Виконавець відповідальний за розгляд заяв МС;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V8_DMSU;ACTIVE;true;МС, санкції;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V9_DMSU;ACTIVE;true;МС, перегляд;;;DMSU;null;null;2020-12-12;2020-12-12;system;system
+GR_V1_CEA;ACTIVE;true;Адміністратор Держкомтелерадіо;;;CEA;null;1;2020-12-12;2020-12-12;system;system
+GR_V2_CEA;ACTIVE;true;Спеціаліст Держкомтелерадіо;;;CEA;null;1;2020-12-12;2020-12-12;system;system
+GR_V3_CEA;ACTIVE;true;Адміністратор Держядеррегулювання;;;CEA;null;2;2020-12-12;2020-12-12;system;system
+GR_V4_CEA;ACTIVE;true;Спеціаліст Держядеррегулювання;;;CEA;null;2;2020-12-12;2020-12-12;system;system
+GR_V5_CEA;ACTIVE;true;Керівник Держядеррегулювання;;;CEA;null;2;2020-12-12;2020-12-12;system;system

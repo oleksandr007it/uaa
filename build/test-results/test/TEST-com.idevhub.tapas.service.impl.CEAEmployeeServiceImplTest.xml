@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:25" hostname="iMac-Aleksandr-2.local" time="0.133">
+  <properties/>
+  <testcase name="testSaveEmployee()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.036"/>
+  <testcase name="testDeleteEmployee()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.007"/>
+  <testcase name="testGetCeaEmployeeContext()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.007"/>
+  <testcase name="testGetCeaUserMainInfo()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.007"/>
+  <testcase name="testFindAll()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.032"/>
+  <testcase name="testGetById()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.008"/>
+  <testcase name="testGetAllActiveCeaEmployeeHasAuth()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.009"/>
+  <testcase name="testGetCurrentContext()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.006"/>
+  <testcase name="testGetDepartmentHead()" classname="com.idevhub.tapas.service.impl.CEAEmployeeServiceImplTest" time="0.008"/>
+  <system-out><![CDATA[2021-02-09 22:44:25.352 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Trying to save cea(edrpou=code) employee (id=0)...
+2021-02-09 22:44:25.353 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Getting initiator context and check privilege code V2_1_3
+2021-02-09 22:44:25.353 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get current CEAEmployee context
+2021-02-09 22:44:25.365 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Trying to delete cea employee with id=0...
+2021-02-09 22:44:25.365 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Getting initiator context and check privilege code V2_1_4
+2021-02-09 22:44:25.366 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get current CEAEmployee context
+2021-02-09 22:44:25.374 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Trying to get employee by user id=0 and cea code=ceaCode
+2021-02-09 22:44:25.392 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get all CEAEmployees by pageable and criteria
+2021-02-09 22:44:25.393 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Getting initiator context and check privilege code V2_1_1
+2021-02-09 22:44:25.393 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get current CEAEmployee context
+2021-02-09 22:44:25.425 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Trying to get cea employee with id=0...
+2021-02-09 22:44:25.426 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Getting initiator context and check privilege code V2_1_2
+2021-02-09 22:44:25.426 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get current CEAEmployee context
+2021-02-09 22:44:25.434 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Trying to get active cea employees that has privilegeCode=V1_1_1
+2021-02-09 22:44:25.434 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Getting initiator context and check privilege code V2_1_1
+2021-02-09 22:44:25.435 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get current CEAEmployee context
+2021-02-09 22:44:25.444 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get current CEAEmployee context
+2021-02-09 22:44:25.452 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Trying to get head of cea department with id=0...
+2021-02-09 22:44:25.453 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Getting initiator context and check privilege code V2_1_2
+2021-02-09 22:44:25.453 DEBUG 7952 --- [    Test worker] c.i.t.s.impl.CEAEmployeeServiceImpl      : Request to get current CEAEmployee context
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

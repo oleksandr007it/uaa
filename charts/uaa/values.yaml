@@ -1,0 +1,49 @@
+replicaCount: 1
+
+image:
+  repository: registry-docker.customs.net.ua/k8s/uaa
+  tag: ""
+  pullPolicy: IfNotPresent
+imagePullSecrets:
+  - name: gitlab
+nameOverride: "uaa"
+fullnameOverride: "uaa"
+
+podAnnotations:
+  prometheus.io/path: /management/prometheus
+  prometheus.io/port: "9999"
+  prometheus.io/scrape: "true"
+
+serviceAccount:
+  create: true
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 0.5
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: 75
+
+postgresql:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

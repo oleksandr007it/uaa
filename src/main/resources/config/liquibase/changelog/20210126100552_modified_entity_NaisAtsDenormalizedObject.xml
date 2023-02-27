@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!--
+        Modify the entity NaisAtsDenormalizedObject.
+    -->
+    <changeSet id="20210126100552-Modify nais_ats_denorm_object names column type length" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="nais_ats_denorm_object"/>
+            <columnExists tableName="nais_ats_denorm_object" columnName="search_name"/>
+            <columnExists tableName="nais_ats_denorm_object" columnName="region_name"/>
+            <columnExists tableName="nais_ats_denorm_object" columnName="district_name"/>
+            <columnExists tableName="nais_ats_denorm_object" columnName="locality_name"/>
+            <columnExists tableName="nais_ats_denorm_object" columnName="locality_object_name"/>
+        </preConditions>
+
+        <modifyDataType tableName="nais_ats_denorm_object"
+                        columnName="search_name"
+                        newDataType="varchar(256)"/>
+
+        <modifyDataType tableName="nais_ats_denorm_object"
+                        columnName="region_name"
+                        newDataType="varchar(256)"/>
+
+        <modifyDataType tableName="nais_ats_denorm_object"
+                        columnName="district_name"
+                        newDataType="varchar(256)"/>
+
+        <modifyDataType tableName="nais_ats_denorm_object"
+                        columnName="locality_name"
+                        newDataType="varchar(256)"/>
+
+        <modifyDataType tableName="nais_ats_denorm_object"
+                        columnName="locality_object_name"
+                        newDataType="varchar(256)"/>
+    </changeSet>
+
+    <changeSet id="20210127183114-Increase locality_object_name column type length" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="nais_ats_denorm_object"/>
+            <columnExists tableName="nais_ats_denorm_object" columnName="locality_object_name"/>
+        </preConditions>
+
+        <modifyDataType tableName="nais_ats_denorm_object"
+                        columnName="locality_object_name"
+                        newDataType="varchar(512)"/>
+    </changeSet>
+
+</databaseChangeLog>

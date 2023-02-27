@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!--
+        Modify the entity NaisAtsObject.
+    -->
+    <changeSet id="20210122151152-Modify nais_ats_object table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="nais_ats_object"/>
+        </preConditions>
+
+        <dropTable cascadeConstraints="true" tableName="nais_ats_object"/>
+
+        <createTable tableName="nais_ats_object">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="parent_id" type="bigint"/>
+            <column name="type_level" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_code" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_code" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="koatuu_code" type="varchar(10)"/>
+            <column name="name" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

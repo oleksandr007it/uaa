@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OAuth2ExternalClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.client</a> &gt; <span class="el_source">OAuth2ExternalClient.java</span></div><h1>OAuth2ExternalClient.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.client;
+
+import com.idevhub.tapas.config.ExternalOAuth2AccessProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.*;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+<span class="fc" id="L16">@Slf4j</span>
+public class OAuth2ExternalClient {
+    private final RestTemplate restTemplate;
+    private OAuth2AccessToken oAuth2AccessToken;
+    private final ExternalOAuth2AccessProperties oAuth2Properties;
+
+<span class="fc" id="L22">    public OAuth2ExternalClient(@Qualifier(&quot;vanillaRestTemplate&quot;) RestTemplate restTemplate, ExternalOAuth2AccessProperties oAuth2Properties) {</span>
+<span class="fc" id="L23">        this.restTemplate = restTemplate;</span>
+<span class="fc" id="L24">        this.oAuth2Properties = oAuth2Properties;</span>
+<span class="fc" id="L25">    }</span>
+
+
+    public String getExternalAccessToken() {
+<span class="nc bnc" id="L29" title="All 4 branches missed.">        if (oAuth2AccessToken == null || oAuth2AccessToken.isExpired()) {</span>
+<span class="nc" id="L30">            this.oAuth2AccessToken = tryToGetAccessToken();</span>
+        }
+<span class="nc" id="L32">        return oAuth2AccessToken.getValue();</span>
+    }
+
+    private OAuth2AccessToken tryToGetAccessToken() {
+
+<span class="nc" id="L37">        HttpHeaders reqHeaders = new HttpHeaders();</span>
+<span class="nc" id="L38">        reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);</span>
+<span class="nc" id="L39">        MultiValueMap&lt;String, String&gt; formParams = new LinkedMultiValueMap&lt;&gt;();</span>
+<span class="nc" id="L40">        formParams.set(&quot;client_id&quot;, oAuth2Properties.getClientId());</span>
+<span class="nc" id="L41">        formParams.set(&quot;client_secret&quot;, oAuth2Properties.getClientSecret());</span>
+<span class="nc" id="L42">        formParams.set(&quot;grant_type&quot;, &quot;client_credentials&quot;);</span>
+
+<span class="nc" id="L44">        HttpEntity&lt;MultiValueMap&lt;String, String&gt;&gt; entity = new HttpEntity&lt;&gt;(formParams, reqHeaders);</span>
+<span class="nc" id="L45">        log.debug(&quot;contacting OAuth2 token endpoint to login user&quot;);</span>
+        ResponseEntity&lt;OAuth2AccessToken&gt;
+<span class="nc" id="L47">            responseEntity = restTemplate.postForEntity(getTokenEndpoint(), entity, OAuth2AccessToken.class);</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (responseEntity.getStatusCode() != HttpStatus.OK) {</span>
+<span class="nc" id="L49">            log.debug(&quot;failed to authenticate user with OAuth2 token endpoint, status: {}&quot;, responseEntity.getStatusCodeValue());</span>
+<span class="nc" id="L50">            throw new HttpClientErrorException(responseEntity.getStatusCode());</span>
+        }
+<span class="nc" id="L52">        OAuth2AccessToken accessToken = responseEntity.getBody();</span>
+<span class="nc" id="L53">        return accessToken;</span>
+    }
+
+    protected String getTokenEndpoint() {
+<span class="nc" id="L57">        String tokenEndpointUrl = oAuth2Properties.getAccessTokenUrl();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (tokenEndpointUrl == null) {</span>
+<span class="nc" id="L59">            throw new InvalidClientException(&quot;no token endpoint configured in application properties&quot;);</span>
+        }
+<span class="nc" id="L61">        return tokenEndpointUrl;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

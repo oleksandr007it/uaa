@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CentralExecutiveAuthorityDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.dto</a> &gt; <span class="el_source">CentralExecutiveAuthorityDTO.java</span></div><h1>CentralExecutiveAuthorityDTO.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.dto;
+
+import com.idevhub.tapas.domain.enumeration.CentralExecutiveAuthorityStatus;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Objects;
+
+/**
+ * A DTO for the CentralExecutiveAuthority entity.
+ */
+<span class="fc" id="L14">public class CentralExecutiveAuthorityDTO implements Serializable {</span>
+    private static final long serialVersionUID = 1L;
+
+    private Long id;
+
+    @NotNull
+    private CentralExecutiveAuthorityStatus centralExecutiveAuthorityStatus;
+
+    @NotNull
+    private Instant createdDate;
+
+    @NotNull
+    private Instant lastModifiedDate;
+
+    private Instant deletedAt;
+
+    @NotNull
+    @Size(min = 8, max = 10)
+    private String code;
+
+    @NotNull
+    @Size(max = 512)
+    private String fullNameUkr;
+
+    @Size(max = 512)
+    private String fullNameEng;
+
+    @NotNull
+    @Size(max = 15)
+    private String telNumber;
+
+    @NotNull
+    private String email;
+
+    private String createdBy;
+
+    private String lastModifiedBy;
+
+    private String deletedBy;
+
+    private String addressId;
+
+    public Long getId() {
+<span class="fc" id="L57">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L61">        this.id = id;</span>
+<span class="fc" id="L62">    }</span>
+
+    public CentralExecutiveAuthorityStatus getCentralExecutiveAuthorityStatus() {
+<span class="fc" id="L65">        return centralExecutiveAuthorityStatus;</span>
+    }
+
+    public void setCentralExecutiveAuthorityStatus(CentralExecutiveAuthorityStatus centralExecutiveAuthorityStatus) {
+<span class="fc" id="L69">        this.centralExecutiveAuthorityStatus = centralExecutiveAuthorityStatus;</span>
+<span class="fc" id="L70">    }</span>
+
+    public Instant getCreatedDate() {
+<span class="fc" id="L73">        return createdDate;</span>
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+<span class="fc" id="L77">        this.createdDate = createdDate;</span>
+<span class="fc" id="L78">    }</span>
+
+    public Instant getLastModifiedDate() {
+<span class="fc" id="L81">        return lastModifiedDate;</span>
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+<span class="fc" id="L85">        this.lastModifiedDate = lastModifiedDate;</span>
+<span class="fc" id="L86">    }</span>
+
+    public Instant getDeletedAt() {
+<span class="fc" id="L89">        return deletedAt;</span>
+    }
+
+    public void setDeletedAt(Instant deletedAt) {
+<span class="fc" id="L93">        this.deletedAt = deletedAt;</span>
+<span class="fc" id="L94">    }</span>
+
+    public String getCode() {
+<span class="fc" id="L97">        return code;</span>
+    }
+
+    public void setCode(String code) {
+<span class="fc" id="L101">        this.code = code;</span>
+<span class="fc" id="L102">    }</span>
+
+    public String getFullNameUkr() {
+<span class="fc" id="L105">        return fullNameUkr;</span>
+    }
+
+    public void setFullNameUkr(String fullNameUkr) {
+<span class="fc" id="L109">        this.fullNameUkr = fullNameUkr;</span>
+<span class="fc" id="L110">    }</span>
+
+    public String getFullNameEng() {
+<span class="fc" id="L113">        return fullNameEng;</span>
+    }
+
+    public void setFullNameEng(String fullNameEng) {
+<span class="fc" id="L117">        this.fullNameEng = fullNameEng;</span>
+<span class="fc" id="L118">    }</span>
+
+    public String getTelNumber() {
+<span class="fc" id="L121">        return telNumber;</span>
+    }
+
+    public void setTelNumber(String telNumber) {
+<span class="fc" id="L125">        this.telNumber = telNumber;</span>
+<span class="fc" id="L126">    }</span>
+
+    public String getEmail() {
+<span class="fc" id="L129">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="fc" id="L133">        this.email = email;</span>
+<span class="fc" id="L134">    }</span>
+
+    public String getLastModifiedBy() {
+<span class="fc" id="L137">        return lastModifiedBy;</span>
+    }
+
+    public void setLastModifiedBy(String userLogin) {
+<span class="nc" id="L141">        this.lastModifiedBy = userLogin;</span>
+<span class="nc" id="L142">    }</span>
+
+    public String getDeletedBy() {
+<span class="fc" id="L145">        return deletedBy;</span>
+    }
+
+    public void setDeletedBy(String userLogin) {
+<span class="nc" id="L149">        this.deletedBy = userLogin;</span>
+<span class="nc" id="L150">    }</span>
+
+    public String getAddressId() {
+<span class="fc" id="L153">        return addressId;</span>
+    }
+
+    public void setAddressId(String addressId) {
+<span class="nc" id="L157">        this.addressId = addressId;</span>
+<span class="nc" id="L158">    }</span>
+
+    public String getCreatedBy() {
+<span class="fc" id="L161">        return createdBy;</span>
+    }
+
+    public void setCreatedBy(String createdBy) {
+<span class="nc" id="L165">        this.createdBy = createdBy;</span>
+<span class="nc" id="L166">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L171">            return true;</span>
+        }
+<span class="pc bpc" id="L173" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L174">            return false;</span>
+        }
+
+<span class="fc" id="L177">        CentralExecutiveAuthorityDTO centralExecutiveAuthorityDTO = (CentralExecutiveAuthorityDTO) o;</span>
+<span class="pc bpc" id="L178" title="2 of 4 branches missed.">        if (centralExecutiveAuthorityDTO.getId() == null || getId() == null) {</span>
+<span class="nc" id="L179">            return false;</span>
+        }
+<span class="fc" id="L181">        return Objects.equals(getId(), centralExecutiveAuthorityDTO.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L186">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L191">        return &quot;CentralExecutiveAuthorityDTO{&quot; +</span>
+<span class="fc" id="L192">            &quot;id=&quot; + getId() +</span>
+<span class="fc" id="L193">            &quot;, centralExecutiveAuthorityStatus='&quot; + getCentralExecutiveAuthorityStatus() + &quot;'&quot; +</span>
+<span class="fc" id="L194">            &quot;, createdAt='&quot; + getCreatedDate() + &quot;'&quot; +</span>
+<span class="fc" id="L195">            &quot;, updatedAt='&quot; + getLastModifiedDate() + &quot;'&quot; +</span>
+<span class="fc" id="L196">            &quot;, deletedAt='&quot; + getDeletedAt() + &quot;'&quot; +</span>
+<span class="fc" id="L197">            &quot;, code='&quot; + getCode() + &quot;'&quot; +</span>
+<span class="fc" id="L198">            &quot;, fullNameUkr='&quot; + getFullNameUkr() + &quot;'&quot; +</span>
+<span class="fc" id="L199">            &quot;, fullNameEng='&quot; + getFullNameEng() + &quot;'&quot; +</span>
+<span class="fc" id="L200">            &quot;, telNumber='&quot; + getTelNumber() + &quot;'&quot; +</span>
+<span class="fc" id="L201">            &quot;, email='&quot; + getEmail() + &quot;'&quot; +</span>
+<span class="fc" id="L202">            &quot;, createdBy=&quot; + getCreatedBy() +</span>
+<span class="fc" id="L203">            &quot;, updatedBy='&quot; + getLastModifiedBy() + &quot;'&quot; +</span>
+<span class="fc" id="L204">            &quot;, deletedBy='&quot; + getDeletedBy() + &quot;'&quot; +</span>
+<span class="fc" id="L205">            &quot;, address=&quot; + getAddressId() +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

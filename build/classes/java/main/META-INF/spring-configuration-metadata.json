@@ -1,0 +1,136 @@
+{
+  "groups": [
+    {
+      "name": "application",
+      "type": "com.idevhub.tapas.config.ApplicationProperties",
+      "sourceType": "com.idevhub.tapas.config.ApplicationProperties"
+    },
+    {
+      "name": "external-oauth2-client",
+      "type": "com.idevhub.tapas.config.ExternalOAuth2AccessProperties",
+      "sourceType": "com.idevhub.tapas.config.ExternalOAuth2AccessProperties"
+    },
+    {
+      "name": "kafka",
+      "type": "com.idevhub.tapas.config.KafkaProperties",
+      "sourceType": "com.idevhub.tapas.config.KafkaProperties"
+    },
+    {
+      "name": "spring.datasource.hikari",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.idevhub.tapas.config.CloudDatabaseConfiguration",
+      "sourceMethod": "dataSource(org.springframework.cache.CacheManager)"
+    },
+    {
+      "name": "uaa",
+      "type": "com.idevhub.tapas.config.UaaProperties",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties"
+    },
+    {
+      "name": "uaa.key-store",
+      "type": "com.idevhub.tapas.config.UaaProperties$KeyStore",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties",
+      "sourceMethod": "getKeyStore()"
+    },
+    {
+      "name": "uaa.mail",
+      "type": "com.idevhub.tapas.config.UaaProperties$Mail",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties",
+      "sourceMethod": "getMail()"
+    },
+    {
+      "name": "uaa.web-client-configuration",
+      "type": "com.idevhub.tapas.config.UaaProperties$WebClientConfiguration",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties",
+      "sourceMethod": "getWebClientConfiguration()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "external-oauth2-client.access-token-url",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.ExternalOAuth2AccessProperties"
+    },
+    {
+      "name": "external-oauth2-client.client-id",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.ExternalOAuth2AccessProperties"
+    },
+    {
+      "name": "external-oauth2-client.client-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.ExternalOAuth2AccessProperties"
+    },
+    {
+      "name": "kafka.boot-strap-servers",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.KafkaProperties",
+      "defaultValue": "localhost:9092"
+    },
+    {
+      "name": "kafka.consumer-props",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>",
+      "sourceType": "com.idevhub.tapas.config.KafkaProperties"
+    },
+    {
+      "name": "kafka.producer-props",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>",
+      "sourceType": "com.idevhub.tapas.config.KafkaProperties"
+    },
+    {
+      "name": "uaa.key-store.alias",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$KeyStore",
+      "defaultValue": "selfsigned"
+    },
+    {
+      "name": "uaa.key-store.name",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$KeyStore",
+      "defaultValue": "config\/tls\/keystore.p12"
+    },
+    {
+      "name": "uaa.key-store.password",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$KeyStore",
+      "defaultValue": "password"
+    },
+    {
+      "name": "uaa.mail.confirmation-url",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$Mail",
+      "defaultValue": ""
+    },
+    {
+      "name": "uaa.mail.email-valid-minutes",
+      "type": "java.lang.Integer",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$Mail",
+      "defaultValue": 0
+    },
+    {
+      "name": "uaa.web-client-configuration.access-token-validity-in-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$WebClientConfiguration",
+      "defaultValue": 0
+    },
+    {
+      "name": "uaa.web-client-configuration.client-id",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$WebClientConfiguration",
+      "defaultValue": "web_app"
+    },
+    {
+      "name": "uaa.web-client-configuration.refresh-token-validity-in-seconds-for-remember-me",
+      "type": "java.lang.Integer",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$WebClientConfiguration",
+      "defaultValue": 0
+    },
+    {
+      "name": "uaa.web-client-configuration.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.idevhub.tapas.config.UaaProperties$WebClientConfiguration",
+      "defaultValue": "changeit"
+    }
+  ],
+  "hints": []
+}

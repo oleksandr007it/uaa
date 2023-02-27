@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.KopfgResourceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:44:13" hostname="iMac-Aleksandr-2.local" time="0.176">
+  <properties/>
+  <testcase name="testDeleteKopfg()" classname="com.idevhub.tapas.web.rest.KopfgResourceTest" time="0.164"/>
+  <testcase name="testGetKopfg()" classname="com.idevhub.tapas.web.rest.KopfgResourceTest" time="0.002"/>
+  <testcase name="testUpdateKopfg()" classname="com.idevhub.tapas.web.rest.KopfgResourceTest" time="0.004"/>
+  <testcase name="testCreateKopfg()" classname="com.idevhub.tapas.web.rest.KopfgResourceTest" time="0.002"/>
+  <testcase name="testGetAllKopfgS()" classname="com.idevhub.tapas.web.rest.KopfgResourceTest" time="0.002"/>
+  <system-out><![CDATA[2021-02-09 22:44:13.601 DEBUG 7952 --- [    Test worker] c.idevhub.tapas.web.rest.KopfgResource   : REST request to delete kopfg : 0
+2021-02-09 22:44:13.607 DEBUG 7952 --- [    Test worker] c.idevhub.tapas.web.rest.KopfgResource   : REST request to get kopfg : 0
+2021-02-09 22:44:13.608 DEBUG 7952 --- [    Test worker] c.idevhub.tapas.web.rest.KopfgResource   : REST request to update Kopfg : KopfgDTO{id=0, code=0, name='name', validUntil='1970-01-01T00:00:00Z', previousCodes='previousCodes'}
+2021-02-09 22:44:13.613 DEBUG 7952 --- [    Test worker] c.idevhub.tapas.web.rest.KopfgResource   : REST request to save Kopfg : KopfgDTO{id=null, code=0, name='name', validUntil='1970-01-01T00:00:00Z', previousCodes='previousCodes'}
+2021-02-09 22:44:13.615 DEBUG 7952 --- [    Test worker] c.idevhub.tapas.web.rest.KopfgResource   : REST request to get all KopfgS
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

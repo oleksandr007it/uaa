@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.UserNameAuthenticationProviderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:39" hostname="iMac-Aleksandr-2.local" time="0.733">
+  <properties/>
+  <testcase name="testAuthenticate()" classname="com.idevhub.tapas.security.UserNameAuthenticationProviderTest" time="0.724"/>
+  <testcase name="testSupports()" classname="com.idevhub.tapas.security.UserNameAuthenticationProviderTest" time="0.001"/>
+  <testcase name="testAuthenticate_UserDetailsServiceThrowsUsernameNotFoundException()" classname="com.idevhub.tapas.security.UserNameAuthenticationProviderTest" time="0.006"/>
+  <system-out><![CDATA[2021-02-09 22:43:40.567  INFO   --- [    Test worker] c.i.t.s.UserNameAuthenticationProvider   : Authentication success. Authorities: []
+2021-02-09 22:43:40.585  WARN   --- [    Test worker] c.i.t.s.UserNameAuthenticationProvider   : User user not found in DB
+2021-02-09 22:43:40.588  WARN   --- [    Test worker] o.s.s.c.bcrypt.BCryptPasswordEncoder     : Empty encoded password
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

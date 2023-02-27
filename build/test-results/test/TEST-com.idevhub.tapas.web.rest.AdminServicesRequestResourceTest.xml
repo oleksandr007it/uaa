@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:42" hostname="iMac-Aleksandr-2.local" time="0.288">
+  <properties/>
+  <testcase name="testSendRequestApproveEmail()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.255"/>
+  <testcase name="testGetAdminServiceRequestData()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.004"/>
+  <testcase name="testGetASRWarehouseUpdateData()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.002"/>
+  <testcase name="testSendRequestRevocationEmail()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.004"/>
+  <testcase name="testGetASRBrokerageUpdateData()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.003"/>
+  <testcase name="testSendRequestReissueEmail()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.001"/>
+  <testcase name="testGetDataToApproveRequest()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.002"/>
+  <testcase name="testSendRequestSuspenseEmail()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.001"/>
+  <testcase name="testGetASRWarehouseCreateData()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.002"/>
+  <testcase name="testGetASRBrokerageCreateData()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.002"/>
+  <testcase name="testGetCurrentUserAdminServiceRequestData()" classname="com.idevhub.tapas.web.rest.AdminServicesRequestResourceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

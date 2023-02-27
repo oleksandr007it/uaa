@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserIdTokenEnhancer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security</a> &gt; <span class="el_source">UserIdTokenEnhancer.java</span></div><h1>UserIdTokenEnhancer.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security;
+
+import lombok.val;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.stereotype.Component;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static com.idevhub.tapas.security.AuthoritiesConstants.USER_ID_KEY;
+
+@Component
+<span class="fc" id="L16">public class UserIdTokenEnhancer implements TokenEnhancer {</span>
+
+
+    @Override
+    public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+<span class="fc" id="L21">        addClaims((DefaultOAuth2AccessToken) accessToken, authentication);</span>
+<span class="fc" id="L22">        return accessToken;</span>
+    }
+
+    private void addClaims(DefaultOAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+<span class="pc bpc" id="L26" title="2 of 4 branches missed.">        Map&lt;String, Object&gt; additionalInformation = accessToken.getAdditionalInformation() != null &amp;&amp; !accessToken.getAdditionalInformation().isEmpty()</span>
+<span class="nc" id="L27">            ? accessToken.getAdditionalInformation()</span>
+<span class="fc" id="L28">            : new LinkedHashMap&lt;&gt;();</span>
+
+<span class="fc" id="L30">        addUserIdClaim(additionalInformation, authentication);</span>
+
+<span class="fc" id="L32">        accessToken.setAdditionalInformation(additionalInformation);</span>
+<span class="fc" id="L33">    }</span>
+
+    private void addUserIdClaim(Map&lt;String, Object&gt; additionalInformation, OAuth2Authentication authentication) {
+<span class="fc" id="L36">        val principal = authentication.getPrincipal();</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (!(principal instanceof CustomUserDetails)) return;</span>
+<span class="fc" id="L38">        val currentUserId = ((CustomUserDetails) principal).getUsetId();</span>
+<span class="fc" id="L39">        additionalInformation.put(USER_ID_KEY, currentUserId);</span>
+<span class="fc" id="L40">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

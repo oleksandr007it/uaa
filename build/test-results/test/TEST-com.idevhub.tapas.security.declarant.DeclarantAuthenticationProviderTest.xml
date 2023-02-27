@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.declarant.DeclarantAuthenticationProviderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:40" hostname="iMac-Aleksandr-2.local" time="0.373">
+  <properties/>
+  <testcase name="testAuthenticate()" classname="com.idevhub.tapas.security.declarant.DeclarantAuthenticationProviderTest" time="0.188"/>
+  <testcase name="testSupports()" classname="com.idevhub.tapas.security.declarant.DeclarantAuthenticationProviderTest" time="0.002"/>
+  <testcase name="testAuthenticate_ThrowsAuthenticationException()" classname="com.idevhub.tapas.security.declarant.DeclarantAuthenticationProviderTest" time="0.183"/>
+  <system-out><![CDATA[2021-02-09 22:43:40.949  INFO   --- [    Test worker] .i.t.s.d.DeclarantAuthenticationProvider : Start authenticate declaranprovider
+2021-02-09 22:43:40.949  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:41.131  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start authenticate checkAuthorities
+2021-02-09 22:43:41.132  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : test Authentication success. Authorities: []
+2021-02-09 22:43:41.138  INFO   --- [    Test worker] .i.t.s.d.DeclarantAuthenticationProvider : Start authenticate declaranprovider
+2021-02-09 22:43:41.139  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start checkUserInfo
+2021-02-09 22:43:41.316  INFO   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Start authenticate checkAuthorities
+2021-02-09 22:43:41.317 ERROR   --- [    Test worker] c.i.t.s.BaseAuthenticationProvider       : Can not have Authority ROLE_DECLARANT for Authorization
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

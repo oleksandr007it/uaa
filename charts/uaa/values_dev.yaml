@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: registry-docker.customs.net.ua/k8s/uaa
+  tag: dev
+  pullPolicy: Always
+ingress:
+  enabled: false
+
+podAnnotations:
+  prometheus.io/path: /management/prometheus
+  prometheus.io/port: "9999"
+  prometheus.io/scrape: "true"
+
+autoscaling:
+  enabled: false
+
+imagePullSecrets:
+  - name: gitlab
+nameOverride: "uaa"
+fullnameOverride: "uaa"
+
+postgresql:
+  enabled: true
+  nameOverride: "postgresql"
+  postgresqlUsername: "uaa"
+  postgresqlPassword: "uaa"
+  postgresqlDatabase: "uaa"
+  persistence:
+    enabled: true
+
+serviceAccount:
+  create: true

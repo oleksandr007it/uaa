@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddressResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.web.rest</a> &gt; <span class="el_source">AddressResource.java</span></div><h1>AddressResource.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.web.rest;
+
+import com.idevhub.tapas.service.AddressService;
+import com.idevhub.tapas.service.dto.AddressDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * REST controller for managing Address.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class AddressResource {
+
+    private static final String ENTITY_NAME = &quot;address&quot;;
+<span class="fc" id="L27">    private final Logger log = LoggerFactory.getLogger(AddressResource.class);</span>
+    private final AddressService addressService;
+    @Value(&quot;${jhipster.clientApp.name}&quot;)
+    private String APPLICATION_NAME;
+
+<span class="fc" id="L32">    public AddressResource(AddressService addressService) {</span>
+<span class="fc" id="L33">        this.addressService = addressService;</span>
+<span class="fc" id="L34">    }</span>
+
+    /**
+     * GET  /addresses : get all the addresses.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of addresses in body
+     */
+    @GetMapping(&quot;/addresses&quot;)
+    @Timed
+    public List&lt;AddressDTO&gt; getAllAddresses() {
+<span class="fc" id="L44">        log.debug(&quot;REST request to get all Addresses&quot;);</span>
+<span class="fc" id="L45">        return addressService.findAll();</span>
+    }
+
+    /**
+     * GET  /addresses/:id : get the &quot;id&quot; address.
+     *
+     * @param id the id of the addressDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the addressDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/addresses/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;AddressDTO&gt; getAddress(@PathVariable String id) {
+<span class="fc" id="L57">        log.debug(&quot;REST request to get Address : {}&quot;, id);</span>
+<span class="fc" id="L58">        Optional&lt;AddressDTO&gt; addressDTO = addressService.findOne(id);</span>
+<span class="fc" id="L59">        return ResponseUtil.wrapOrNotFound(addressDTO);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

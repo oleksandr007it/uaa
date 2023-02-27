@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatehoodSubjectServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.impl</a> &gt; <span class="el_source">StatehoodSubjectServiceImpl.java</span></div><h1>StatehoodSubjectServiceImpl.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.impl;
+
+import com.idevhub.tapas.domain.*;
+import com.idevhub.tapas.domain.address.Address;
+import com.idevhub.tapas.domain.constants.UserStatus;
+import com.idevhub.tapas.domain.enumeration.AccountDetailsStatus;
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentStatus;
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentType;
+import com.idevhub.tapas.repository.AddressRepository;
+import com.idevhub.tapas.repository.KopfgRepository;
+import com.idevhub.tapas.repository.StatehoodSubjectRepository;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.security.SecurityUtils;
+import com.idevhub.tapas.service.*;
+import com.idevhub.tapas.service.criteria.StatehoodSubjectCriteria;
+import com.idevhub.tapas.service.criteria.StatehoodSubjectSpecificationHelper;
+import com.idevhub.tapas.service.dto.*;
+import com.idevhub.tapas.service.errors.UserNotFoundException;
+import com.idevhub.tapas.service.feign.IntegrationEDRClient;
+import com.idevhub.tapas.service.feign.RemoteCryptographyServiceClient;
+import com.idevhub.tapas.service.mapper.StatehoodSubjectMapper;
+import com.idevhub.tapas.service.utils.CompareUtils;
+import com.idevhub.tapas.service.utils.CryptoUtils;
+import com.idevhub.tapas.service.utils.StringTransformUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ua.idevhub.dto.SignerInfo;
+
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Service Implementation for managing StatehoodSubject.
+ */
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class StatehoodSubjectServiceImpl implements StatehoodSubjectService {
+
+    private final Logger log = LoggerFactory.getLogger(StatehoodSubjectServiceImpl.class);
+
+    private final StatehoodSubjectRepository statehoodSubjectRepository;
+    private final StatehoodSubjectMapper statehoodSubjectMapper;
+    private final EmailConfirmationService emailConfirmationService;
+    private final StatehoodSubjectRepresentService statehoodSubjectRepresentService;
+    private final MailService mailService;
+    private final StatehoodSubjectSpecificationHelper specificationHelper;
+    private final StatehoodSubjectRepresentLookupService statehoodSubjectRepresentLookupService;
+    private final AddressRepository addressRepository;
+    private final RemoteCryptographyServiceClient remoteCryptographyServiceClient;
+    private final UserRepository userRepository;
+    private final IntegrationEDRClient integrationEDRClient;
+    private final KopfgRepository kopfgRepository;
+
+    /**
+     * Save a statehoodSubject.
+     *
+     * @param inputDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public StatehoodSubjectDTO save(StatehoodSubjectCreateDTO inputDTO) {
+<span class="nc" id="L74">        log.debug(&quot;Request to save StatehoodSubject : {}&quot;, inputDTO);</span>
+
+<span class="nc" id="L76">        StatehoodSubject statehoodSubject = statehoodSubjectMapper.toEntity(inputDTO);</span>
+<span class="nc" id="L77">        AddressSaveDTO addressSaveDTO = getAddress(inputDTO.getLegalAddressId(), inputDTO.getActualAddressId(), inputDTO.getIsActualSameAsLegalAddress());</span>
+
+<span class="nc" id="L79">        statehoodSubject.setActualAddress(addressSaveDTO.getActual());</span>
+<span class="nc" id="L80">        statehoodSubject.setLegalAddress(addressSaveDTO.getLegal());</span>
+
+<span class="nc" id="L82">        statehoodSubject.setCreatedAt(Instant.now());</span>
+<span class="nc" id="L83">        statehoodSubject.setAccountDetailsStatus(AccountDetailsStatus.NOT_FULL);</span>
+<span class="nc" id="L84">        statehoodSubject.setIsEmailApproved(false);</span>
+
+<span class="nc" id="L86">        statehoodSubject = statehoodSubjectRepository.save(statehoodSubject);</span>
+
+<span class="nc" id="L88">        return statehoodSubjectMapper.toDto(statehoodSubject);</span>
+    }
+
+    @Data
+    @AllArgsConstructor
+    private class AddressSaveDTO {
+        Address actual;
+        Address legal;
+    }
+
+    private AddressSaveDTO getAddress(String legalAddressId, String actualAddressId, Boolean isActualSameAsLegalAddress) {
+        Address actual;
+<span class="fc" id="L100">        Address legal =</span>
+<span class="fc" id="L101">            addressRepository.findById(legalAddressId)</span>
+<span class="pc" id="L102">                .orElseThrow(() -&gt; new RuntimeException(&quot;Address with id: &quot; +</span>
+                    legalAddressId + &quot; not found!&quot;));
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (isActualSameAsLegalAddress)</span>
+<span class="nc" id="L105">            actual = legal;</span>
+        else
+<span class="fc" id="L107">            actual = addressRepository.findById(actualAddressId)</span>
+<span class="pc" id="L108">                .orElseThrow(() -&gt; new RuntimeException(&quot;Address with id: &quot; +</span>
+                    actualAddressId + &quot; not found!&quot;));
+
+<span class="fc" id="L111">        AddressSaveDTO addressSaveDTO = new AddressSaveDTO(actual, legal);</span>
+<span class="fc" id="L112">        return addressSaveDTO;</span>
+    }
+
+    @Override
+    public StatehoodSubjectDTO update(StatehoodSubjectDTO inputDTO) {
+<span class="fc" id="L117">        log.debug(&quot;Request to update StatehoodSubject : {}&quot;, inputDTO);</span>
+
+        // StatehoodSubject statehoodSubject = statehoodSubjectMapper.toEntity(inputDTO);
+<span class="fc" id="L120">        Long id = inputDTO.getId();</span>
+<span class="fc" id="L121">        Long currentUserId = SecurityUtils.getCurrentUserIdIfExists();</span>
+<span class="pc" id="L122">        StatehoodSubject statehoodSubject = statehoodSubjectRepository.findById(id).orElseThrow(() -&gt; new RuntimeException(&quot;StatehoodSubject with id:&quot; + id + &quot; NOT FOUND!!!&quot;));</span>
+<span class="fc" id="L123">        Boolean isActualSameAsLegalAddress = inputDTO.getActualSameAsLegalAddress();</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (! isActualSameAsLegalAddress.equals(statehoodSubject.isIsActualSameAsLegalAddress())) {</span>
+<span class="fc" id="L125">            statehoodSubject.setIsActualSameAsLegalAddress(isActualSameAsLegalAddress);</span>
+<span class="fc" id="L126">            String legalId = inputDTO.getLegalAddress().getId();</span>
+<span class="fc" id="L127">            String actualAddressId = inputDTO.getActualAddress().getId();</span>
+<span class="fc" id="L128">            AddressSaveDTO addressSaveDTO = getAddress(legalId, actualAddressId, isActualSameAsLegalAddress);</span>
+<span class="fc" id="L129">            statehoodSubject.setActualAddress(addressSaveDTO.getActual());</span>
+<span class="fc" id="L130">            statehoodSubject.setLegalAddress(addressSaveDTO.getLegal());</span>
+        }
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (inputDTO.getTelNumber() != null)</span>
+<span class="fc" id="L133">            statehoodSubject.setTelNumber(inputDTO.getTelNumber());</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (inputDTO.getEori() != null)</span>
+<span class="fc" id="L135">            statehoodSubject.setEori(inputDTO.getEori());</span>
+<span class="pc bpc" id="L136" title="2 of 4 branches missed.">        if (inputDTO.getEmail() != null &amp;&amp; !inputDTO.getEmail().equals(statehoodSubject.getEmail())) {</span>
+<span class="fc" id="L137">            statehoodSubject.setEmail(inputDTO.getEmail());</span>
+<span class="fc" id="L138">            statehoodSubject.setIsEmailApproved(false);</span>
+<span class="fc" id="L139">            statehoodSubject.setAccountDetailsStatus(AccountDetailsStatus.FULL_NOT_CONFIRMED);</span>
+        }
+<span class="fc" id="L141">        statehoodSubject.setUpdatedAt(Instant.now());</span>
+<span class="fc" id="L142">        statehoodSubject.setUpdatedBy(currentUserId.toString());</span>
+<span class="fc" id="L143">        statehoodSubject = statehoodSubjectRepository.save(statehoodSubject);</span>
+
+<span class="fc" id="L145">        return statehoodSubjectMapper.toDto(statehoodSubject);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page&lt;StatehoodSubjectDTO&gt; findAll(Pageable pageable,
+                                             StatehoodSubjectCriteria criteria) {
+<span class="nc" id="L152">        log.debug(&quot;Request to get all StatehoodSubjects&quot;);</span>
+
+<span class="nc" id="L154">        Specification&lt;StatehoodSubject&gt; specification =</span>
+<span class="nc" id="L155">            specificationHelper.createSpecification(criteria);</span>
+
+<span class="nc" id="L157">        return statehoodSubjectRepository.findAll(specification, pageable)</span>
+<span class="nc" id="L158">            .map(statehoodSubjectMapper::toDto);</span>
+    }
+
+
+    /**
+     * Get one statehoodSubject by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public StatehoodSubjectDTO findOne(Long id) {
+<span class="nc" id="L171">        log.debug(&quot;Request to get StatehoodSubject : {}&quot;, id);</span>
+
+<span class="nc" id="L173">        Long currentUserId = SecurityUtils.getCurrentUserIdIfExists();</span>
+
+<span class="nc" id="L175">        StatehoodSubjectRepresent represent =</span>
+<span class="nc" id="L176">            statehoodSubjectRepresentService.findByDeclarantIdAndStatehoodSubjectId(currentUserId, id)</span>
+<span class="nc" id="L177">                .orElseThrow(() -&gt; {</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                    if (statehoodSubjectRepository.findByIdAndSubjectStatusNot(id, UserStatus.DELETED).isEmpty())</span>
+<span class="nc" id="L179">                        return new RuntimeException(&quot;StatehoodSubject with id:&quot; + id + &quot; NOT FOUND!!!&quot;);</span>
+
+<span class="nc" id="L181">                    return new RuntimeException(&quot;You don't have rights to get any info about subjects with id:&quot; + id);</span>
+                });
+
+<span class="nc" id="L184">        return statehoodSubjectMapper.toDto(represent.getStatehoodSubject());</span>
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public StatehoodSubject findOneById(Long id) {
+<span class="fc" id="L191">        log.debug(&quot;Request to get StatehoodSubject by ID : {}&quot;, id);</span>
+
+<span class="pc" id="L193">        return statehoodSubjectRepository.findById(id).orElseThrow(() -&gt; new RuntimeException(&quot;StatehoodSubject with id:&quot; + id + &quot; NOT FOUND!!!&quot;));</span>
+
+    }
+
+
+    /**
+     * Delete the statehoodSubject by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="nc" id="L205">        log.debug(&quot;Request to delete StatehoodSubject : {}&quot;, id);</span>
+<span class="nc" id="L206">        Optional&lt;StatehoodSubject&gt; target = statehoodSubjectRepository.findById(id);</span>
+
+        //todo change to customize exception
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (target.isEmpty())</span>
+<span class="nc" id="L210">            throw new RuntimeException(&quot;Statehood Subject with id : &quot; + id + &quot; NOT FOUND!!!&quot;);</span>
+
+<span class="nc" id="L212">        Optional&lt;String&gt; currentUserLoginOpt = SecurityUtils.getCurrentUserLogin();</span>
+
+        //todo change to customize exception
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        if (currentUserLoginOpt.isEmpty())</span>
+<span class="nc" id="L216">            throw new RuntimeException(&quot;You need to be logged in!!!&quot;);</span>
+
+<span class="nc" id="L218">        target.get().setDeletedAt(Instant.now());</span>
+<span class="nc" id="L219">        target.get().setDeletedBy(currentUserLoginOpt.get());</span>
+
+<span class="nc" id="L221">        statehoodSubjectRepository.save(target.get());</span>
+<span class="nc" id="L222">    }</span>
+
+    @Override
+    public void sendSubjectConfirmationEmail(StatehoodSubjectSendConfirmEmailDTO inputData) {
+
+<span class="nc" id="L227">        StatehoodSubjectRepresent represent =</span>
+<span class="nc" id="L228">            statehoodSubjectRepresentLookupService.tryToGetActiveRepresent(SecurityUtils.getCurrentUserIdIfExists(), inputData.getStatehoodSubjectId());</span>
+
+<span class="nc" id="L230">        String htmlTemplateName = &quot;statehoodSubjectEmailConfimEmail&quot;;</span>
+
+<span class="nc" id="L232">        StatehoodSubject statehoodSubject = represent.getStatehoodSubject();</span>
+
+<span class="nc" id="L234">        EmailConfirmation confirmation =</span>
+<span class="nc" id="L235">            emailConfirmationService.save(represent.getDeclarant(), htmlTemplateName, inputData.getEmail(), statehoodSubject);</span>
+
+<span class="nc" id="L237">        mailService.sendStatehoodSubjectEmailConfirmationEmail(confirmation, htmlTemplateName, statehoodSubject.getSubjectName());</span>
+<span class="nc" id="L238">    }</span>
+
+
+    private static final String EDR_NOT_ACTIVE = &quot;StatehoodSubject validation Error not found  active StatehoodSubject from  EDR&quot;;
+    private static final String NOT_FOUND_DETAILS = &quot;Not found details  about statehoodSubject&quot;;
+
+
+    @Override
+<span class="fc" id="L246">    @SneakyThrows</span>
+    public SubjectInfoForAdd getActiveSubjectsByCodeOrPassport(String codeOrPassport) {
+<span class="fc" id="L248">        Optional&lt;StatehoodSubject&gt; optionalStatehoodSubject = statehoodSubjectRepository.findBySubjectCodeAndSubjectStatusNot(codeOrPassport, UserStatus.DELETED);</span>
+<span class="fc" id="L249">        SubjectInfoForAdd subjectInfoForAdd = new SubjectInfoForAdd();</span>
+
+
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (optionalStatehoodSubject.isPresent()) {</span>
+<span class="fc" id="L253">            StatehoodSubject statehoodSubject = optionalStatehoodSubject.get();</span>
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">            if (validationAndSynchroniseInternalStatehoodSubject(statehoodSubject)) {</span>
+<span class="fc" id="L255">                subjectInfoForAdd.setSubjectName(statehoodSubject.getSubjectName());</span>
+<span class="fc" id="L256">                subjectInfoForAdd.setSubjectCode(statehoodSubject.getSubjectCode());</span>
+<span class="fc" id="L257">                subjectInfoForAdd.setInternal(true);</span>
+            }
+<span class="fc" id="L259">        } else {</span>
+            try {
+<span class="fc" id="L261">                Optional&lt;SubjectMainInfo&gt; optionalSubjectMainInfo = integrationEDRClient.getActiveSubjectInfoByCode(codeOrPassport);</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">                if (optionalSubjectMainInfo.isPresent()) {</span>
+<span class="fc" id="L263">                    subjectInfoForAdd.setSubjectName(optionalSubjectMainInfo.get().getName());</span>
+<span class="fc" id="L264">                    subjectInfoForAdd.setSubjectCode(optionalSubjectMainInfo.get().getCode());</span>
+<span class="fc" id="L265">                    subjectInfoForAdd.setInternal(false);</span>
+                } else {
+<span class="fc" id="L267">                    log.error(EDR_NOT_ACTIVE);</span>
+<span class="fc" id="L268">                    throw new RuntimeException(EDR_NOT_ACTIVE);</span>
+                }
+<span class="fc" id="L270">            } catch (Exception e) {</span>
+<span class="fc" id="L271">                log.error(&quot;Active statehoodSubject with code: {}  NOT FOUND!!!&quot;, codeOrPassport);</span>
+<span class="fc" id="L272">                throw new RuntimeException(&quot;Active statehoodSubject with code: &quot; + codeOrPassport + &quot; NOT FOUND!!!&quot;);</span>
+<span class="fc" id="L273">            }</span>
+
+        }
+
+<span class="fc" id="L277">        String signForApproveBase64 = CryptoUtils.makeBase64ForSign(subjectInfoForAdd.getSubjectCode(), subjectInfoForAdd.getSubjectName(), &quot;confirmLegalEntityRepresentation&quot;);</span>
+<span class="fc" id="L278">        subjectInfoForAdd.setRawDataBase64(signForApproveBase64);</span>
+<span class="fc" id="L279">        return subjectInfoForAdd;</span>
+    }
+
+    public Long getCurrentUserId() {
+<span class="fc" id="L283">        return SecurityUtils.getCurrentUserIdIfExists();</span>
+    }
+
+    @Override
+    public Long createStatehoodSubjectAndAddRepreseter(SubjectInfoForAdd subjectInfoForAdd) {
+
+
+<span class="fc" id="L290">        String edrpouStatehoodSubject = subjectInfoForAdd.getSubjectCode();</span>
+<span class="fc" id="L291">        SignerInfo signerInfo = CryptoUtils.verifyByData(subjectInfoForAdd.getRawDataBase64(), subjectInfoForAdd.getSignBase64(), remoteCryptographyServiceClient);</span>
+<span class="fc" id="L292">        String edrpouFromSign = signerInfo.getOkpo_();</span>
+<span class="fc" id="L293">        String rnokppFromSign = signerInfo.getGrfl_();</span>
+<span class="fc" id="L294">        String fullNameFromSign = StringTransformUtils.removePunct(signerInfo.getCommon_name_());</span>
+
+
+<span class="fc" id="L297">        Long currentUserId = getCurrentUserId();</span>
+<span class="fc" id="L298">        User currentDeclarant = userRepository.findOneById(currentUserId)</span>
+<span class="pc" id="L299">            .orElseThrow(() -&gt; new UserNotFoundException(&quot;error.user.not.found.by.id&quot;, currentUserId.toString()));</span>
+
+<span class="fc" id="L301">        String declarantFullName = StringTransformUtils.removePunct(currentDeclarant.getFullName());</span>
+<span class="fc" id="L302">        String declarantRnokpp = currentDeclarant.getRnokpp();</span>
+
+<span class="fc" id="L304">        CompareUtils.compareRnokppAndFullName(rnokppFromSign, declarantRnokpp, fullNameFromSign, declarantFullName);</span>
+<span class="fc" id="L305">        CompareUtils.compareRnokppAndeEdrpouStatehoodSubject(rnokppFromSign, edrpouStatehoodSubject, edrpouFromSign);</span>
+
+<span class="fc" id="L307">        Optional&lt;SubjectMainInfo&gt; optionalSubjectMainInfo = integrationEDRClient.getActiveSubjectInfoByCode(edrpouStatehoodSubject);</span>
+
+<span class="pc bpc" id="L309" title="1 of 2 branches missed.">        if (optionalSubjectMainInfo.isEmpty()) {</span>
+<span class="nc" id="L310">            log.error(EDR_NOT_ACTIVE);</span>
+<span class="nc" id="L311">            throw new RuntimeException(EDR_NOT_ACTIVE);</span>
+        }
+
+<span class="fc" id="L314">        SubjectMainInfo subjectMainInfo = optionalSubjectMainInfo.get();</span>
+<span class="fc" id="L315">        Optional&lt;SubjectDTO&gt; optionalSubjectDTO = integrationEDRClient.getSubjectDTODetails(BigInteger.valueOf(subjectMainInfo.getId()));</span>
+
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        if (optionalSubjectDTO.isEmpty()) {</span>
+<span class="nc" id="L318">            log.error(NOT_FOUND_DETAILS);</span>
+<span class="nc" id="L319">            throw new RuntimeException(NOT_FOUND_DETAILS);</span>
+        }
+
+<span class="fc" id="L322">        SubjectDTO subjectDTODatails = optionalSubjectDTO.get();</span>
+<span class="fc" id="L323">        String fullNameFromEdr = StringTransformUtils.removePunct(subjectDTODatails.getName());</span>
+
+<span class="fc bfc" id="L325" title="All 2 branches covered.">        if (!declarantFullName.equals(fullNameFromEdr)) {</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">            if (!iSHead(subjectDTODatails.getHeadFullName(), declarantFullName)) {</span>
+<span class="nc" id="L327">                throw new RuntimeException(&quot;Declarant is not Head or Owner  Company&quot;);</span>
+            }
+        }
+
+        StatehoodSubject statehoodSubject;
+<span class="fc" id="L332">        Optional&lt;StatehoodSubject&gt; optionalStatehoodSubject = statehoodSubjectRepository.findBySubjectCodeAndSubjectStatusNot(edrpouStatehoodSubject, UserStatus.DELETED);</span>
+
+<span class="fc bfc" id="L334" title="All 2 branches covered.">        if (optionalStatehoodSubject.isPresent()) {</span>
+<span class="fc" id="L335">            statehoodSubject = optionalStatehoodSubject.get();</span>
+
+        } else {
+<span class="fc" id="L338">            statehoodSubject = createStatehoodSubject(subjectDTODatails, subjectInfoForAdd, declarantFullName);</span>
+        }
+<span class="fc" id="L340">        statehoodSubjectRepresentService.createRepresenterAndSave(CreateRepresenterDTO.builder().declarant(currentDeclarant).subject(statehoodSubject)</span>
+<span class="fc" id="L341">            .subjectRepresentStatus(StatehoodSubjectRepresentStatus.ACTIVE).subjectRepresentType(StatehoodSubjectRepresentType.CHIEF_EXECUTIVE)</span>
+<span class="fc" id="L342">            .approveSignBase64(subjectInfoForAdd.getSignBase64()).build());</span>
+
+<span class="fc" id="L344">        return statehoodSubject.getId();</span>
+    }
+
+
+    private StatehoodSubject createStatehoodSubject(SubjectDTO subjectDTODatails, SubjectInfoForAdd subjectInfoForAdd, String creator) {
+
+<span class="fc" id="L350">        StatehoodSubject statehoodSubject = new StatehoodSubject();</span>
+<span class="fc" id="L351">        statehoodSubject.setSubjectStatus(UserStatus.ACTIVE);</span>
+<span class="fc" id="L352">        statehoodSubject.setSubjectCode(subjectDTODatails.getCode());</span>
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">        if (subjectInfoForAdd.getEori() != null)</span>
+<span class="nc" id="L354">            statehoodSubject.setEori(subjectInfoForAdd.getEori());</span>
+
+        //TODO Parse  Addres and fill all  values DTO
+<span class="fc" id="L357">        Address address = new Address();</span>
+<span class="fc" id="L358">        address.setCountryCode(&quot;804&quot;);</span>
+
+<span class="fc" id="L360">        address.setPostalCode(subjectDTODatails.getAddressFromEDR().getZip());</span>
+<span class="fc" id="L361">        address.setHouseNumber(subjectDTODatails.getAddressFromEDR().getParts().getHouse());</span>
+<span class="fc" id="L362">        address.setPavilionNumber(subjectDTODatails.getAddressFromEDR().getParts().getBuilding());</span>
+<span class="fc" id="L363">        address.setApartmentNumber(subjectDTODatails.getAddressFromEDR().getParts().getHouse());</span>
+
+<span class="fc" id="L365">        addressRepository.saveAndFlush(address);</span>
+<span class="fc" id="L366">        statehoodSubject.setIsActualSameAsLegalAddress(true);</span>
+<span class="fc" id="L367">        statehoodSubject.setActualAddress(address);</span>
+<span class="fc" id="L368">        statehoodSubject.setLegalAddress(address);</span>
+
+<span class="fc" id="L370">        statehoodSubject.setSubjectShortName(subjectDTODatails.getName());</span>
+<span class="fc" id="L371">        statehoodSubject.setKopfg(createKopfg(subjectDTODatails.getOlfName()));</span>
+<span class="fc" id="L372">        statehoodSubject.setIsEmailApproved(false);</span>
+<span class="fc" id="L373">        statehoodSubject.setEmail(subjectInfoForAdd.getEmail());</span>
+<span class="pc bpc" id="L374" title="1 of 2 branches missed.">        if (subjectInfoForAdd.getTelNumber() != null)</span>
+<span class="fc" id="L375">            statehoodSubject.setTelNumber(subjectInfoForAdd.getTelNumber());</span>
+<span class="fc" id="L376">        statehoodSubject.setAccountDetailsStatus(AccountDetailsStatus.FULL_NOT_CONFIRMED);</span>
+<span class="fc" id="L377">        statehoodSubject.setSubjectName(subjectDTODatails.getName());</span>
+<span class="fc" id="L378">        statehoodSubject.setCreatedAt(Instant.now());</span>
+<span class="fc" id="L379">        statehoodSubject.setCreatedBy(creator);</span>
+<span class="fc" id="L380">        statehoodSubject.setEori(&quot;eori&quot;);</span>
+
+<span class="fc" id="L382">        return statehoodSubjectRepository.saveAndFlush(statehoodSubject);</span>
+    }
+
+    private Kopfg createKopfg(String kopfgName) {
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">        if (kopfgName != null) {</span>
+<span class="fc" id="L387">            Optional&lt;Kopfg&gt; kopfgOptional = kopfgRepository.findByCode(Integer.parseInt(kopfgName));</span>
+<span class="pc bpc" id="L388" title="1 of 2 branches missed.">            if (kopfgOptional.isPresent())</span>
+<span class="fc" id="L389">                return kopfgOptional.get();</span>
+        }
+
+<span class="nc" id="L392">        Optional&lt;Kopfg&gt; kopfgOptional = kopfgRepository.findByCode(910);</span>
+<span class="nc bnc" id="L393" title="All 2 branches missed.">        if (kopfgOptional.isPresent())</span>
+<span class="nc" id="L394">            return kopfgOptional.get();</span>
+
+<span class="nc" id="L396">        Kopfg kopfg = new Kopfg();</span>
+<span class="nc" id="L397">        kopfg.setCode(910);</span>
+<span class="nc" id="L398">        kopfg.setName(&quot;���������������������� - �������������� ����������&quot;);</span>
+<span class="nc" id="L399">        kopfgRepository.saveAndFlush(kopfg);</span>
+<span class="nc" id="L400">        return kopfg;</span>
+    }
+
+
+    private boolean iSHead(List&lt;String&gt; heads, String declarant) {
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">        for (String head : heads) {</span>
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">            if (StringTransformUtils.removePunct(head).equals(declarant)) {</span>
+<span class="fc" id="L407">                return true;</span>
+            }
+<span class="nc" id="L409">        }</span>
+<span class="nc" id="L410">        return false;</span>
+    }
+
+
+    private boolean validationAndSynchroniseInternalStatehoodSubject(StatehoodSubject statehoodSubject) {
+<span class="fc" id="L415">        Optional&lt;SubjectMainInfo&gt; optionalSubjectMainInfo = integrationEDRClient.getActiveSubjectInfoByCode(statehoodSubject.getSubjectCode());</span>
+<span class="pc bpc" id="L416" title="1 of 2 branches missed.">        if (optionalSubjectMainInfo.isEmpty()) {</span>
+//            statehoodSubject.setSubjectStatus(UserStatus.DELETED);
+//            statehoodSubjectRepository.save(statehoodSubject);
+<span class="nc" id="L419">            log.error(EDR_NOT_ACTIVE);</span>
+<span class="nc" id="L420">            throw new RuntimeException(EDR_NOT_ACTIVE);</span>
+<span class="pc bpc" id="L421" title="1 of 2 branches missed.">        } else if (!statehoodSubject.getSubjectStatus().equals(UserStatus.ACTIVE)) {</span>
+<span class="fc" id="L422">            statehoodSubject.setSubjectStatus(UserStatus.ACTIVE);</span>
+<span class="fc" id="L423">            statehoodSubjectRepository.save(statehoodSubject);</span>
+        }
+<span class="fc" id="L425">        return true;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

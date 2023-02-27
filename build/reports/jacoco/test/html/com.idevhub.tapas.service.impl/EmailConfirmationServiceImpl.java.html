@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailConfirmationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.impl</a> &gt; <span class="el_source">EmailConfirmationServiceImpl.java</span></div><h1>EmailConfirmationServiceImpl.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.impl;
+
+import com.idevhub.tapas.config.UaaProperties;
+import com.idevhub.tapas.domain.EmailConfirmation;
+import com.idevhub.tapas.domain.StatehoodSubject;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.domain.constants.PropertyStatus;
+import com.idevhub.tapas.domain.constants.RepoConst;
+import com.idevhub.tapas.domain.enumeration.AccountDetailsStatus;
+import com.idevhub.tapas.domain.enumeration.EmailConfirmationStatus;
+import com.idevhub.tapas.repository.EmailConfirmationRepository;
+import com.idevhub.tapas.repository.StatehoodSubjectRepository;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.service.EmailConfirmationService;
+import com.idevhub.tapas.service.dto.EmailConfirmationDTO;
+import com.idevhub.tapas.service.errors.EmailConfirmationException;
+import com.idevhub.tapas.service.mapper.EmailConfirmationMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Service Implementation for managing EmailConfirmation.
+ */
+@Service
+@Transactional
+public class EmailConfirmationServiceImpl implements EmailConfirmationService {
+
+<span class="fc" id="L39">    private final Logger log = LoggerFactory.getLogger(EmailConfirmationServiceImpl.class);</span>
+
+    private final EmailConfirmationRepository emailConfirmationRepository;
+    private final EmailConfirmationMapper emailConfirmationMapper;
+    private final UserRepository userRepository;
+    private final StatehoodSubjectRepository statehoodSubjectRepository;
+    private final CacheManager cacheManager;
+    private final UaaProperties uaaProperties;
+
+    public EmailConfirmationServiceImpl(EmailConfirmationRepository emailConfirmationRepository,
+                                        EmailConfirmationMapper emailConfirmationMapper,
+                                        UserRepository userRepository,
+                                        StatehoodSubjectRepository statehoodSubjectRepository,
+<span class="fc" id="L52">                                        CacheManager cacheManager, UaaProperties uaaProperties) {</span>
+<span class="fc" id="L53">        this.emailConfirmationRepository = emailConfirmationRepository;</span>
+<span class="fc" id="L54">        this.emailConfirmationMapper = emailConfirmationMapper;</span>
+<span class="fc" id="L55">        this.userRepository = userRepository;</span>
+<span class="fc" id="L56">        this.statehoodSubjectRepository = statehoodSubjectRepository;</span>
+<span class="fc" id="L57">        this.cacheManager = cacheManager;</span>
+<span class="fc" id="L58">        this.uaaProperties = uaaProperties;</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * Save a emailConfirmation.
+     *
+     * @param emailConfirmationDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public EmailConfirmationDTO save(EmailConfirmationDTO emailConfirmationDTO) {
+<span class="fc" id="L69">        log.debug(&quot;Request to save EmailConfirmation : {}&quot;, emailConfirmationDTO);</span>
+<span class="fc" id="L70">        EmailConfirmation emailConfirmation = emailConfirmationMapper.toEntity(emailConfirmationDTO);</span>
+<span class="fc" id="L71">        emailConfirmation = emailConfirmationRepository.save(emailConfirmation);</span>
+<span class="fc" id="L72">        return emailConfirmationMapper.toDto(emailConfirmation);</span>
+    }
+
+    @Override
+    public EmailConfirmation save(User user, String htmlTemplateName, String to, StatehoodSubject statehoodSubject) {
+<span class="fc" id="L77">        log.debug(&quot;Request to save EmailConfirmation using User entity with id: {}&quot;, user.getId());</span>
+<span class="fc" id="L78">        EmailConfirmation emailConfirmation = emailConfirmationMapper.toEntity(user);</span>
+
+<span class="fc" id="L80">        int emailValidMinutes = uaaProperties.getMail().getEmailValidMinutes();</span>
+<span class="fc" id="L81">        Instant validUntil = Instant.now().plus(emailValidMinutes, ChronoUnit.MINUTES);</span>
+
+<span class="fc" id="L83">        emailConfirmation.setHtmlTemplateName(htmlTemplateName);</span>
+<span class="fc" id="L84">        emailConfirmation.setValidUntil(validUntil);</span>
+
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (statehoodSubject == null) {</span>
+<span class="nc" id="L87">            emailConfirmation.setEmail(to);</span>
+<span class="nc" id="L88">            emailConfirmation.setDeclarant(user);</span>
+        } else {
+<span class="fc" id="L90">            emailConfirmation.setEmail(to);</span>
+<span class="fc" id="L91">            emailConfirmation.setStatehoodSubject(statehoodSubject);</span>
+        }
+
+<span class="fc" id="L94">        emailConfirmation = emailConfirmationRepository.save(emailConfirmation);</span>
+
+<span class="fc" id="L96">        return emailConfirmation;</span>
+    }
+
+    /**
+     * Get all the emailConfirmations.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;EmailConfirmationDTO&gt; findAllActive() {
+<span class="fc" id="L107">        log.debug(&quot;Request to get all EmailConfirmations&quot;);</span>
+<span class="fc" id="L108">        return emailConfirmationRepository.findAllByConfirmationStatusIn(Collections.singletonList(EmailConfirmationStatus.ACTIVE)).stream()</span>
+<span class="fc" id="L109">            .map(emailConfirmationMapper::toDto)</span>
+<span class="fc" id="L110">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+
+    /**
+     * Get one emailConfirmation by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;EmailConfirmationDTO&gt; findOne(Long id) {
+<span class="fc" id="L123">        log.debug(&quot;Request to get EmailConfirmation : {}&quot;, id);</span>
+<span class="fc" id="L124">        return emailConfirmationRepository.findById(id)</span>
+<span class="fc" id="L125">            .map(emailConfirmationMapper::toDto);</span>
+    }
+
+    /**
+     * Delete the emailConfirmation by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="fc" id="L135">        log.debug(&quot;Request to delete EmailConfirmation : {}&quot;, id);</span>
+
+<span class="fc" id="L137">        emailConfirmationRepository.deleteById(id);</span>
+<span class="fc" id="L138">    }</span>
+
+    @Override
+    public EmailConfirmationDTO confirmEmail(Long confirmationId, String email, String ipAddress) {
+<span class="fc" id="L142">        log.debug(&quot;Trying to confirm email:&quot; + email + &quot;with confirmation id: &quot; + confirmationId);</span>
+<span class="fc" id="L143">        EmailConfirmation target = emailConfirmationRepository.findOneById(confirmationId)</span>
+<span class="pc" id="L144">            .orElseThrow(() -&gt; new EmailConfirmationException(&quot;error.email.confirm.by.id.not.found&quot;));</span>
+
+<span class="pc bpc" id="L146" title="2 of 4 branches missed.">        if (target.getEmail().equals(email) &amp;&amp; target.getConfirmationStatus() != EmailConfirmationStatus.ACTIVE)</span>
+<span class="nc" id="L147">            throw new EmailConfirmationException(&quot;error.email.confirm.already.used&quot;);</span>
+
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">        if (Instant.now().compareTo(target.getValidUntil()) &gt; 0)</span>
+<span class="nc" id="L150">            throw new EmailConfirmationException(&quot;error.email.confirm.link.not.valid&quot;);</span>
+
+        try {
+<span class="fc" id="L153">            String emailToConfirm = URLDecoder.decode(email, StandardCharsets.UTF_8.toString());</span>
+
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            if (!emailToConfirm.equals(target.getEmail()))</span>
+<span class="nc" id="L156">                throw new EmailConfirmationException(&quot;error.email.confirm.wrong.email&quot;);</span>
+
+<span class="fc" id="L158">            target.setConfirmationStatus(EmailConfirmationStatus.CONFIRMED);</span>
+<span class="fc" id="L159">            target.setApprovedAt(Instant.now());</span>
+<span class="fc" id="L160">            target.setIpAddress(ipAddress);</span>
+
+<span class="fc" id="L162">            target = emailConfirmationRepository.save(target);</span>
+
+<span class="fc" id="L164">            StatehoodSubject subject = target.getStatehoodSubject();</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            if (subject != null) {</span>
+<span class="nc" id="L166">                subject.setEmail(target.getEmail());</span>
+<span class="nc" id="L167">                subject.setIsEmailApproved(true);</span>
+<span class="nc" id="L168">                subject.setAccountDetailsStatus(AccountDetailsStatus.FULL_CONFIRMED);</span>
+<span class="nc" id="L169">                statehoodSubjectRepository.save(subject);</span>
+            } else {
+<span class="fc" id="L171">                User declarant = target.getDeclarant();</span>
+<span class="fc" id="L172">                declarant.setEmail(target.getEmail());</span>
+<span class="fc" id="L173">                declarant.setEmailApprove(true);</span>
+<span class="fc" id="L174">                declarant.setPropertyStatus(PropertyStatus.CONFIRMED);</span>
+<span class="fc" id="L175">                User user = userRepository.save(declarant);</span>
+<span class="fc" id="L176">                this.clearUserCaches(user);</span>
+            }
+
+<span class="fc" id="L179">            log.debug(&quot;Modified and saved EmailConfirmation with id: &quot; + target.getId());</span>
+
+<span class="fc" id="L181">            return emailConfirmationMapper.toDto(target);</span>
+<span class="nc" id="L182">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L183">            log.error(&quot;Got an error during confirming email. err = &quot; + e.getLocalizedMessage());</span>
+<span class="nc" id="L184">            throw new EmailConfirmationException(&quot;error.internal&quot;, e.getLocalizedMessage());</span>
+        }
+    }
+
+    private void clearUserCaches(User user) {
+<span class="fc" id="L189">        Objects.requireNonNull(cacheManager.getCache(RepoConst.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());</span>
+<span class="fc" id="L190">        Objects.requireNonNull(cacheManager.getCache(RepoConst.USERS_BY_ID_CACHE)).evict(user.getId());</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (user.getEmail() != null) {</span>
+<span class="fc" id="L192">            Objects.requireNonNull(cacheManager.getCache(RepoConst.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());</span>
+        }
+<span class="fc" id="L194">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

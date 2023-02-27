@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.mapper</a> &gt; <span class="el_source">UserMapper.java</span></div><h1>UserMapper.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.mapper;
+
+import com.idevhub.tapas.domain.Authority;
+import com.idevhub.tapas.domain.CEADepartment;
+import com.idevhub.tapas.domain.CentralExecutiveAuthority;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.domain.address.Address;
+import com.idevhub.tapas.service.dto.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * Mapper for the entity {@link User} and its DTO called {@link UserDTO}.
+ * &lt;p&gt;
+ * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
+ * support is still in beta, and requires a manual step with an IDE.
+ */
+@Service
+@RequiredArgsConstructor
+public class UserMapper {
+
+    private final AddressMapper addressMapper;
+    private final CEADepartmentMapper ceaDepartmentMapper;
+    private final CentralExecutiveAuthorityMapper ceaMapper;
+
+    public List&lt;UserDTO&gt; usersToUserDTOs(List&lt;User&gt; users) {
+<span class="nc" id="L33">        return users.stream()</span>
+<span class="nc" id="L34">            .filter(Objects::nonNull)</span>
+<span class="nc" id="L35">            .map(this::userToUserDTO)</span>
+<span class="nc" id="L36">            .collect(Collectors.toList());</span>
+    }
+
+    public UserDTO userToUserDTO(User user) {
+<span class="fc" id="L40">        UserDTO targetDto = new UserDTO()</span>
+<span class="fc" id="L41">            .setId(user.getId())</span>
+<span class="fc" id="L42">            .setLogin(user.getLogin())</span>
+<span class="fc" id="L43">            .setFirstName(user.getFirstName())</span>
+<span class="fc" id="L44">            .setLastName(user.getLastName())</span>
+<span class="fc" id="L45">            .setEmail(user.getEmail())</span>
+<span class="fc" id="L46">            .setActivated(user.isActivated())</span>
+<span class="fc" id="L47">            .setLangKey(user.getLangKey())</span>
+<span class="fc" id="L48">            .setUserType(user.getUserType())</span>
+<span class="fc" id="L49">            .setMiddleName(user.getMiddleName())</span>
+<span class="fc" id="L50">            .setFullName(user.getFullName())</span>
+<span class="fc" id="L51">            .setStatus(user.getStatus())</span>
+<span class="fc" id="L52">            .setRnokpp(user.getRnokpp())</span>
+<span class="fc" id="L53">            .setEdrpouCode(user.getEdrpouCode())</span>
+<span class="fc" id="L54">            .setOrg(user.getOrg())</span>
+<span class="fc" id="L55">            .setOrgUnit(user.getOrgUnit())</span>
+<span class="fc" id="L56">            .setPosition(user.getPosition())</span>
+<span class="fc" id="L57">            .setPropertyStatus(user.getPropertyStatus())</span>
+<span class="fc" id="L58">            .setPhoneNumber(user.getPhoneNumber())</span>
+<span class="fc" id="L59">            .setPasportSn(user.getPasportSn())</span>
+<span class="fc" id="L60">            .setPasportIssuedBy(user.getPasportIssuedBy())</span>
+<span class="fc" id="L61">            .setPasportDate(user.getPasportDate())</span>
+<span class="fc" id="L62">            .setEmailApprove(user.getEmailApprove())</span>
+<span class="fc" id="L63">            .setCreatedBy(user.getCreatedBy())</span>
+<span class="fc" id="L64">            .setCreatedDate(user.getCreatedDate())</span>
+<span class="fc" id="L65">            .setLastModifiedBy(user.getLastModifiedBy())</span>
+//            .setLegalAddress(user.getLegalAddress() == null ? null : addressMapper.toDto(user.getLegalAddress()))
+<span class="fc" id="L67">            .setLastModifiedDate(user.getLastModifiedDate())</span>
+
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            .setAuthorities(user.getAuthorities() == null ? null : user.getAuthorities().stream()</span>
+<span class="fc" id="L70">                .map(Authority::getName)</span>
+<span class="fc" id="L71">                .collect(Collectors.toSet()))</span>
+
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            .setCeaDepartment(user.getCeaDepartment() == null ? null : ceaDepartmentMapper.toDto(user.getCeaDepartment()))</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            .setCentralExecutiveAuthority(user.getCentralExecutiveAuthority() == null ? null : ceaMapper.toDto(user.getCentralExecutiveAuthority()));</span>
+
+<span class="fc" id="L76">        return targetDto;</span>
+    }
+
+    public ShortUserDTO userToShortUserDTO(User user) {
+<span class="nc" id="L80">        return ShortUserDTO.builder()</span>
+<span class="nc" id="L81">            .id(user.getId())</span>
+<span class="nc" id="L82">            .rnokpp(user.getRnokpp())</span>
+<span class="nc" id="L83">            .firstName(user.getFirstName())</span>
+<span class="nc" id="L84">            .lastName(user.getLastName())</span>
+<span class="nc" id="L85">            .middleName(user.getMiddleName())</span>
+<span class="nc" id="L86">            .activated(user.isActivated())</span>
+<span class="nc" id="L87">            .status(user.getStatus())</span>
+<span class="nc" id="L88">            .propertyStatus(user.getPropertyStatus())</span>
+<span class="nc" id="L89">            .userType(user.getUserType())</span>
+<span class="nc" id="L90">            .email(user.getEmail())</span>
+<span class="nc" id="L91">            .phoneNumber(user.getPhoneNumber())</span>
+<span class="nc" id="L92">            .pasportSn(user.getPasportSn())</span>
+<span class="nc" id="L93">            .pasportIssuedBy(user.getPasportIssuedBy())</span>
+<span class="nc" id="L94">            .pasportDate(user.getPasportDate())</span>
+<span class="nc" id="L95">            .legalAddress(addressMapper.toDto(user.getLegalAddress()))</span>
+<span class="nc" id="L96">            .build();</span>
+    }
+
+    public List&lt;User&gt; userDTOsToUsers(List&lt;UserDTO&gt; userDTOs) {
+<span class="nc" id="L100">        return userDTOs.stream()</span>
+<span class="nc" id="L101">            .filter(Objects::nonNull)</span>
+<span class="nc" id="L102">            .map(this::userDTOToUser)</span>
+<span class="nc" id="L103">            .collect(Collectors.toList());</span>
+    }
+
+    public User userDTOToUser(UserDTO userDTO) {
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (userDTO == null) {</span>
+<span class="nc" id="L108">            return null;</span>
+        } else {
+<span class="fc" id="L110">            User user = new User();</span>
+<span class="fc" id="L111">            user.setId(userDTO.getId());</span>
+<span class="fc" id="L112">            user.setLogin(userDTO.getLogin());</span>
+<span class="fc" id="L113">            user.setFirstName(userDTO.getFirstName());</span>
+<span class="fc" id="L114">            user.setLastName(userDTO.getLastName());</span>
+<span class="fc" id="L115">            user.setEmail(userDTO.getEmail());</span>
+<span class="fc" id="L116">            user.setActivated(userDTO.isActivated());</span>
+<span class="fc" id="L117">            user.setLangKey(userDTO.getLangKey());</span>
+<span class="fc" id="L118">            user.setUserType(userDTO.getUserType());</span>
+<span class="fc" id="L119">            user.setMiddleName(userDTO.getMiddleName());</span>
+<span class="fc" id="L120">            user.setFullName(userDTO.getFullName());</span>
+<span class="fc" id="L121">            user.setStatus(userDTO.getStatus());</span>
+<span class="fc" id="L122">            user.setRnokpp(userDTO.getRnokpp());</span>
+<span class="fc" id="L123">            user.setEdrpouCode(userDTO.getEdrpouCode());</span>
+<span class="fc" id="L124">            user.setOrg(userDTO.getOrg());</span>
+<span class="fc" id="L125">            user.setOrgUnit(userDTO.getOrgUnit());</span>
+<span class="fc" id="L126">            user.setPosition(userDTO.getPosition());</span>
+<span class="fc" id="L127">            user.setPropertyStatus(userDTO.getPropertyStatus());</span>
+<span class="fc" id="L128">            user.setPhoneNumber(userDTO.getPhoneNumber());</span>
+<span class="fc" id="L129">            user.setPasportSn(userDTO.getPasportSn());</span>
+<span class="fc" id="L130">            user.setPasportIssuedBy(userDTO.getPasportIssuedBy());</span>
+<span class="fc" id="L131">            user.setPasportDate(userDTO.getPasportDate());</span>
+<span class="fc" id="L132">            user.setEmailApprove(userDTO.getEmailApprove());</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">            if (userDTO.getLegalAddress() != null)</span>
+<span class="nc" id="L134">                user.setLegalAddress(this.setAddress(userDTO.getLegalAddress().getId()));</span>
+<span class="fc" id="L135">            Set&lt;Authority&gt; authorities = this.authoritiesFromStrings(userDTO.getAuthorities());</span>
+<span class="fc" id="L136">            user.setAuthorities(authorities);</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            user.setCeaDepartment(userDTO.getCeaDepartment() == null ? null : ceaDepartmentMapper.toEntity(userDTO.getCeaDepartment()));</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            user.setCentralExecutiveAuthority(userDTO.getCentralExecutiveAuthority() == null ? null : ceaMapper.toEntity(userDTO.getCentralExecutiveAuthority()));</span>
+
+<span class="fc" id="L140">            return user;</span>
+        }
+    }
+
+    private Address setAddress(String id) {
+<span class="nc" id="L145">        Address address = new Address();</span>
+<span class="nc" id="L146">        address.setId(id);</span>
+<span class="nc" id="L147">        return address;</span>
+    }
+
+    private Set&lt;Authority&gt; authoritiesFromStrings(Set&lt;String&gt; authoritiesAsString) {
+<span class="fc" id="L151">        Set&lt;Authority&gt; authorities = new HashSet&lt;&gt;();</span>
+
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (authoritiesAsString != null) {</span>
+<span class="fc" id="L154">            authorities = authoritiesAsString.stream().map(string -&gt; {</span>
+<span class="fc" id="L155">                Authority auth = new Authority();</span>
+<span class="fc" id="L156">                auth.setName(string);</span>
+<span class="fc" id="L157">                return auth;</span>
+<span class="fc" id="L158">            }).collect(Collectors.toSet());</span>
+        }
+
+<span class="fc" id="L161">        return authorities;</span>
+    }
+
+    public User userFromId(Long id) {
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L166">            return null;</span>
+        }
+<span class="nc" id="L168">        User user = new User();</span>
+<span class="nc" id="L169">        user.setId(id);</span>
+<span class="nc" id="L170">        return user;</span>
+    }
+
+    public CEAEmployeeFindAllDTO toCEAEmployeeDto(User user) {
+<span class="nc" id="L174">        CEAEmployeeFindAllDTO target = new CEAEmployeeFindAllDTO();</span>
+
+<span class="nc" id="L176">        target.setId(user.getId());</span>
+<span class="nc" id="L177">        target.setFirstName(user.getFirstName());</span>
+<span class="nc" id="L178">        target.setLastName(user.getLastName());</span>
+<span class="nc" id="L179">        target.setMiddleName(user.getMiddleName());</span>
+<span class="nc" id="L180">        target.setFullName(user.getFullName());</span>
+<span class="nc" id="L181">        target.setOrgUnit(user.getOrgUnit());</span>
+<span class="nc" id="L182">        target.setPosition(user.getPosition());</span>
+
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (user.getCentralExecutiveAuthority() != null)</span>
+<span class="nc" id="L185">            target.setCentralExecutiveAuthorityDTO(ceaMapper.toDto(user.getCentralExecutiveAuthority()));</span>
+
+<span class="nc" id="L187">        return target;</span>
+    }
+
+    public CEAEmployeeContextDTO toCeaEmployeeContextDto(User user) {
+<span class="nc" id="L191">        CEAEmployeeContextDTO target = new CEAEmployeeContextDTO();</span>
+
+<span class="nc" id="L193">        target.setUserId(user.getId());</span>
+<span class="nc" id="L194">        target.setFirstName(user.getFirstName());</span>
+<span class="nc" id="L195">        target.setLastName(user.getLastName());</span>
+<span class="nc" id="L196">        target.setMiddleName(user.getMiddleName());</span>
+<span class="nc" id="L197">        target.setFullName(user.getFullName());</span>
+<span class="nc" id="L198">        target.setPosition(user.getPosition());</span>
+<span class="nc" id="L199">        target.setPositionType(user.getPositionType());</span>
+
+<span class="nc bnc" id="L201" title="All 2 branches missed.">        if (user.getCentralExecutiveAuthority() != null)</span>
+<span class="nc" id="L202">            target.setCeaCode(user.getCentralExecutiveAuthority().getCode());</span>
+
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (user.getCeaDepartment() != null)</span>
+<span class="nc" id="L205">            target.setCeaDepartmentId(user.getCeaDepartment().getId());</span>
+
+<span class="nc" id="L207">        return target;</span>
+    }
+
+    public CeaEmployeeMainInfoDTO toCeaEmployeeMainInfoDto(User ceaUser) {
+        CeaEmployeeMainInfoDTO target =
+<span class="nc" id="L212">            CeaEmployeeMainInfoDTO.builder()</span>
+<span class="nc" id="L213">                .id(ceaUser.getId())</span>
+<span class="nc" id="L214">                .firstName(ceaUser.getFirstName())</span>
+<span class="nc" id="L215">                .lastName(ceaUser.getLastName())</span>
+<span class="nc" id="L216">                .middleName(ceaUser.getMiddleName())</span>
+<span class="nc" id="L217">                .rnokpp(ceaUser.getRnokpp())</span>
+<span class="nc" id="L218">                .email(ceaUser.getEmail())</span>
+<span class="nc" id="L219">                .phoneNumber(ceaUser.getPhoneNumber())</span>
+<span class="nc" id="L220">                .orgUnit(ceaUser.getOrgUnit())</span>
+<span class="nc" id="L221">                .position(ceaUser.getPosition())</span>
+<span class="nc" id="L222">                .build();</span>
+
+<span class="nc" id="L224">        return target;</span>
+    }
+
+    public CEAEmployeeDTO toCeaEmployeeDto(User ceaUser) {
+<span class="nc" id="L228">        CentralExecutiveAuthority cea = ceaUser.getCentralExecutiveAuthority();</span>
+<span class="nc" id="L229">        CEADepartment department = ceaUser.getCeaDepartment();</span>
+<span class="nc" id="L230">        return CEAEmployeeDTO.builder()</span>
+<span class="nc" id="L231">            .id(ceaUser.getId())</span>
+<span class="nc" id="L232">            .firstName(ceaUser.getFirstName())</span>
+<span class="nc" id="L233">            .lastName(ceaUser.getLastName())</span>
+<span class="nc" id="L234">            .middleName(ceaUser.getMiddleName())</span>
+<span class="nc" id="L235">            .rnokpp(ceaUser.getRnokpp())</span>
+<span class="nc" id="L236">            .email(ceaUser.getEmail())</span>
+<span class="nc" id="L237">            .phoneNumber(ceaUser.getPhoneNumber())</span>
+<span class="nc" id="L238">            .edrpouCode(cea.getCode())</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">            .departmentId(department == null ? null : department.getId())</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">            .departmentFullName(department == null ? null : department.getFullNameUkr())</span>
+<span class="nc" id="L241">            .position(ceaUser.getPosition())</span>
+<span class="nc" id="L242">            .positionType(ceaUser.getPositionType())</span>
+<span class="nc" id="L243">            .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CentralExecutiveAuthorityServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.impl</a> &gt; <span class="el_source">CentralExecutiveAuthorityServiceImpl.java</span></div><h1>CentralExecutiveAuthorityServiceImpl.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.impl;
+
+import com.idevhub.tapas.domain.CEADepartment;
+import com.idevhub.tapas.domain.CentralExecutiveAuthority;
+import com.idevhub.tapas.domain.enumeration.CEADepartmentStatus;
+import com.idevhub.tapas.domain.enumeration.CentralExecutiveAuthorityStatus;
+import com.idevhub.tapas.repository.CEADepartmentRepository;
+import com.idevhub.tapas.repository.CentralExecutiveAuthorityRepository;
+import com.idevhub.tapas.service.CentralExecutiveAuthorityService;
+import com.idevhub.tapas.service.dto.CEADepartmentDTO;
+import com.idevhub.tapas.service.dto.CentralExecutiveAuthorityDTO;
+import com.idevhub.tapas.service.errors.EntityNotFoundException;
+import com.idevhub.tapas.service.mapper.CEADepartmentMapper;
+import com.idevhub.tapas.service.mapper.CentralExecutiveAuthorityMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+/**
+ * Service Implementation for managing CentralExecutiveAuthority.
+ */
+<span class="fc" id="L29">@Slf4j</span>
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class CentralExecutiveAuthorityServiceImpl implements CentralExecutiveAuthorityService {
+
+    private final CentralExecutiveAuthorityRepository centralExecutiveAuthorityRepository;
+    private final CEADepartmentRepository departmentRepository;
+    private final CentralExecutiveAuthorityMapper centralExecutiveAuthorityMapper;
+    private final CEADepartmentMapper ceaDepartmentMapper;
+
+    /**
+     * Save a centralExecutiveAuthority.
+     *
+     * @param centralExecutiveAuthorityDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public CentralExecutiveAuthorityDTO save(CentralExecutiveAuthorityDTO centralExecutiveAuthorityDTO) {
+<span class="fc" id="L48">        log.debug(&quot;Request to save CentralExecutiveAuthority : {}&quot;, centralExecutiveAuthorityDTO);</span>
+
+<span class="fc" id="L50">        CentralExecutiveAuthority centralExecutiveAuthority = centralExecutiveAuthorityMapper.toEntity(centralExecutiveAuthorityDTO);</span>
+<span class="fc" id="L51">        centralExecutiveAuthority = centralExecutiveAuthorityRepository.save(centralExecutiveAuthority);</span>
+
+<span class="fc" id="L53">        return centralExecutiveAuthorityMapper.toDto(centralExecutiveAuthority);</span>
+    }
+
+    /**
+     * Get all the centralExecutiveAuthorities.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;CentralExecutiveAuthorityDTO&gt; findAll() {
+<span class="fc" id="L64">        log.debug(&quot;Request to get all CentralExecutiveAuthorities&quot;);</span>
+
+<span class="fc" id="L66">        return centralExecutiveAuthorityRepository.findAll().stream()</span>
+<span class="fc" id="L67">            .map(centralExecutiveAuthorityMapper::toDto)</span>
+<span class="fc" id="L68">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+
+    /**
+     * Get one centralExecutiveAuthority by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;CentralExecutiveAuthorityDTO&gt; findOne(Long id) {
+<span class="fc" id="L81">        log.debug(&quot;Request to get CentralExecutiveAuthority : {}&quot;, id);</span>
+
+<span class="fc" id="L83">        return centralExecutiveAuthorityRepository.findById(id)</span>
+<span class="fc" id="L84">            .map(centralExecutiveAuthorityMapper::toDto);</span>
+    }
+
+    /**
+     * Delete the centralExecutiveAuthority by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="fc" id="L94">        log.debug(&quot;Request to delete CentralExecutiveAuthority : {}&quot;, id);</span>
+
+<span class="fc" id="L96">        centralExecutiveAuthorityRepository.deleteById(id);</span>
+<span class="fc" id="L97">    }</span>
+
+    @Override
+    public CentralExecutiveAuthority getByCode(String edrpou) {
+<span class="fc" id="L101">        log.debug(&quot;Request to get CentralExecutiveAuthority : {}&quot;, edrpou);</span>
+<span class="fc" id="L102">        return centralExecutiveAuthorityRepository.findByCode(edrpou)</span>
+<span class="pc" id="L103">            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;error.cea.not.found.by.code&quot;, edrpou));</span>
+    }
+
+    @Override
+    public List&lt;CEADepartmentDTO&gt; getAllActiveDepartments(String edrpou) {
+<span class="fc" id="L108">        log.debug(&quot;Trying to get department list of cea (code = {})&quot;, edrpou);</span>
+<span class="fc" id="L109">        return departmentRepository.findAllCeaDepartments(edrpou).stream()</span>
+<span class="fc" id="L110">            .filter(activeDepartmentPredicate())</span>
+<span class="fc" id="L111">            .map(ceaDepartmentMapper::toDto)</span>
+<span class="fc" id="L112">            .collect(Collectors.toList());</span>
+    }
+
+    @Override
+    public CEADepartment getDepartment(String edrpou, Long departmentId) {
+<span class="fc" id="L117">        log.debug(&quot;Trying to get cea department by cea code = {} and department id = {}&quot;, edrpou, departmentId);</span>
+<span class="fc" id="L118">        return departmentRepository.findCeaDepartmentById(edrpou, departmentId)</span>
+<span class="pc" id="L119">            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;error.cea.department.not.found.by.id.and.code&quot;, edrpou, departmentId.toString()));</span>
+    }
+
+    private Predicate&lt;CEADepartment&gt; activeDepartmentPredicate() {
+<span class="fc" id="L123">        return department -&gt;</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            department.getCentralExecutiveAuthority().getCentralExecutiveAuthorityStatus() == CentralExecutiveAuthorityStatus.ACTIVE &amp;&amp;</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">                department.getCeaDepartmentStatus() == CEADepartmentStatus.ACTIVE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

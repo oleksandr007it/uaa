@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UaaProperties.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.config</a> &gt; <span class="el_source">UaaProperties.java</span></div><h1>UaaProperties.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+/**
+ * Properties for UAA-based OAuth2 security.
+ */
+@Component
+@ConfigurationProperties(prefix = &quot;uaa&quot;, ignoreUnknownFields = false)
+<span class="fc" id="L11">public class UaaProperties {</span>
+<span class="fc" id="L12">    private final KeyStore keyStore = new KeyStore();</span>
+<span class="fc" id="L13">    private final WebClientConfiguration webClientConfiguration = new WebClientConfiguration();</span>
+<span class="fc" id="L14">    private final Mail mail = new Mail();</span>
+
+    public KeyStore getKeyStore() {
+<span class="fc" id="L17">        return keyStore;</span>
+    }
+
+    public WebClientConfiguration getWebClientConfiguration() {
+<span class="fc" id="L21">        return webClientConfiguration;</span>
+    }
+
+    public Mail getMail() {
+<span class="fc" id="L25">        return mail;</span>
+    }
+
+    /**
+     * Keystore configuration for signing and verifying JWT tokens.
+     */
+<span class="fc" id="L31">    public static class KeyStore {</span>
+        //name of the keystore in the classpath
+<span class="fc" id="L33">        private String name = &quot;config/tls/keystore.p12&quot;;</span>
+        //password used to access the key
+<span class="fc" id="L35">        private String password = &quot;password&quot;;</span>
+        //name of the alias to fetch
+<span class="fc" id="L37">        private String alias = &quot;selfsigned&quot;;</span>
+
+        public String getName() {
+<span class="fc" id="L40">            return name;</span>
+        }
+
+        public void setName(String name) {
+<span class="nc" id="L44">            this.name = name;</span>
+<span class="nc" id="L45">        }</span>
+
+        public String getPassword() {
+<span class="fc" id="L48">            return password;</span>
+        }
+
+        public void setPassword(String password) {
+<span class="nc" id="L52">            this.password = password;</span>
+<span class="nc" id="L53">        }</span>
+
+        public String getAlias() {
+<span class="fc" id="L56">            return alias;</span>
+        }
+
+        public void setAlias(String alias) {
+<span class="nc" id="L60">            this.alias = alias;</span>
+<span class="nc" id="L61">        }</span>
+    }
+
+<span class="fc" id="L64">    public static class WebClientConfiguration {</span>
+        //validity of the short-lived access token in secs (min: 60), don't make it too long
+<span class="fc" id="L66">        private int accessTokenValidityInSeconds = 5 * 60;</span>
+        //validity of the refresh token in secs (defines the duration of &quot;remember me&quot;)
+<span class="fc" id="L68">        private int refreshTokenValidityInSecondsForRememberMe = 7 * 24 * 60 * 60;</span>
+<span class="fc" id="L69">        private String clientId = &quot;web_app&quot;;</span>
+<span class="fc" id="L70">        private String secret = &quot;changeit&quot;;</span>
+
+        public int getAccessTokenValidityInSeconds() {
+<span class="fc" id="L73">            return accessTokenValidityInSeconds;</span>
+        }
+
+        public void setAccessTokenValidityInSeconds(int accessTokenValidityInSeconds) {
+<span class="nc" id="L77">            this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;</span>
+<span class="nc" id="L78">        }</span>
+
+        public int getRefreshTokenValidityInSecondsForRememberMe() {
+<span class="fc" id="L81">            return refreshTokenValidityInSecondsForRememberMe;</span>
+        }
+
+        public void setRefreshTokenValidityInSecondsForRememberMe(int refreshTokenValidityInSecondsForRememberMe) {
+<span class="nc" id="L85">            this.refreshTokenValidityInSecondsForRememberMe = refreshTokenValidityInSecondsForRememberMe;</span>
+<span class="nc" id="L86">        }</span>
+
+        public String getClientId() {
+<span class="nc" id="L89">            return clientId;</span>
+        }
+
+        public void setClientId(String clientId) {
+<span class="nc" id="L93">            this.clientId = clientId;</span>
+<span class="nc" id="L94">        }</span>
+
+        public String getSecret() {
+<span class="nc" id="L97">            return secret;</span>
+        }
+
+        public void setSecret(String secret) {
+<span class="nc" id="L101">            this.secret = secret;</span>
+<span class="nc" id="L102">        }</span>
+    }
+
+<span class="fc" id="L105">    public static class Mail {</span>
+<span class="fc" id="L106">        private String confirmationUrl = &quot;&quot;;</span>
+<span class="fc" id="L107">        private int emailValidMinutes = 0;</span>
+
+        public String getConfirmationUrl() {
+<span class="fc" id="L110">            return confirmationUrl;</span>
+        }
+
+        public void setConfirmationUrl(String confirmationUrl) {
+<span class="fc" id="L114">            this.confirmationUrl = confirmationUrl;</span>
+<span class="fc" id="L115">        }</span>
+
+        public int getEmailValidMinutes() {
+<span class="fc" id="L118">            return emailValidMinutes;</span>
+        }
+
+        public void setEmailValidMinutes(int emailValidMinutes) {
+<span class="fc" id="L122">            this.emailValidMinutes = emailValidMinutes;</span>
+<span class="fc" id="L123">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

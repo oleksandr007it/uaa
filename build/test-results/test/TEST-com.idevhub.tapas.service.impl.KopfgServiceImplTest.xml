@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.KopfgServiceImplTest" tests="4" skipped="1" failures="0" errors="0" timestamp="2021-02-09T20:44:27" hostname="iMac-Aleksandr-2.local" time="0.131">
+  <properties/>
+  <testcase name="testFindAll()" classname="com.idevhub.tapas.service.impl.KopfgServiceImplTest" time="0.063"/>
+  <testcase name="testFindOne()" classname="com.idevhub.tapas.service.impl.KopfgServiceImplTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="testSave()" classname="com.idevhub.tapas.service.impl.KopfgServiceImplTest" time="0.008"/>
+  <testcase name="testDelete()" classname="com.idevhub.tapas.service.impl.KopfgServiceImplTest" time="0.055"/>
+  <system-out><![CDATA[2021-02-09 22:44:27.354 DEBUG 7952 --- [    Test worker] c.i.tapas.service.impl.KopfgServiceImpl  : Request to get all KopfgS
+2021-02-09 22:44:27.384 DEBUG 7952 --- [    Test worker] c.i.tapas.service.impl.KopfgServiceImpl  : Request to save Kopfg : KopfgDTO{id=1, code=3, name='kopfg_name', validUntil='2021-02-09T20:44:27.383686Z', previousCodes='321'}
+2021-02-09 22:44:27.407 DEBUG 7952 --- [    Test worker] c.i.tapas.service.impl.KopfgServiceImpl  : Request to delete Kopfg : 84
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

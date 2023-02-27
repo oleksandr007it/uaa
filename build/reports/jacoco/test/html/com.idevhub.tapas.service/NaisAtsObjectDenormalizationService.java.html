@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NaisAtsObjectDenormalizationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service</a> &gt; <span class="el_source">NaisAtsObjectDenormalizationService.java</span></div><h1>NaisAtsObjectDenormalizationService.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service;
+
+import com.idevhub.tapas.domain.address.NaisAtsDenormalizedObject;
+import com.idevhub.tapas.domain.address.NaisAtsObject;
+import com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectStatus;
+import com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectType;
+import com.idevhub.tapas.repository.NaisAtsDenormalizedObjectRepository;
+import com.idevhub.tapas.repository.NaisAtsObjectRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import static com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectStatus.ACTIVE;
+import static com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectStatus.INACTIVE;
+import static com.idevhub.tapas.domain.address.enumeration.NaisAtsDenormalizedObjectType.*;
+
+<span class="fc" id="L25">@Slf4j</span>
+@Service
+@RequiredArgsConstructor
+public class NaisAtsObjectDenormalizationService {
+
+    private final NaisAtsObjectRepository objectRepository;
+    private final NaisAtsDenormalizedObjectRepository denormalizedObjectRepository;
+
+    private LinkedBlockingQueue&lt;Long&gt; toDenormalizeObjectIds;
+    private ExecutorService denormalizationExecutorService;
+
+    public void denormalizeAtsObjectDictionary() {
+
+<span class="fc" id="L38">        log.debug(&quot;Trying to denormalize ats object dictionary...&quot;);</span>
+
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (isDenormalizationProcessRunning()) {</span>
+<span class="nc" id="L41">            log.debug(&quot;Ats object denormalization process already running...&quot;);</span>
+<span class="nc" id="L42">            return;</span>
+        }
+
+<span class="fc" id="L45">        initializeDenormalizationExecutorServiceIfNeeded();</span>
+
+<span class="fc" id="L47">        toDenormalizeObjectIds = new LinkedBlockingQueue&lt;&gt;(objectRepository.findAllIdsOrderedByType());</span>
+
+<span class="fc" id="L49">        denormalizationExecutorService.execute(new ObjectDenormalizationJob());</span>
+<span class="fc" id="L50">    }</span>
+
+    private boolean isDenormalizationProcessRunning() {
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">        return denormalizationExecutorService != null &amp;&amp; !denormalizationExecutorService.isTerminated();</span>
+    }
+
+    private void initializeDenormalizationExecutorServiceIfNeeded() {
+<span class="pc bpc" id="L57" title="3 of 4 branches missed.">        if (denormalizationExecutorService == null || denormalizationExecutorService.isTerminated())</span>
+<span class="fc" id="L58">            denormalizationExecutorService = Executors.newSingleThreadExecutor();</span>
+<span class="fc" id="L59">    }</span>
+
+    @CheckForNull
+    public NaisAtsDenormalizedObject denormalizeObject(Long objectId) {
+
+<span class="fc" id="L64">        NaisAtsObject objectToDenormalize = objectRepository.findById(objectId)</span>
+<span class="pc" id="L65">            .orElseThrow(() -&gt; new EntityNotFoundException(NaisAtsObject.class, objectId));</span>
+
+<span class="fc" id="L67">        return denormalizeObject(objectToDenormalize);</span>
+    }
+
+    private NaisAtsDenormalizedObject denormalizeObject(NaisAtsObject objectToDenormalize) {
+
+<span class="fc" id="L72">        NaisAtsDenormalizedObjectType denormalizedObjectType = defineObjectType(objectToDenormalize);</span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (denormalizedObjectType.equals(NOT_PROCESSING_TYPE)) {</span>
+<span class="fc" id="L75">            return null;</span>
+        }
+
+<span class="fc" id="L78">        NaisAtsDenormalizedObject denormalizedObject = buildDenormalizedObject(objectToDenormalize, denormalizedObjectType);</span>
+<span class="fc" id="L79">        defineObjectsOnStructuredName(objectToDenormalize, denormalizedObject);</span>
+
+<span class="fc" id="L81">        return denormalizedObject;</span>
+    }
+
+    private NaisAtsDenormalizedObjectType defineObjectType(final NaisAtsObject object) {
+
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (object == null) {</span>
+<span class="nc" id="L87">            return NOT_PROCESSING_TYPE;</span>
+        }
+
+<span class="fc" id="L90">        final long typeLevel = object.getType().getLevel();</span>
+<span class="fc" id="L91">        final long typeCode = object.getType().getCode();</span>
+
+<span class="pc bpc" id="L93" title="1 of 6 branches missed.">        if (typeLevel == 5 || (typeLevel == 4 &amp;&amp; !hasChild(object.getId()))) {</span>
+<span class="fc" id="L94">            return LOCALITY_OBJECT;</span>
+<span class="pc bpc" id="L95" title="6 of 8 branches missed.">        } else if ((typeLevel == 3 || typeLevel == 2) &amp;&amp; typeCode == 2 &amp;&amp; object.getParent().getType().getCode() == 1) {</span>
+<span class="nc" id="L96">            return LOCALITY_DISTRICT;</span>
+<span class="pc bpc" id="L97" title="3 of 8 branches missed.">        } else if (typeLevel == 3 || ((typeLevel == 2 || typeLevel == 1) &amp;&amp; typeCode == 1)) {</span>
+<span class="fc" id="L98">            return LOCALITY;</span>
+<span class="fc" id="L99">        } else return NOT_PROCESSING_TYPE;</span>
+    }
+
+    private boolean hasChild(Long parentId) {
+<span class="fc" id="L103">        return objectRepository.existsByParent_Id(parentId);</span>
+    }
+
+    private NaisAtsDenormalizedObjectStatus defineObjectStatus(final NaisAtsObject object) {
+<span class="fc" id="L107">        NaisAtsObject toCheck = object;</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        while (toCheck != null) {</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (!toCheck.getStatus().isActive()) {</span>
+<span class="nc" id="L110">                return INACTIVE;</span>
+            }
+<span class="fc" id="L112">            toCheck = toCheck.getParent();</span>
+        }
+<span class="fc" id="L114">        return ACTIVE;</span>
+    }
+
+    @Nullable
+    private NaisAtsDenormalizedObject defineObjectParent(final NaisAtsObject object) {
+
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (object == null) {</span>
+<span class="nc" id="L121">            return null;</span>
+        }
+
+<span class="fc" id="L124">        NaisAtsObject parentCandidate = null;</span>
+<span class="fc" id="L125">        NaisAtsDenormalizedObject parent = null;</span>
+<span class="fc" id="L126">        NaisAtsDenormalizedObjectType objectType = defineObjectType(object);</span>
+
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if (objectType.equals(LOCALITY_DISTRICT)) {</span>
+<span class="nc" id="L129">            parentCandidate = object.getParent();</span>
+        }
+
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (objectType.equals(LOCALITY_OBJECT)) {</span>
+<span class="fc" id="L133">            parentCandidate = object.getParent();</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            while (!defineObjectType(parentCandidate).equals(LOCALITY)) {</span>
+<span class="fc" id="L135">                parentCandidate = parentCandidate.getParent();</span>
+            }
+        }
+
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (parentCandidate != null) {</span>
+<span class="fc" id="L140">            parent = buildDenormalizedObject(parentCandidate, defineObjectType(parentCandidate));</span>
+        }
+<span class="fc" id="L142">        return parent;</span>
+    }
+
+    @Nullable
+    private String defineKoatuuCode(final NaisAtsObject object) {
+
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (object == null) {</span>
+<span class="nc" id="L149">            return null;</span>
+        }
+
+<span class="fc" id="L152">        String code = null;</span>
+<span class="pc bpc" id="L153" title="1 of 4 branches missed.">        if (object.getKoatuuCode() != null &amp;&amp; !object.getKoatuuCode().isBlank()) {</span>
+<span class="fc" id="L154">            code = object.getKoatuuCode();</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        } else if (object.getParent() != null) {</span>
+<span class="fc" id="L156">            code = defineKoatuuCode(object.getParent());</span>
+        }
+<span class="fc" id="L158">        return code;</span>
+    }
+
+    private void defineObjectsOnStructuredName(final NaisAtsObject source, NaisAtsDenormalizedObject target) {
+
+<span class="pc bpc" id="L163" title="2 of 4 branches missed.">        if (source == null || !Objects.equals(source.getId(), target.getId())) {</span>
+<span class="nc" id="L164">            return;</span>
+        }
+
+<span class="fc" id="L167">        NaisAtsObject region = null;</span>
+<span class="fc" id="L168">        NaisAtsObject district = null;</span>
+        NaisAtsObject locality;
+<span class="fc" id="L170">        NaisAtsObject localityObject = null;</span>
+        NaisAtsObject temporary;
+
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (target.getType().equals(LOCALITY_OBJECT)) {</span>
+<span class="fc" id="L174">            localityObject = source;</span>
+<span class="fc" id="L175">            temporary = source.getParent();</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">            while (!Objects.equals(temporary.getId(), target.getParent().getId())) {</span>
+<span class="fc" id="L177">                temporary = temporary.getParent();</span>
+            }
+<span class="fc" id="L179">            locality = temporary;</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        } else if (target.getType().equals(LOCALITY_DISTRICT)) {</span>
+<span class="nc" id="L181">            locality = source.getParent();</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        } else if (target.getType().equals(LOCALITY)) {</span>
+<span class="fc" id="L183">            locality = source;</span>
+        } else {
+<span class="nc" id="L185">            return;</span>
+        }
+
+<span class="fc" id="L188">        temporary = locality.getParent();</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if (temporary != null) {</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            if (temporary.getType().getLevel() == 2) {</span>
+<span class="nc" id="L191">                district = temporary;</span>
+<span class="nc" id="L192">                region = temporary.getParent();</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            } else if (temporary.getType().getLevel() == 1) {</span>
+<span class="nc" id="L194">                region = temporary;</span>
+            }
+        }
+
+<span class="fc" id="L198">        target.setRegionName(defineObjectName(region));</span>
+<span class="fc" id="L199">        target.setDistrictName(defineObjectName(district));</span>
+<span class="fc" id="L200">        target.setLocalityName(defineObjectName(locality));</span>
+<span class="fc" id="L201">        target.setLocalityObjectName(defineObjectName(localityObject));</span>
+
+<span class="fc" id="L203">        NaisAtsDenormalizedObject parent = target.getParent();</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (parent != null) {</span>
+<span class="fc" id="L205">            parent.setRegionName(target.getRegionName());</span>
+<span class="fc" id="L206">            parent.setDistrictName(target.getDistrictName());</span>
+<span class="fc" id="L207">            parent.setLocalityName(target.getLocalityName());</span>
+        }
+<span class="fc" id="L209">    }</span>
+
+    @Nullable
+    private String defineObjectName(final NaisAtsObject object) {
+
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (object == null) {</span>
+<span class="fc" id="L215">            return null;</span>
+        }
+
+        String name;
+<span class="fc" id="L219">        final String baseName = object.getName();</span>
+<span class="fc" id="L220">        final long typeLevel = object.getType().getLevel();</span>
+<span class="fc" id="L221">        final long typeCode = object.getType().getCode();</span>
+<span class="fc" id="L222">        final String typeFullName = object.getType().getFullName();</span>
+<span class="fc" id="L223">        final String typeShortName = object.getType().getShortName();</span>
+
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (typeLevel == 5) {</span>
+<span class="fc" id="L226">            NaisAtsObject parent = object.getParent();</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">            if (parent == null) {</span>
+<span class="nc" id="L228">                return null;</span>
+            }
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">            if (parent.getType().getLevel() == 4) {</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">                if (typeCode == 6) {</span>
+<span class="nc" id="L232">                    name = String.format(&quot;%s, %s&quot;, parent.getName(), baseName);</span>
+                } else {
+<span class="fc" id="L234">                    name = String.format(&quot;%s, %s %s&quot;, parent.getName(), typeShortName, baseName);</span>
+                }
+            } else {
+<span class="nc bnc" id="L237" title="All 2 branches missed.">                if (typeCode == 6) {</span>
+<span class="nc" id="L238">                    name = baseName;</span>
+                } else {
+<span class="nc" id="L240">                    name = String.format(&quot;%s %s&quot;, typeShortName, baseName);</span>
+                }
+            }
+<span class="fc" id="L243">        } else {</span>
+<span class="pc bpc" id="L244" title="3 of 4 branches missed.">            if (typeLevel == 3 &amp;&amp; typeCode == 2) {</span>
+<span class="nc" id="L245">                name = String.format(&quot;%s %s&quot;, baseName, typeFullName);</span>
+<span class="pc bpc" id="L246" title="5 of 6 branches missed.">            } else if (typeLevel == 3 &amp;&amp; (typeCode == 6 || typeCode == 8)) {</span>
+<span class="nc" id="L247">                name = String.format(&quot;%s %s&quot;, baseName, typeShortName);</span>
+<span class="pc bpc" id="L248" title="13 of 14 branches missed.">            } else if (typeLevel == 1 || (typeLevel == 2 &amp;&amp; typeCode == 2) || (typeLevel == 3 &amp;&amp; typeCode == 7) || (typeLevel == 4 &amp;&amp; typeCode == 3)) {</span>
+<span class="fc" id="L249">                name = baseName;</span>
+            } else {
+<span class="nc" id="L251">                name = String.format(&quot;%s%s&quot;, typeShortName, baseName);</span>
+            }
+        }
+<span class="fc" id="L254">        return name;</span>
+    }
+
+    private NaisAtsDenormalizedObject buildDenormalizedObject(final NaisAtsObject toDenormalize, final NaisAtsDenormalizedObjectType objectType) {
+<span class="fc" id="L258">        return NaisAtsDenormalizedObject.builder()</span>
+<span class="fc" id="L259">            .id(toDenormalize.getId())</span>
+<span class="fc" id="L260">            .type(objectType)</span>
+<span class="fc" id="L261">            .parent(defineObjectParent(toDenormalize))</span>
+<span class="fc" id="L262">            .status(defineObjectStatus(toDenormalize))</span>
+<span class="fc" id="L263">            .searchName(toDenormalize.getName().toUpperCase())</span>
+<span class="fc" id="L264">            .koatuuCode(defineKoatuuCode(toDenormalize))</span>
+<span class="fc" id="L265">            .build();</span>
+    }
+
+<span class="fc" id="L268">    private final class ObjectDenormalizationJob implements Runnable {</span>
+        @Override
+        public void run() {
+
+<span class="fc" id="L272">            log.debug(&quot;Running new object denormalization job...&quot;);</span>
+
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">            while (!Thread.currentThread().isInterrupted()) {</span>
+                try {
+
+<span class="fc bfc" id="L277" title="All 2 branches covered.">                    if (toDenormalizeObjectIds.isEmpty()) {</span>
+<span class="fc" id="L278">                        log.debug(&quot;Shutting down object denormalization job...&quot;);</span>
+<span class="fc" id="L279">                        denormalizationExecutorService.shutdown();</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">                        if (!denormalizationExecutorService.awaitTermination(30, TimeUnit.SECONDS)) {</span>
+<span class="nc" id="L281">                            denormalizationExecutorService.shutdownNow();</span>
+                        }
+<span class="nc" id="L283">                        return;</span>
+                    }
+
+<span class="fc" id="L286">                    NaisAtsDenormalizedObject denormalizedObject = denormalizeObject(toDenormalizeObjectIds.take());</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">                    if (denormalizedObject != null) {</span>
+<span class="fc" id="L288">                        denormalizedObjectRepository.saveAndFlush(denormalizedObject);</span>
+                    }
+<span class="nc" id="L290">                } catch (Exception e) {</span>
+<span class="nc" id="L291">                    log.error(&quot;Unable to process object denormalization job. Error: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L292">                    log.error(&quot;Unable to process object denormalization job. Error: &quot;, e);</span>
+<span class="pc" id="L293">                }</span>
+            }
+<span class="nc" id="L295">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

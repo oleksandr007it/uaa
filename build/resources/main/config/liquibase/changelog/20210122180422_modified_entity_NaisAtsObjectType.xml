@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!--
+        Modify the entity NaisAtsObjectType.
+    -->
+    <changeSet id="20210122180422-Modify nais_ats_object_type table" author="d.chaban">
+
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="nais_ats_object_type"/>
+            <columnExists tableName="nais_ats_object_type" columnName="id"/>
+            <columnExists tableName="nais_ats_object_type" columnName="jhi_level"/>
+            <columnExists tableName="nais_ats_object_type" columnName="code"/>
+        </preConditions>
+
+        <dropPrimaryKey tableName="nais_ats_object_type"/>
+        <dropColumn tableName="nais_ats_object_type"
+                    columnName="id"/>
+
+        <renameColumn tableName="nais_ats_object_type"
+                      oldColumnName="jhi_level"
+                      newColumnName="level"/>
+
+        <addPrimaryKey columnNames="level, code" tableName="nais_ats_object_type"/>
+
+    </changeSet>
+</databaseChangeLog>

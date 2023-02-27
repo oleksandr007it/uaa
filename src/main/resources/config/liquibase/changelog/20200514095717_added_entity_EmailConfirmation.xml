@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity EmailConfirmation.
+    -->
+    <changeSet id="20200514095717-1" author="jhipster">
+        <createTable tableName="email_confirmation">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="confirmation_status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="valid_until" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="email" type="varchar(254)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="html_template_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="lang_key" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="rejected_at" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="reject_description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="approved_at" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="ip_address" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="created_by_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="declarant_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="statehood_subject_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="email_confirmation" columnName="created_at" columnDataType="datetime"/>
+        <dropDefaultValue tableName="email_confirmation" columnName="valid_until" columnDataType="datetime"/>
+        <dropDefaultValue tableName="email_confirmation" columnName="rejected_at" columnDataType="datetime"/>
+        <dropDefaultValue tableName="email_confirmation" columnName="approved_at" columnDataType="datetime"/>
+
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+</databaseChangeLog>

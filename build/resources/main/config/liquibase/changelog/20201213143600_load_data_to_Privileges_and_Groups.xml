@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <!-- ////////////////////////////////// -->
+    <!-- CORE TABLES -->
+    <!-- ////////////////////////////////// -->
+    <changeSet id="20201213143600_load_data_to_Core_tables" author="a.sidko">
+
+        <preConditions>
+            <tableExists tableName="_privilege"/>
+            <tableExists tableName="_privilege_category"/>
+            <tableExists tableName="_privilege_group"/>
+        </preConditions>
+
+        <loadUpdateData tableName="_privilege_category"
+                        primaryKey="code"
+                        separator=";"
+                        file="config/liquibase/data/privilege_category_v2.csv"
+                        relativeToChangelogFile="false"/>
+
+        <loadUpdateData tableName="_privilege"
+                        primaryKey="code"
+                        separator=";"
+                        file="config/liquibase/data/privilege_v2.csv"
+                        relativeToChangelogFile="false"/>
+
+        <loadUpdateData tableName="_privilege_group"
+                        primaryKey="code"
+                        separator=";"
+                        file="config/liquibase/data/privilege_group_v2.csv"
+                        relativeToChangelogFile="false"/>
+    </changeSet>
+
+
+    <!-- ////////////////////////////////// -->
+    <!-- LINK TABLES -->
+    <!-- ////////////////////////////////// -->
+    <changeSet id="20201213143600_load_data_to_Link_tables" author="a.sidko">
+
+        <preConditions>
+            <tableExists tableName="_privilege_group_to_privilege"/>
+        </preConditions>
+
+        <loadUpdateData tableName="_privilege_group_to_privilege"
+                        primaryKey="group_code,privilege_code"
+                        separator=";"
+                        file="config/liquibase/data/privilege_group_to_privilege_v2.csv"
+                        relativeToChangelogFile="false"/>
+
+    </changeSet>
+</databaseChangeLog>

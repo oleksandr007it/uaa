@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <changeSet id="20200707144030-1" author="e.ukhanov">
+        <createTable tableName="statehood_subject_auth_group">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="group_type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="created_date" type="timestamp"  defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_modified_date" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+            <column name="deleted_at" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="created_by" type="varchar(64)">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_modified_by" type="varchar(64)">
+                <constraints nullable="true" />
+            </column>
+            <column name="deleted_by" type="varchar(64)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="full_name_ukr" type="varchar(128)">
+                <constraints nullable="false" />
+            </column>
+            <column name="full_name_eng" type="varchar(128)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="statehood_subject_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+
+        <createTable tableName="subject_auth_group_subject_auth">
+            <column name="subject_auths_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_auth_groups_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="subject_auth_groups_id, subject_auths_id" tableName="subject_auth_group_subject_auth"/>
+
+        <dropDefaultValue tableName="statehood_subject_auth_group" columnName="created_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="statehood_subject_auth_group" columnName="last_modified_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="statehood_subject_auth_group" columnName="deleted_at" columnDataType="datetime"/>
+
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+</databaseChangeLog>

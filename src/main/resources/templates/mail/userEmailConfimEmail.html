@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+    <head>
+        <title th:text="#{email.user.confirm.title}">JHipster activation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.user.confirm.greeting(${user.fullName})}">
+            Dear
+        </p>
+        <p th:text="#{email.user.confirm.text1(${user.email})}">
+            You specified a new email address.
+        </p>
+
+        <p th:text="#{email.user.confirm.text2}"></p>
+        <p th:text="#{email.user.confirm.text3}"></p>
+        <p th:text="#{email.user.confirm.text4}"></p>
+
+        <tr>
+            <td class="content-block">
+                <a class="apple-link" th:text="${confirmationText}"
+                      th:href="${confirmationUrl}"></a>
+            </td>
+        </tr>
+        <p>
+            <span th:text="#{email.user.confirm.text5}">Regards, </span>
+            <br/>
+            <em th:text="#{email.user.confirm.signature}">.</em>
+        </p>
+    </body>
+</html>

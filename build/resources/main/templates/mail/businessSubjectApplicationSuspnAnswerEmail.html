@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+<head>
+    <title th:text="#{email.applications.suspense.subject}">Confirm</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+
+<p th:text="#{email.applications.greeting(${subjectFullName})}">
+    Шановний представник
+</p>
+
+<p th:text="#{email.applications.suspense.text1(${title})}">
+    Вами була подана заява
+</p>
+
+<p th:text="#{email.applications.suspense.text2(${type})}">
+    За результатами розгляду Вашої заяви до Реєстру митних брокерів внесено запис про {0} дозволу на провадження митної брокерської діяльності.
+</p>
+
+
+<p>
+    <span th:text="#{email.applications.suspense.text3}">З найкращими побажаннями </span>
+    <br/>
+
+</p>
+
+</body>
+</html>
+
+
+
+
+
+

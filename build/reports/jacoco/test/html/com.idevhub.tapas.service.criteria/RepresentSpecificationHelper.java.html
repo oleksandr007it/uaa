@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RepresentSpecificationHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.criteria</a> &gt; <span class="el_source">RepresentSpecificationHelper.java</span></div><h1>RepresentSpecificationHelper.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.criteria;
+
+import com.idevhub.tapas.domain.StatehoodSubjectRepresent;
+import com.idevhub.tapas.domain.StatehoodSubjectRepresent_;
+import com.idevhub.tapas.domain.StatehoodSubject_;
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentStatus;
+import com.idevhub.tapas.domain.enumeration.StatehoodSubjectRepresentType;
+import io.github.jhipster.service.QueryService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+<span class="fc" id="L19">@Slf4j</span>
+<span class="fc" id="L20">public class RepresentSpecificationHelper extends QueryService&lt;StatehoodSubjectRepresent&gt; {</span>
+
+    private static Predicate addInType(CriteriaBuilder cb, Root&lt;StatehoodSubjectRepresent&gt; root, RepresentCriteria sc) {
+<span class="nc" id="L23">        CriteriaBuilder.In&lt;Object&gt; in = cb.in(root.get(StatehoodSubjectRepresent_.subjectRepresentType));</span>
+
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        for (StatehoodSubjectRepresentType type : sc.getType().getIn()) {</span>
+<span class="nc" id="L26">            in = in.value(type);</span>
+<span class="nc" id="L27">        }</span>
+
+<span class="nc" id="L29">        return in;</span>
+    }
+
+    private static Predicate addInStatus(CriteriaBuilder cb, Root&lt;StatehoodSubjectRepresent&gt; root, RepresentCriteria sc) {
+<span class="nc" id="L33">        CriteriaBuilder.In&lt;Object&gt; in = cb.in(root.get(StatehoodSubjectRepresent_.subjectRepresentStatus));</span>
+
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        for (StatehoodSubjectRepresentStatus status : sc.getStatus().getIn()) {</span>
+<span class="nc" id="L36">            in = in.value(status);</span>
+<span class="nc" id="L37">        }</span>
+
+<span class="nc" id="L39">        return in;</span>
+    }
+
+    public Specification&lt;StatehoodSubjectRepresent&gt; createSpecification(RepresentCriteria c) {
+<span class="fc" id="L43">        Specification&lt;StatehoodSubjectRepresent&gt; specification = getSpecification(c);</span>
+
+<span class="fc" id="L45">        return specification;</span>
+    }
+
+    private Specification&lt;StatehoodSubjectRepresent&gt; getSpecification(RepresentCriteria c) {
+<span class="fc" id="L49">        return (root, criteriaQuery, criteriaBuilder) -&gt; {</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            if (Long.class != criteriaQuery.getResultType()) {</span>
+<span class="nc" id="L51">                root.fetch(StatehoodSubjectRepresent_.declarant, JoinType.LEFT);</span>
+            }
+
+<span class="nc" id="L54">            List&lt;Predicate&gt; p = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (c != null) {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                if (c.getSubjectId() != null) {</span>
+<span class="nc" id="L58">                    Expression&lt;Long&gt; expression =</span>
+<span class="nc" id="L59">                        root.get(StatehoodSubjectRepresent_.statehoodSubject).get(StatehoodSubject_.id);</span>
+<span class="nc" id="L60">                    Long value = c.getSubjectId().getEquals();</span>
+
+<span class="nc" id="L62">                    Predicate equalPredicate = criteriaBuilder.equal(expression, value);</span>
+<span class="nc" id="L63">                    p.add(equalPredicate);</span>
+                }
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                if (c.getType() != null) {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                    if (c.getType().getEquals() != null) {</span>
+<span class="nc" id="L68">                        Expression&lt;StatehoodSubjectRepresentType&gt; expression =</span>
+<span class="nc" id="L69">                            root.get(StatehoodSubjectRepresent_.subjectRepresentType);</span>
+
+<span class="nc" id="L71">                        Predicate equalPredicate = criteriaBuilder.equal(expression, c.getType());</span>
+<span class="nc" id="L72">                        p.add(equalPredicate);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                    } else if (c.getType().getIn() != null) {</span>
+<span class="nc" id="L74">                        p.add(addInType(criteriaBuilder, root, c));</span>
+                    }
+                }
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                if (c.getStatus() != null) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                    if (c.getStatus().getEquals() != null) {</span>
+<span class="nc" id="L80">                        Expression&lt;StatehoodSubjectRepresentStatus&gt; expression =</span>
+<span class="nc" id="L81">                            root.get(StatehoodSubjectRepresent_.subjectRepresentStatus);</span>
+
+<span class="nc" id="L83">                        Predicate equalPredicate = criteriaBuilder.equal(expression, c.getStatus().getEquals());</span>
+<span class="nc" id="L84">                        p.add(equalPredicate);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                    } else if (c.getStatus().getIn() != null) {</span>
+<span class="nc" id="L86">                        p.add(addInStatus(criteriaBuilder, root, c));</span>
+                    }
+                } else {
+<span class="nc" id="L89">                    Expression&lt;StatehoodSubjectRepresentStatus&gt; expression =</span>
+<span class="nc" id="L90">                        root.get(StatehoodSubjectRepresent_.subjectRepresentStatus);</span>
+
+<span class="nc" id="L92">                    Predicate notDeletedPredicate =</span>
+<span class="nc" id="L93">                        criteriaBuilder.notEqual(expression, StatehoodSubjectRepresentStatus.DELETED);</span>
+<span class="nc" id="L94">                    p.add(notDeletedPredicate);</span>
+                }
+            }
+
+<span class="nc" id="L98">            Predicate[] predicates = new Predicate[p.size()];</span>
+<span class="nc" id="L99">            predicates = p.toArray(predicates);</span>
+
+<span class="nc" id="L101">            return criteriaBuilder.and(predicates);</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

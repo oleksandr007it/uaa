@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseAuthenticationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.security</a> &gt; <span class="el_source">BaseAuthenticationProvider.java</span></div><h1>BaseAuthenticationProvider.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.security;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.idevhub.tapas.service.dto.UserDTOfromIdGovUa;
+import com.idevhub.tapas.web.rest.errors.ErrorConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.stream.Stream;
+
+import static com.idevhub.tapas.security.AuthoritiesConstants.USER_ID_KEY;
+
+public abstract class BaseAuthenticationProvider implements AuthenticationProvider {
+    private final DomainUserDetailsService userDetailsService;
+<span class="fc" id="L26">    private final Logger logger = LoggerFactory.getLogger(BaseAuthenticationProvider.class);</span>
+
+<span class="fc" id="L28">    protected BaseAuthenticationProvider(DomainUserDetailsService userDetailsService) {</span>
+<span class="fc" id="L29">        this.userDetailsService = userDetailsService;</span>
+<span class="fc" id="L30">    }</span>
+
+    private static Stream&lt;String&gt; getAuthorities(Collection&lt;GrantedAuthority&gt; authorities) {
+<span class="fc" id="L33">        return authorities.stream().map(GrantedAuthority::getAuthority);</span>
+    }
+
+    public CustomUserDetails tryToGetUserDetailsByRnokppAndUserType(final String rnokpp, final String userType) {
+        try {
+<span class="fc" id="L38">            CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByRnokppAndUserType(rnokpp, userType);</span>
+<span class="fc" id="L39">            return userDetails;</span>
+<span class="nc" id="L40">        } catch (UsernameNotFoundException e) {</span>
+<span class="nc" id="L41">            logger.error(e.getMessage());</span>
+<span class="nc" id="L42">            throw new UsernameNotFoundException(ErrorConstants.USER_NOT_FOUND);</span>
+<span class="nc" id="L43">        } catch (Exception e) {</span>
+<span class="nc" id="L44">            logger.error(e.getMessage());</span>
+<span class="nc" id="L45">            throw new InternalAuthenticationServiceException(e.getMessage(), e);</span>
+        }
+    }
+
+    protected UserDTOfromIdGovUa tryToGetUserInfo(String userInfo, String message) {
+<span class="fc" id="L50">        ObjectMapper objectMapper = new ObjectMapper();</span>
+<span class="fc" id="L51">        byte[] decodedBytes = Base64.getDecoder().decode(userInfo);</span>
+<span class="fc" id="L52">        String userDTOfromIdGovUaJson = new String(decodedBytes);</span>
+        UserDTOfromIdGovUa userFromIdGovUaDTO;
+        try {
+<span class="fc" id="L55">            userFromIdGovUaDTO = objectMapper.readValue(userDTOfromIdGovUaJson, UserDTOfromIdGovUa.class);</span>
+<span class="nc" id="L56">        } catch (Exception x) {</span>
+<span class="nc" id="L57">            logger.error(&quot;Can not parse &quot; + message + &quot; user get from gateway&quot; + x.getMessage());</span>
+<span class="nc" id="L58">            throw new BadCredentialsException(&quot;Can not parse &quot; + message + &quot; user get from gateway&quot;);</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">        return userFromIdGovUaDTO;</span>
+    }
+
+    protected void checkAuthorities(Collection&lt;GrantedAuthority&gt; authorities, String authority) {
+<span class="fc" id="L64">        logger.info(&quot;Start authenticate checkAuthorities&quot;);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (!getAuthorities(authorities).anyMatch(authority::equals)) {</span>
+<span class="fc" id="L66">            logger.error(&quot;Can not have Authority &quot; + authority + &quot; for Authorization&quot;);</span>
+<span class="fc" id="L67">            throw new BadCredentialsException(&quot;Can not have Authority &quot; + authority + &quot; for Authorization&quot;);</span>
+        }
+
+<span class="fc" id="L70">    }</span>
+
+    protected UsernamePasswordAuthenticationToken tryToMakeAuthenticationTokenAndAddUserIdToDetails(CustomUserDetails userDetails, Collection&lt;GrantedAuthority&gt; authorities, Authentication authentication) {
+<span class="fc" id="L73">        UsernamePasswordAuthenticationToken authenticationWithAuthorities =</span>
+<span class="fc" id="L74">            new UsernamePasswordAuthenticationToken(userDetails, authentication.getCredentials(), authorities);</span>
+<span class="fc" id="L75">        addUserIdToDetails(authenticationWithAuthorities, userDetails);</span>
+<span class="fc" id="L76">        logger.info(userDetails.getUsername() + &quot; Authentication success. Authorities: &quot; + Arrays.toString(authentication.getAuthorities().toArray()));</span>
+<span class="fc" id="L77">        return authenticationWithAuthorities;</span>
+    }
+
+    protected void checkUserInfo(String userInfo, String message) {
+<span class="fc" id="L81">        logger.info(&quot;Start checkUserInfo&quot;);</span>
+<span class="pc bpc" id="L82" title="1 of 4 branches missed.">        if (userInfo == null || &quot;&quot;.equals(userInfo)) {</span>
+<span class="fc" id="L83">            logger.error(&quot;UserInfo&quot; + message + &quot; must not be empty&quot;);</span>
+<span class="fc" id="L84">            throw new BadCredentialsException(&quot;UserInfo &quot; + message + &quot; must not be empty&quot;);</span>
+        }
+
+<span class="fc" id="L87">    }</span>
+
+    public CustomUserDetails tryToGetUserDetailsByAndEdrpouCodeAndUserType(final String rnokpp, final String edrpouCode, final String userType) {
+        try {
+<span class="fc" id="L91">            CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByRnokppAndEdrpouCodeAndUserType(rnokpp, edrpouCode, userType);</span>
+<span class="fc" id="L92">            return userDetails;</span>
+<span class="nc" id="L93">        } catch (UsernameNotFoundException e) {</span>
+<span class="nc" id="L94">            logger.error(e.getMessage());</span>
+<span class="nc" id="L95">            throw new UsernameNotFoundException(ErrorConstants.USER_NOT_FOUND);</span>
+<span class="nc" id="L96">        } catch (Exception e) {</span>
+<span class="nc" id="L97">            logger.error(e.getMessage());</span>
+<span class="nc" id="L98">            throw new InternalAuthenticationServiceException(e.getMessage(), e);</span>
+        }
+    }
+
+    public LdapUserDetails tryToGetUserDetailsByLdap(UserDTOfromIdGovUa user) {
+        try {
+<span class="fc" id="L104">            LdapUserDetails userDetails = (LdapUserDetails) userDetailsService.loadUserByLdap(user);</span>
+<span class="fc" id="L105">            return userDetails;</span>
+<span class="nc" id="L106">        } catch (UsernameNotFoundException e) {</span>
+<span class="nc" id="L107">            logger.error(e.getMessage());</span>
+<span class="nc" id="L108">            throw new UsernameNotFoundException(ErrorConstants.USER_NOT_FOUND);</span>
+<span class="nc" id="L109">        } catch (Exception e) {</span>
+<span class="nc" id="L110">            logger.error(e.getMessage());</span>
+<span class="nc" id="L111">            throw new InternalAuthenticationServiceException(e.getMessage(), e);</span>
+        }
+    }
+
+    protected void addUserIdToDetails(
+        UsernamePasswordAuthenticationToken authenticationWithAuthorities,
+        CustomUserDetails userDetails) {
+<span class="fc" id="L118">        LinkedHashMap details = new LinkedHashMap();</span>
+<span class="fc" id="L119">        details.put(USER_ID_KEY, userDetails.getUsetId());</span>
+<span class="fc" id="L120">        authenticationWithAuthorities.setDetails(details);</span>
+<span class="fc" id="L121">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

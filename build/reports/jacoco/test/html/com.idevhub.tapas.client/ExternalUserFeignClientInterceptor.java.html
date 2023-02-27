@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExternalUserFeignClientInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.client</a> &gt; <span class="el_source">ExternalUserFeignClientInterceptor.java</span></div><h1>ExternalUserFeignClientInterceptor.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.client;
+
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+
+<span class="nc" id="L11">public class ExternalUserFeignClientInterceptor implements RequestInterceptor {</span>
+
+    private static final String AUTHORIZATION_HEADER = &quot;Authorization&quot;;
+    private static final String AUTHORIZATION_HEADER_CLIENT = &quot;Authorization-client&quot;;
+    private static final String BEARER_TOKEN_TYPE = &quot;Bearer&quot;;
+    @Autowired
+    private OAuth2ExternalClient oAuth2ExternalClient;
+
+    @Override
+    public void apply(RequestTemplate template) {
+
+<span class="nc" id="L22">        SecurityContext securityContext = SecurityContextHolder.getContext();</span>
+<span class="nc" id="L23">        Authentication authentication = securityContext.getAuthentication();</span>
+
+<span class="nc" id="L25">        String externalToken = oAuth2ExternalClient.getExternalAccessToken();</span>
+<span class="nc bnc" id="L26" title="All 4 branches missed.">        if (authentication != null &amp;&amp; authentication.getDetails() instanceof OAuth2AuthenticationDetails) {</span>
+<span class="nc" id="L27">            OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();</span>
+<span class="nc" id="L28">            template.header(AUTHORIZATION_HEADER, String.format(&quot;%s %s&quot;, BEARER_TOKEN_TYPE, externalToken));</span>
+<span class="nc" id="L29">            template.header(AUTHORIZATION_HEADER_CLIENT, String.format(details.getTokenValue()));</span>
+        }
+<span class="nc" id="L31">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

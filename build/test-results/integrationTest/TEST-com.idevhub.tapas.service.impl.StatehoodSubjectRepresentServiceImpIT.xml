@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImpIT" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:43:26" hostname="iMac-Aleksandr-2.local" time="0.055">
+  <properties/>
+  <testcase name="testUpdateRepresenterStatusEx()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImpIT" time="0.034"/>
+  <testcase name="testUpdateRepresenterStatus()" classname="com.idevhub.tapas.service.impl.StatehoodSubjectRepresentServiceImpIT" time="0.02"/>
+  <system-out><![CDATA[2021-02-09 22:43:26.182 DEBUG 7937 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Request to save StatehoodSubjectRepresent : StatehoodSubjectRepresentUpdateDTO(representerId=1751, privilegeGroupsIds=[GR_V1_LEGAL_ENTITY99])
+2021-02-09 22:43:26.202 DEBUG 7937 --- [    Test worker] s.i.StatehoodSubjectRepresentServiceImpl : Request to save StatehoodSubjectRepresent : StatehoodSubjectRepresentUpdateDTO(representerId=1752, privilegeGroupsIds=[GR_V1_LEGAL_ENTITY99])
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

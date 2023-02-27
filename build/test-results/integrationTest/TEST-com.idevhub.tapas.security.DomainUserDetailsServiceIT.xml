@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.idevhub.tapas.security.DomainUserDetailsServiceIT" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-02-09T20:42:32" hostname="iMac-Aleksandr-2.local" time="0.715">
+  <properties/>
+  <testcase name="assertThatEmailIsPrioritizedOverLogin()" classname="com.idevhub.tapas.security.DomainUserDetailsServiceIT" time="0.549"/>
+  <testcase name="assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers()" classname="com.idevhub.tapas.security.DomainUserDetailsServiceIT" time="0.051"/>
+  <testcase name="assertThatUserCanBeFoundByLoginIgnoreCase()" classname="com.idevhub.tapas.security.DomainUserDetailsServiceIT" time="0.029"/>
+  <testcase name="assertThatUserCanBeFoundByEmailIgnoreCase()" classname="com.idevhub.tapas.security.DomainUserDetailsServiceIT" time="0.027"/>
+  <testcase name="assertThatUserCanBeFoundByEmail()" classname="com.idevhub.tapas.security.DomainUserDetailsServiceIT" time="0.025"/>
+  <testcase name="assertThatUserCanBeFoundByLogin()" classname="com.idevhub.tapas.security.DomainUserDetailsServiceIT" time="0.026"/>
+  <system-out><![CDATA[2021-02-09 22:42:33.116 DEBUG 7937 --- [    Test worker] c.i.t.security.DomainUserDetailsService  : Authenticating test-user-one@localhost
+2021-02-09 22:42:33.224  INFO 7937 --- [    Test worker] c.h.i.p.impl.PartitionStateManager       : [192.168.255.30]:5701 [dev] [3.12.7] Initializing cluster partition table arrangement...
+2021-02-09 22:42:33.233 DEBUG 7937 --- [    Test worker] c.h.i.p.InternalPartitionService         : [192.168.255.30]:5701 [dev] [3.12.7] Publishing partition state, version: 272
+2021-02-09 22:42:33.562 DEBUG 7937 --- [    Test worker] c.i.t.security.DomainUserDetailsService  : Authenticating test-user-three
+2021-02-09 22:42:33.587 ERROR 7937 --- [    Test worker] c.i.t.security.DomainUserDetailsService  : User test-user-three was not activated
+2021-02-09 22:42:33.610 DEBUG 7937 --- [    Test worker] c.i.t.security.DomainUserDetailsService  : Authenticating TEST-USER-ONE
+2021-02-09 22:42:33.639 DEBUG 7937 --- [    Test worker] c.i.t.security.DomainUserDetailsService  : Authenticating TEST-USER-TWO@LOCALHOST
+2021-02-09 22:42:33.667 DEBUG 7937 --- [    Test worker] c.i.t.security.DomainUserDetailsService  : Authenticating test-user-two@localhost
+2021-02-09 22:42:33.694 DEBUG 7937 --- [    Test worker] c.i.t.security.DomainUserDetailsService  : Authenticating test-user-one
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

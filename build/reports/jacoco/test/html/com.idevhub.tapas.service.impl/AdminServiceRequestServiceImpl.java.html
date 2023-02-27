@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminServiceRequestServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uaa</a> &gt; <a href="index.source.html" class="el_package">com.idevhub.tapas.service.impl</a> &gt; <span class="el_source">AdminServiceRequestServiceImpl.java</span></div><h1>AdminServiceRequestServiceImpl.java</h1><pre class="source lang-java linenums">package com.idevhub.tapas.service.impl;
+
+import com.idevhub.tapas.domain.StatehoodSubject;
+import com.idevhub.tapas.domain.StatehoodSubjectRepresent;
+import com.idevhub.tapas.domain.User;
+import com.idevhub.tapas.domain.address.Address;
+import com.idevhub.tapas.repository.StatehoodSubjectRepository;
+import com.idevhub.tapas.repository.StatehoodSubjectRepresentRepository;
+import com.idevhub.tapas.repository.UserRepository;
+import com.idevhub.tapas.security.SecurityUtils;
+import com.idevhub.tapas.service.AdminServiceRequestService;
+import com.idevhub.tapas.service.UserService;
+import com.idevhub.tapas.service.dto.*;
+import com.idevhub.tapas.service.errors.UserAuthenticationNeedException;
+import com.idevhub.tapas.service.errors.WrongActiveContextException;
+import com.idevhub.tapas.service.mapper.AddressMapper;
+import com.idevhub.tapas.service.mapper.AdminServiceRequestMapper;
+import com.idevhub.tapas.service.utils.AddressUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class AdminServiceRequestServiceImpl implements AdminServiceRequestService {
+
+    private final UserRepository userRepository;
+
+    private final AdminServiceRequestMapper adminServiceRequestMapper;
+
+    private final StatehoodSubjectRepresentRepository subjectRepresentRepository;
+
+    private final StatehoodSubjectRepository subjectRepository;
+
+    private final UserService userService;
+
+    private final AddressMapper addressMapper;
+
+    @Override
+    public AdminServiceRequestFullRespDTO getFullRespDTO(Long declarantId, Long statehoodSubjectId) {
+<span class="fc" id="L47">        Optional&lt;User&gt; applicantOpt = userRepository.findOneById(declarantId);</span>
+
+        //todo change to customize exception
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (!applicantOpt.isPresent())</span>
+<span class="nc" id="L51">            throw new RuntimeException(&quot;User with id:&quot; + declarantId + &quot; NOT FOUND&quot;);</span>
+
+<span class="fc" id="L53">        return getResp(applicantOpt.get(), statehoodSubjectId);</span>
+    }
+
+    @Override
+    public AdminServiceRequestFullRespDTO getCurrentUserFullRespDTO(Long statehoodSubjectId) {
+<span class="fc" id="L58">        User current = userService.getCurrentUser();</span>
+
+<span class="fc" id="L60">        return getResp(current, statehoodSubjectId);</span>
+    }
+
+    private AdminServiceRequestFullRespDTO getResp(User declarant, Long statehoodSubjectId) {
+<span class="fc" id="L64">        Optional&lt;StatehoodSubject&gt; statehoodSubject = subjectRepository.findById(statehoodSubjectId);</span>
+
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (!statehoodSubject.isPresent())</span>
+<span class="nc" id="L67">            throw new RuntimeException(&quot;StatehoodSubject with id:&quot; + statehoodSubjectId + &quot; NOT FOUND !!!&quot;);</span>
+
+<span class="fc" id="L69">        return adminServiceRequestMapper.toDto(declarant, statehoodSubject.get());</span>
+    }
+
+    public Long getCurrentUserIdIfExists() {
+<span class="nc" id="L73">        return SecurityUtils.getCurrentUserIdIfExists();</span>
+    }
+
+    //TODO add checks for authGroups
+    @Override
+    public AdminServiceRequestBrokerageCreateDTO getASRBrokerageCreateData() {
+<span class="fc" id="L79">        AdminServiceRequestBrokerageCreateDTO target = new AdminServiceRequestBrokerageCreateDTO();</span>
+
+<span class="fc" id="L81">        Long currentDeclarantId = getCurrentDeclarantIdOrThrowEx();</span>
+
+<span class="fc" id="L83">        StatehoodSubjectRepresent represent =</span>
+<span class="fc" id="L84">            subjectRepresentRepository.findByDeclarant_IdAndCurrentContextTrue(currentDeclarantId)</span>
+<span class="pc" id="L85">                .orElseThrow(() -&gt; new WrongActiveContextException(&quot;error.represent.no.active.context&quot;));</span>
+
+<span class="fc" id="L87">        StatehoodSubject subject = represent.getStatehoodSubject();</span>
+
+        //TODO move to mapper
+<span class="fc" id="L90">        target.setEdrpou(subject.getSubjectCode());</span>
+<span class="fc" id="L91">        target.setKopfg(subject.getKopfg().getCode().toString());</span>
+<span class="fc" id="L92">        target.setSubjectName(subject.getSubjectName());</span>
+<span class="fc" id="L93">        target.setHeadFullName(subject.getHeadFullName());</span>
+<span class="fc" id="L94">        target.setLegalAddress(addressMapper.toDto(subject.getLegalAddress()).getFullAddress());</span>
+<span class="fc" id="L95">        target.setKoatuu(addressMapper.toDto(subject.getLegalAddress()).getKoatuuCode());</span>
+<span class="fc" id="L96">        target.setSubjectTelNumber(subject.getTelNumber());</span>
+<span class="fc" id="L97">        target.setSubjectEmail(subject.getEmail());</span>
+<span class="fc" id="L98">        target.setStatehoodSubjectId(subject.getId());</span>
+<span class="fc" id="L99">        target.setDeclarantId(represent.getDeclarant().getId());</span>
+
+<span class="fc" id="L101">        String fullNameWithInitials = getFullNameWithInitials(represent.getDeclarant());</span>
+<span class="fc" id="L102">        target.setCreatedBy(fullNameWithInitials);</span>
+<span class="fc" id="L103">        target.setExecutedBy(fullNameWithInitials);</span>
+
+<span class="fc" id="L105">        return target;</span>
+    }
+
+    private String getFullNameWithInitials(User declarant) {
+<span class="fc" id="L109">        String nameInitial = declarant.getFirstName().substring(0, 1);</span>
+<span class="fc" id="L110">        String middleNameInitial = declarant.getMiddleName().substring(0, 1);</span>
+<span class="fc" id="L111">        String target = declarant.getLastName() + &quot; &quot; + nameInitial + &quot;. &quot; + middleNameInitial + &quot;.&quot;;</span>
+
+<span class="fc" id="L113">        return target;</span>
+    }
+
+    //TODO add checks for authGroups
+    @Override
+    public AdminServiceRequestWarehouseDTO getASRWarehouseCreateData() {
+<span class="fc" id="L119">        AdminServiceRequestWarehouseDTO target = new AdminServiceRequestWarehouseDTO();</span>
+
+<span class="fc" id="L121">        Long currentDeclarantId = getCurrentDeclarantIdOrThrowEx();</span>
+
+<span class="fc" id="L123">        StatehoodSubjectRepresent represent =</span>
+<span class="fc" id="L124">            subjectRepresentRepository.findByDeclarant_IdAndCurrentContextTrue(currentDeclarantId)</span>
+<span class="pc" id="L125">                .orElseThrow(() -&gt; new WrongActiveContextException(&quot;error.represent.no.active.context&quot;));</span>
+
+<span class="fc" id="L127">        StatehoodSubject subject = represent.getStatehoodSubject();</span>
+
+        //TODO move to mapper
+<span class="fc" id="L130">        target.setEdrpou(subject.getSubjectCode());</span>
+<span class="fc" id="L131">        target.setSubjectFullName(subject.getSubjectName());</span>
+<span class="fc" id="L132">        target.setSubjectShortName(subject.getSubjectName());</span>
+<span class="fc" id="L133">        target.setHeadFullName(subject.getHeadFullName());</span>
+<span class="fc" id="L134">        target.setRegistrationAddress(addressMapper.toDto(subject.getLegalAddress()).getFullAddress());</span>
+<span class="fc" id="L135">        target.setStatehoodSubjectId(subject.getId());</span>
+<span class="fc" id="L136">        target.setApplicantTelNumber(subject.getTelNumber());</span>
+<span class="fc" id="L137">        target.setEmail(subject.getEmail());</span>
+
+<span class="fc" id="L139">        return target;</span>
+    }
+
+    //TODO add checks for authGroups
+    @Override
+    public List&lt;AdminServiceRequestBrokerageUpdateDTO&gt; getASRBrokerageUpdateData(Set&lt;Long&gt; subjectsIds) {
+<span class="fc" id="L145">        List&lt;AdminServiceRequestBrokerageUpdateDTO&gt; target = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L147">        Long currentDeclarantId = getCurrentDeclarantIdOrThrowEx();</span>
+
+<span class="fc" id="L149">        List&lt;StatehoodSubjectRepresent&gt; represents =</span>
+<span class="fc" id="L150">            subjectRepresentRepository.findAllByDeclarant_IdAndStatehoodSubject_IdIn(currentDeclarantId, new ArrayList&lt;&gt;(subjectsIds));</span>
+
+<span class="fc" id="L152">        represents.forEach(rep -&gt; {</span>
+<span class="fc" id="L153">            StatehoodSubject subject = rep.getStatehoodSubject();</span>
+
+            //TODO move to mapper
+<span class="fc" id="L156">            AdminServiceRequestBrokerageUpdateDTO outDto = new AdminServiceRequestBrokerageUpdateDTO();</span>
+
+<span class="fc" id="L158">            outDto.setEdrpou(subject.getSubjectCode());</span>
+<span class="fc" id="L159">            outDto.setKopfg(subject.getKopfg().getCode().toString());</span>
+<span class="fc" id="L160">            outDto.setSubjectName(subject.getSubjectName());</span>
+<span class="fc" id="L161">            outDto.setHeadFullName(subject.getHeadFullName());</span>
+<span class="fc" id="L162">            outDto.setLegalAddress(addressMapper.toDto(subject.getLegalAddress()).getFullAddress());</span>
+<span class="fc" id="L163">            outDto.setKoatuu(addressMapper.toDto(subject.getLegalAddress()).getKoatuuCode());</span>
+<span class="fc" id="L164">            outDto.setSubjectTelNumber(subject.getTelNumber());</span>
+<span class="fc" id="L165">            outDto.setSubjectEmail(subject.getEmail());</span>
+<span class="fc" id="L166">            outDto.setStatehoodSubjectId(subject.getId());</span>
+<span class="fc" id="L167">            outDto.setDeclarantId(rep.getDeclarant().getId());</span>
+
+<span class="fc" id="L169">            String fullNameWithInitials = getFullNameWithInitials(rep.getDeclarant());</span>
+<span class="fc" id="L170">            outDto.setCreatedBy(fullNameWithInitials);</span>
+<span class="fc" id="L171">            outDto.setExecutedBy(fullNameWithInitials);</span>
+
+<span class="fc" id="L173">            target.add(outDto);</span>
+<span class="fc" id="L174">        });</span>
+
+<span class="fc" id="L176">        return target;</span>
+    }
+
+    public Long getCurrentDeclarantIdOrThrowEx() {
+<span class="fc" id="L180">        Long currentDeclarantId = getCurrentUserIdIfExists();</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (currentDeclarantId == null)</span>
+<span class="fc" id="L182">            throw new UserAuthenticationNeedException(&quot;error.user.authentication.needed&quot;);</span>
+<span class="fc" id="L183">        return currentDeclarantId;</span>
+    }
+
+
+    //TODO add checks for authGroups
+    @Override
+    public List&lt;AdminServiceRequestWarehouseDTO&gt; getASRWarehouseUpdateData(Set&lt;Long&gt; subjectsIds) {
+<span class="fc" id="L190">        List&lt;AdminServiceRequestWarehouseDTO&gt; target = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L191">        Long currentDeclarantId = getCurrentDeclarantIdOrThrowEx();</span>
+
+<span class="fc" id="L193">        List&lt;StatehoodSubjectRepresent&gt; represents =</span>
+<span class="fc" id="L194">            subjectRepresentRepository.findAllByDeclarant_IdAndStatehoodSubject_IdIn(currentDeclarantId, new ArrayList&lt;&gt;(subjectsIds));</span>
+
+<span class="fc" id="L196">        represents.forEach(rep -&gt; {</span>
+<span class="fc" id="L197">            StatehoodSubject subject = rep.getStatehoodSubject();</span>
+
+            //TODO move to mapper
+<span class="fc" id="L200">            AdminServiceRequestWarehouseDTO outDto = new AdminServiceRequestWarehouseDTO();</span>
+
+<span class="fc" id="L202">            outDto.setEdrpou(subject.getSubjectCode());</span>
+<span class="fc" id="L203">            outDto.setSubjectFullName(subject.getSubjectName());</span>
+<span class="fc" id="L204">            outDto.setSubjectShortName(subject.getSubjectName());</span>
+<span class="fc" id="L205">            outDto.setHeadFullName(subject.getHeadFullName());</span>
+<span class="fc" id="L206">            outDto.setRegistrationAddress(addressMapper.toDto(subject.getLegalAddress()).getFullAddress());</span>
+<span class="fc" id="L207">            outDto.setStatehoodSubjectId(subject.getId());</span>
+<span class="fc" id="L208">            outDto.setApplicantTelNumber(subject.getTelNumber());</span>
+<span class="fc" id="L209">            outDto.setEmail(subject.getEmail());</span>
+
+<span class="fc" id="L211">            String fullNameWithInitials = getFullNameWithInitials(rep.getDeclarant());</span>
+
+<span class="fc" id="L213">            target.add(outDto);</span>
+<span class="fc" id="L214">        });</span>
+
+<span class="fc" id="L216">        return target;</span>
+    }
+
+    @Override
+    public DataToApproveRequestDTO getDataToApproveRequest() {
+<span class="fc" id="L221">        Long currentDeclarantId = getCurrentDeclarantIdOrThrowEx();</span>
+
+<span class="fc" id="L223">        StatehoodSubjectRepresent represent =</span>
+<span class="fc" id="L224">            subjectRepresentRepository.findByDeclarant_IdAndCurrentContextTrue(currentDeclarantId)</span>
+<span class="pc" id="L225">                .orElseThrow(() -&gt; new WrongActiveContextException(&quot;error.represent.no.active.context&quot;));</span>
+
+<span class="fc" id="L227">        DataToApproveRequestDTO target = new DataToApproveRequestDTO();</span>
+
+<span class="fc" id="L229">        target.setEdrpouStr(represent.getStatehoodSubject().getSubjectCode());</span>
+<span class="fc" id="L230">        target.setRnokppStr(represent.getDeclarant().getRnokpp());</span>
+
+<span class="fc" id="L232">        return target;</span>
+    }
+
+    @Override
+    public DataToAppointRequestDTO getDataToAppointRequest(Long executantId) {
+<span class="nc" id="L237">        DataToAppointRequestDTO target = new DataToAppointRequestDTO();</span>
+
+<span class="nc" id="L239">        User initiator = userService.getCurrentUser();</span>
+<span class="nc" id="L240">        UserDTO executant = userService.getUserById(executantId);</span>
+<span class="nc" id="L241">        List&lt;String&gt; initiatorPrivileges = userService.findAllPrivilegesByCurrentLoggedInUser();</span>
+
+<span class="nc" id="L243">        target.setExecutantOrg(executant.getOrg());</span>
+<span class="nc" id="L244">        target.setInitiatorOrg(initiator.getOrg());</span>
+<span class="nc" id="L245">        target.setExecutantFullName(executant.getFullName());</span>
+<span class="nc" id="L246">        target.setInitiatorPrivileges(initiatorPrivileges);</span>
+
+<span class="nc" id="L248">        return target;</span>
+    }
+
+    @Override
+    public Long getOrgHeadId() {
+<span class="nc" id="L253">        Long orgHeadId = userService.getOrgHeadId();</span>
+
+<span class="nc" id="L255">        return orgHeadId;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
