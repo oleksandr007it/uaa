@@ -1,4 +1,4 @@
-# uaa Implementation Openn Id connect and  User Account and Authentication (UAA) Server with Spring Security
+# uaa Implementation Open Id connect and  User Account and Authentication (UAA) Server with Spring Security
 Provided OpenId Connect and Oauth 2
 
 [![version](https://img.shields.io/badge/version-0.3.1-blue.svg)](https://semver.org)
